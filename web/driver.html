@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Birga — водитель</title>
+<style>
+  :root{--bg:#10201a;--card:#17322a;--ink:#eaf3ef;--muted:#9ab8ac;--brand:#3fae7f;--accent:#f4a62a;--line:#244a3d}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+  header{background:linear-gradient(135deg,#246048,#17322a);padding:14px 18px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:5}
+  .logo{font-weight:800;font-size:19px}.logo span{color:var(--accent)}
+  .status{margin-left:auto;font-size:13px}
+  .dotonline{display:inline-block;width:10px;height:10px;border-radius:50%;background:#888;margin-right:6px}
+  .dotonline.on{background:var(--brand);box-shadow:0 0 8px var(--brand)}
+  .wrap{max-width:640px;margin:0 auto;padding:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+  h2{margin:.1em 0 .5em;font-size:17px}
+  label{display:block;font-size:13px;color:var(--muted);margin:8px 0 4px}
+  input,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:#0e1c17;color:var(--ink);font-size:15px}
+  button.primary{background:var(--brand);color:#06231a;border:0;padding:12px 16px;border-radius:12px;font-weight:800;cursor:pointer;font-size:15px}
+  button.ghost{background:#0e1c17;color:var(--ink);border:1px solid var(--line);padding:10px 14px;border-radius:10px;cursor:pointer}
+  .row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1}
+  .muted{color:var(--muted);font-size:13px}
+  .badge{padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;background:#0e1c17;color:var(--accent)}
+  .stops{list-style:none;padding:0;margin:10px 0}
+  .stops li{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line)}
+  .dot{width:24px;height:24px;border-radius:50%;background:var(--brand);color:#06231a;display:flex;align-items:center;justify-content:center;font-weight:800;flex:none}
+  .picked .dot{background:var(--accent)}
+  .picked{opacity:.6}
+  .big{font-size:20px;font-weight:800}
+  .hidden{display:none}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#000;color:#fff;padding:12px 18px;border-radius:12px;opacity:0;transition:.3s}
+  .toast.show{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Bir<span>ga</span> · Водитель</div>
+  <div class="status" id="status"></div>
+</header>
+<div class="wrap">
+  <div id="login" class="card" style="max-width:380px;margin:32px auto">
+    <h2>Вход водителя</h2>
+    <label>Телефон</label><input id="phone" value="+998901112233">
+    <label>Код (демо: 1111)</label><input id="code" value="1111">
+    <div style="margin-top:12px"><button class="primary" id="btnLogin" style="width:100%">Войти</button></div>
+    <p class="muted" style="margin-top:10px">Демо-водители: +998901112233 (van10), +998907778899 (van20)</p>
+  </div>
+
+  <div id="app" class="hidden">
+    <div class="card">
+      <div class="row" style="align-items:center">
+        <div><div class="big" id="drvName"></div><div class="muted" id="drvCar"></div></div>
+        <button class="primary" id="btnOnline" style="flex:none">Выйти на линию</button>
+      </div>
+    </div>
+
+    <div id="routesCard" class="card">
+      <h2>Доступные рейсы</h2>
+      <div id="routes"></div>
+    </div>
+
+    <div id="activeCard" class="card hidden">
+      <h2>Текущий рейс <span class="badge" id="rStatus"></span></h2>
+      <div class="muted" id="rInfo"></div>
+      <div id="dmap" style="height:220px;border-radius:12px;overflow:hidden;border:1px solid var(--line);margin:10px 0;background:#0e1c17"></div>
+      <ul class="stops" id="rStops"></ul>
+      <div class="row">
+        <button class="primary hidden" id="btnStart">Начать рейс</button>
+        <button class="primary hidden" id="btnDrive">▶ Симулировать движение</button>
+        <button class="ghost hidden" id="btnComplete">Завершить</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const API=location.origin;
+let TOKEN=null,DRV=null,ROUTE=null,driveTimer=null;
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}
+async function api(method,path,body){const h={'Content-Type':'application/json'};if(TOKEN)h['Authorization']='Bearer '+TOKEN;
+  const r=await fetch(API+path,{method,headers:h,body:body?JSON.stringify(body):undefined});const j=await r.json();if(!j.ok&&j.error)toast(j.error);return j;}
+
+document.getElementById('btnLogin').onclick=async()=>{
+  const j=await api('POST','/api/driver/login',{phone:phone.value,code:code.value});
+  if(j.ok){TOKEN=j.token;DRV=j.driver;
+    document.getElementById('login').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    document.getElementById('drvName').textContent=DRV.name;
+    document.getElementById('drvCar').textContent=DRV.vehicle_class+' · '+DRV.capacity+' мест · '+(DRV.plate||'');
+    setOnline(DRV.online);loadRoutes();}
+};
+
+function setOnline(v){DRV.online=v;
+  document.getElementById('status').innerHTML=`<span class="dotonline ${v?'on':''}"></span>${v?'на линии':'оффлайн'}`;
+  document.getElementById('btnOnline').textContent=v?'Уйти с линии':'Выйти на линию';}
+document.getElementById('btnOnline').onclick=async()=>{const j=await api('POST','/api/driver/online',{online:!DRV.online});if(j.ok){setOnline(j.driver.online);loadRoutes();}};
+
+async function loadRoutes(){
+  const j=await api('GET','/api/driver/routes');if(!j.ok)return;
+  if((j.mine||[]).length){openRoute(j.mine[0].id);return;}
+  const box=document.getElementById('routes');box.innerHTML='';
+  if(!(j.available||[]).length){box.innerHTML='<p class="muted">Нет доступных рейсов. Ждём формирования…</p>';}
+  (j.available||[]).forEach(r=>{
+    const d=document.createElement('div');d.className='card';d.style.background='#0e1c17';
+    const pmode=r.pickup_mode==='points'?'точки сбора':'от двери';
+    d.innerHTML=`<div class="big">${r.school}</div>
+      <div class="muted">${vehLabel(r.vehicle_class)} · ${r.children} детей · ${r.distance_km} км · посадка: ${pmode}</div>
+      <div class="muted">Старт: ${r.start_date||'—'} · записалось водителей: ${r.interested||0}</div>
+      <div class="row" style="margin-top:10px">
+        <button class="primary" data-a="accept">Принять рейс</button>
+        <button class="ghost" data-a="signup">Записаться заранее</button>
+      </div>`;
+    d.querySelector('[data-a="accept"]').onclick=async()=>{const a=await api('POST','/api/driver/routes/'+r.id+'/accept');if(a.ok){toast('Рейс принят');openRoute(r.id);}};
+    d.querySelector('[data-a="signup"]').onclick=async()=>{const a=await api('POST','/api/driver/routes/'+r.id+'/signup');if(a.ok){toast('Вы записались на маршрут (кандидатов: '+a.interested+')');loadRoutes();}};
+    box.appendChild(d);
+  });
+}
+
+async function openRoute(id){
+  const j=await api('GET','/api/driver/routes/'+id);if(!j.ok)return;
+  ROUTE=j.route;
+  document.getElementById('routesCard').classList.add('hidden');
+  document.getElementById('activeCard').classList.remove('hidden');
+  renderRoute();
+}
+const VEH={car4:'4 мест',car7:'7 мест (Kia Carnival)',van9:'9 мест',van10:'10 мест',van20:'20 мест'};
+function vehLabel(c){return VEH[c]||c;}
+function renderRoute(){
+  const r=ROUTE;
+  const pmode=r.pickup_mode==='points'?'точки сбора':'от двери';
+  document.getElementById('rStatus').textContent=r.status;
+  document.getElementById('rInfo').textContent=`${r.school.name} · ${vehLabel(r.vehicle_class)} · ${r.children} детей · ${r.distance_km} км · посадка: ${pmode}${r.start_date?' · старт '+r.start_date:''}`;
+  document.getElementById('rStops').innerHTML=r.stops.map(p=>{
+    const allPicked=(p.pickups||[]).every(x=>x.status==='picked');
+    const addr=(p.pickups[0]&&p.pickups[0].address)||'';
+    const walks=(p.pickups||[]).map(x=>x.walk_m?`${x.children_count} (${x.walk_m} м пешком)`:`${x.children_count}`).join(', ');
+    const label=p.type==='point'?'Точка сбора':'От двери';
+    return `<li class="${allPicked?'picked':''}">
+      <span class="dot">${p.seq}</span>
+      <div><div><b>${p.children_total} детей</b> · ${walks}</div><div class="muted">${label}${addr?' · '+addr:''}</div></div>
+      ${(!allPicked&&r.status==='running')?`<button class="ghost" style="margin-left:auto" onclick="pickup(${p.seq})">Забрал</button>`:(allPicked?'<span style="margin-left:auto">✓</span>':'')}
+    </li>`;
+  }).join('');
+  document.getElementById('btnStart').classList.toggle('hidden',r.status!=='active');
+  document.getElementById('btnDrive').classList.toggle('hidden',r.status!=='running');
+  document.getElementById('btnComplete').classList.toggle('hidden',r.status!=='running');
+  if(window.drawRouteMap)window.drawRouteMap(r);
+}
+window.pickup=async(seq)=>{const j=await api('POST','/api/driver/routes/'+ROUTE.id+'/pickup',{seq});if(j.ok){toast('Ребёнок посажен');openRoute(ROUTE.id);}};
+document.getElementById('btnStart').onclick=async()=>{const j=await api('POST','/api/driver/routes/'+ROUTE.id+'/start');if(j.ok){toast('Рейс начат');openRoute(ROUTE.id);}};
+document.getElementById('btnComplete').onclick=async()=>{if(driveTimer)clearInterval(driveTimer);const j=await api('POST','/api/driver/routes/'+ROUTE.id+'/complete');if(j.ok){toast('Рейс завершён');document.getElementById('activeCard').classList.add('hidden');document.getElementById('routesCard').classList.remove('hidden');loadRoutes();}};
+
+// Симуляция движения: интерполяция по точкам маршрута → отправка трека
+document.getElementById('btnDrive').onclick=()=>{
+  if(driveTimer)clearInterval(driveTimer);
+  const pts=[...ROUTE.stops.map(s=>[s.lat,s.lon]),[ROUTE.school.lat,ROUTE.school.lon]];
+  let seg=0,t=0;
+  driveTimer=setInterval(async()=>{
+    if(seg>=pts.length-1){clearInterval(driveTimer);toast('Прибыли в школу');return;}
+    const a=pts[seg],b=pts[seg+1];
+    const lat=a[0]+(b[0]-a[0])*t, lon=a[1]+(b[1]-a[1])*t;
+    await api('POST','/api/driver/routes/'+ROUTE.id+'/track',{lat,lon});
+    t+=0.34;if(t>=1){t=0;seg++;}
+  },1500);
+  toast('Поехали — родители видят движение');
+};
+</script>
+
+<!-- ==================== Yandex route map (stops → school) ==================== -->
+<script>
+(function(){
+  let dmap=null,ready=false,keyChecked=false,pending=null;
+  async function ensure(){
+    if(ready||keyChecked)return; keyChecked=true;
+    try{
+      const c=await (await fetch(location.origin+'/api/config')).json();
+      if(!c||!c.yandex_js_key)return;
+      const s=document.createElement('script');
+      s.src='https://api-maps.yandex.ru/2.1/?apikey='+encodeURIComponent(c.yandex_js_key)+'&lang=ru_RU';
+      s.onload=()=>{if(window.ymaps)ymaps.ready(()=>{ready=true;if(pending)window.drawRouteMap(pending);});};
+      document.head.appendChild(s);
+    }catch(e){}
+  }
+  window.drawRouteMap=function(r){
+    ensure();
+    if(!ready||!window.ymaps){pending=r;return;}
+    const el=document.getElementById('dmap'); if(!el||!r)return;
+    const stops=(r.stops||[]).filter(s=>s.lat&&s.lon);
+    const school=r.school&&r.school.lat?[r.school.lat,r.school.lon]:null;
+    if(!stops.length&&!school)return;
+    if(!dmap){dmap=new ymaps.Map('dmap',{center:school||[stops[0].lat,stops[0].lon],zoom:12,controls:['zoomControl']},{suppressMapOpenBlock:true});}
+    else dmap.geoObjects.removeAll();
+    const line=[];
+    stops.forEach(s=>{const p=[s.lat,s.lon];line.push(p);
+      dmap.geoObjects.add(new ymaps.Placemark(p,{iconContent:String(s.seq),hintContent:(s.children_total||'')+' детей'},{preset:'islands#greenCircleIcon'}));});
+    if(school){line.push(school);
+      dmap.geoObjects.add(new ymaps.Placemark(school,{hintContent:'Школа — '+(r.school.name||'')},{preset:'islands#redEducationCircleIcon'}));}
+    if(line.length>1)dmap.geoObjects.add(new ymaps.Polyline(line,{},{strokeColor:'#3fae7f',strokeWidth:4,strokeOpacity:.8}));
+    setTimeout(()=>{try{dmap.container.fitToViewport();const b=dmap.geoObjects.getBounds();if(b)dmap.setBounds(b,{checkZoomRange:true,zoomMargin:40});}catch(e){}},60);
+  };
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MaktabGo — диспетчер</title>
+<style>
+  :root{--bg:#f4f6f8;--card:#fff;--ink:#1c2a25;--muted:#6b7c74;--brand:#2e7d5b;--brand-d:#246048;--accent:#f4a62a;--line:#e4eae7;--ok:#2e7d5b;--warn:#e08a1e;--bad:#c0392b;--blue:#1c66c9;--shadow:0 6px 24px rgba(20,50,40,.08)}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+  header{background:linear-gradient(135deg,var(--brand),var(--brand-d));color:#fff;padding:12px 18px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:20;box-shadow:var(--shadow)}
+  header .logo{font-weight:800;font-size:19px}header .logo span{color:var(--accent)}
+  header .sub{opacity:.9;font-size:13px}
+  header .right{margin-left:auto;display:flex;align-items:center;gap:12px;font-size:13px}
+  .wrap{max-width:1240px;margin:0 auto;padding:16px}
+  .tabs{display:flex;gap:8px;margin:6px 0 16px;flex-wrap:wrap}
+  .tabs button{border:0;background:#e8efec;color:var(--brand-d);padding:9px 15px;border-radius:999px;font-weight:600;cursor:pointer}
+  .tabs button.active{background:var(--brand);color:#fff}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px}
+  h2{margin:.1em 0 .5em;font-size:16px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow)}
+  .kpi .n{font-size:24px;font-weight:800;color:var(--brand-d)}
+  .kpi .l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+  .kpi.accent .n{color:var(--accent)}
+  #map{height:420px;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#e9eeec}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:700}
+  tr:hover td{background:#f6faf8}
+  .scroll{overflow:auto;max-height:70vh}
+  .badge{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:700}
+  .b-forming{background:#fff3e0;color:var(--warn)}.b-active{background:#e6f4ec;color:var(--ok)}
+  .b-running{background:#e3f0ff;color:var(--blue)}.b-done{background:#eee;color:#666}.b-cancelled{background:#fdecea;color:var(--bad)}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}.on{background:var(--ok);box-shadow:0 0 6px var(--ok)}.off{background:#bbb}
+  button.primary{background:var(--brand);color:#fff;border:0;padding:9px 15px;border-radius:10px;font-weight:700;cursor:pointer}
+  button.primary:hover{background:var(--brand-d)}
+  button.ghost{background:#eef3f1;color:var(--brand-d);border:0;padding:8px 13px;border-radius:10px;font-weight:600;cursor:pointer}
+  .right-num{text-align:right;font-variant-numeric:tabular-nums}
+  .muted{color:var(--muted)}
+  .hidden{display:none}
+  .grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+  .login{max-width:380px;margin:64px auto}
+  input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1c2a25;color:#fff;padding:11px 16px;border-radius:12px;box-shadow:var(--shadow);opacity:0;transition:.3s;z-index:50}
+  .toast.show{opacity:1}
+  /* live route cards */
+  .lr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+  .lr{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}
+  .lr h4{margin:0 0 4px;font-size:14px;display:flex;align-items:center;gap:8px}
+  .lr .m{display:flex;gap:8px;margin-top:8px}
+  .lr .mm{flex:1;background:#f6faf8;border:1px solid var(--line);border-radius:10px;padding:6px;text-align:center}
+  .lr .mm b{font-size:17px;display:block}.lr .mm span{font-size:10px;color:var(--muted)}
+  .lr .prog{height:7px;border-radius:5px;background:#eef2f1;margin:9px 0 2px;overflow:hidden}
+  .lr .prog>i{display:block;height:100%;background:linear-gradient(90deg,#1b8f5a,#39b878)}
+  .lr .nx{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .busmk{width:38px;height:38px;margin:-19px 0 0 -19px;pointer-events:none}
+  /* per-route dispatcher tracking overlay */
+  .rt-ov{position:fixed;inset:0;z-index:3000;background:#e9eeec;display:none;flex-direction:column}
+  .rt-ov.show{display:flex}
+  .rt-top{position:absolute;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;gap:10px;padding:12px 14px;pointer-events:none}
+  .rt-back{pointer-events:auto;width:42px;height:42px;border-radius:50%;border:none;background:#fff;box-shadow:var(--shadow);font-size:22px;cursor:pointer}
+  .rt-live{pointer-events:auto;display:flex;align-items:center;gap:7px;background:#fff;box-shadow:var(--shadow);border-radius:22px;padding:8px 14px;font-weight:800;font-size:13px}
+  .rt-live .d{width:9px;height:9px;border-radius:50%;background:#e11d1d;animation:pulse 1.2s infinite}
+  @keyframes pulse{0%{opacity:1}50%{opacity:.25}100%{opacity:1}}
+  #rtMap{flex:1 1 auto;width:100%;min-height:220px}
+  .rt-sheet{background:#fff;border-radius:22px 22px 0 0;box-shadow:0 -6px 26px rgba(0,0,0,.16);padding:12px 16px 18px;max-height:56vh;overflow:auto}
+  .rt-grab{width:42px;height:5px;border-radius:3px;background:#d7dedb;margin:0 auto 12px}
+  .rt-eta b{font-size:30px;color:var(--brand-d);font-weight:900}
+  .rt-metrics{display:flex;gap:8px;margin:12px 0 2px}
+  .rt-metric{flex:1;background:#f6faf8;border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center}
+  .rt-metric b{font-size:18px;display:block}.rt-metric span{font-size:10px;color:var(--muted)}
+  .rt-prog{height:8px;border-radius:6px;background:#eef2f1;margin:10px 0 2px;overflow:hidden}.rt-prog>i{display:block;height:100%;background:linear-gradient(90deg,#1b8f5a,#39b878)}
+  .rt-ev{display:flex;gap:8px;font-size:13px;margin:5px 0;align-items:baseline}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Maktab<span>Go</span></div><div class="sub">Диспетчер</div>
+  <div class="right" id="hdr"></div>
+</header>
+
+<!-- LOGIN -->
+<div id="login" class="wrap">
+  <div class="card login">
+    <h2>Вход диспетчера</h2>
+    <p class="muted" style="font-size:13px">Введите админ-токен (ADMIN_TOKEN, задан на сервере).</p>
+    <input id="tok" type="password" placeholder="Админ-токен" autocomplete="off">
+    <div style="margin-top:12px"><button class="primary" id="btnLogin" style="width:100%">Войти</button></div>
+    <p id="loginErr" class="muted" style="color:var(--bad);font-size:13px;margin-top:10px"></p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="wrap hidden">
+  <div class="tabs" id="tabs">
+    <button data-tab="overview" class="active">Обзор</button>
+    <button data-tab="subs">Заявки</button>
+    <button data-tab="routes">Рейсы</button>
+    <button data-tab="drivers">Водители</button>
+    <button data-tab="schools">Школы (Б)</button>
+    <button data-tab="parents">Клиенты</button>
+    <button data-tab="billing">Биллинг</button>
+  </div>
+
+  <section id="t-overview">
+    <div class="kpis" id="kpis"></div>
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <h2 style="margin:0">Карта · передвижение и рейсы</h2>
+        <span class="muted" id="liveInfo" style="font-size:12px"></span>
+      </div>
+      <div id="map"></div>
+    </div>
+    <div class="card" id="liveCard" style="display:none">
+      <h2 style="margin:0 0 10px">Рейсы в реальном времени · кто где едет</h2>
+      <div class="lr-grid" id="liveRoutes"></div>
+    </div>
+  </section>
+
+  <section id="t-subs" class="hidden"><div class="card"><h2>Заявки (подписки)</h2><div class="scroll"><table id="tblSubs"></table></div></div></section>
+  <section id="t-routes" class="hidden"><div class="card"><h2>Рейсы</h2><div class="scroll"><table id="tblRoutes"></table></div></div></section>
+  <section id="t-drivers" class="hidden"><div class="card"><h2>Водители</h2><div class="scroll"><table id="tblDrivers"></table></div></div></section>
+  <section id="t-schools" class="hidden"><div class="card"><h2>Школы / центры (точки Б)</h2><div class="scroll"><table id="tblSchools"></table></div></div></section>
+  <section id="t-parents" class="hidden"><div class="card"><h2>Клиенты (родители)</h2><div class="scroll"><table id="tblParents"></table></div></div></section>
+  <section id="t-billing" class="hidden">
+    <div class="grid2">
+      <div class="card"><h2>Биллинг по школам</h2><div class="scroll"><table id="tblBillSchool"></table></div></div>
+      <div class="card"><h2>Сводка</h2><div id="billSummary"></div></div>
+    </div>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const API=location.origin;
+let TOKEN=null, DATA=null, map=null, schoolLayer=null, liveLayer=null, liveTimer=null;
+
+function $(id){return document.getElementById(id);}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function fmt(n){return (Number(n)||0).toLocaleString('ru-RU')+' сум';}
+function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function badge(st){const m={forming:['b-forming','формируется'],active:['b-active','активна'],running:['b-running','в пути'],done:['b-done','завершён'],cancelled:['b-cancelled','отменён'],paused:['b-forming','пауза']};const[c,t]=m[st]||['b-done',st||'—'];return `<span class="badge ${c}">${t}</span>`;}
+const VEH={car4:'4м',car7:'7м (Carnival)',van9:'9м',van10:'10м',van20:'20м'};
+const DIR={both:'туда-обратно',am:'утро',pm:'вечер'};
+
+async function api(path){
+  const r=await fetch(API+path,{headers:TOKEN?{'X-Admin-Token':TOKEN}:{}});
+  if(r.status===401||r.status===503){throw {code:r.status};}
+  return r.json();
+}
+
+/* ---------- LOGIN ---------- */
+$('btnLogin').onclick=login;
+$('tok').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
+async function login(){
+  TOKEN=$('tok').value.trim();
+  if(!TOKEN){$('loginErr').textContent='Введите токен';return;}
+  try{
+    await loadDashboard();
+    $('login').classList.add('hidden');$('app').classList.remove('hidden');
+    bootMap();startLive();
+  }catch(e){
+    $('loginErr').textContent = e.code===503 ? 'На сервере не задан ADMIN_TOKEN' : 'Неверный токен';
+    TOKEN=null;
+  }
+}
+
+/* ---------- TABS ---------- */
+$('tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+  $('tabs').querySelectorAll('button').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  ['overview','subs','routes','drivers','schools','parents','billing'].forEach(t=>$('t-'+t).classList.toggle('hidden',t!==b.dataset.tab));
+  if(b.dataset.tab==='overview'&&map)setTimeout(()=>{try{map.container.fitToViewport();}catch(e){}},60);
+});
+
+/* ---------- DASHBOARD ---------- */
+async function loadDashboard(){
+  const j=await api('/api/admin/dashboard');
+  if(!j.ok)throw {code:401};
+  DATA=j;renderAll();
+}
+function renderAll(){
+  const o=DATA.overview;
+  const st=o.subscriptions_by_status||{}, rs=o.routes_by_status||{};
+  $('hdr').innerHTML=`<span><span class="dot on"></span>${o.drivers_online}/${o.drivers_total} на линии</span>
+    <button class="ghost" onclick="runMatching()">↻ Пулинг</button>
+    <button class="ghost" onclick="reloadAll()">Обновить</button>`;
+  $('kpis').innerHTML=[
+    ['Заявки',o.subscriptions_total,`${st.active||0} активн · ${st.forming||0} формир`,''],
+    ['Рейсы',o.routes_total,`${rs.active||0} активн · ${rs.running||0} в пути · ${rs.forming||0} формир`,''],
+    ['Водители',`${o.drivers_online}/${o.drivers_total}`,'на линии',''],
+    ['Школы (Б)',o.schools_total,'партнёры',''],
+    ['Клиенты',o.parents_total,'родителей',''],
+    ['MRR активные',fmt(o.mrr_active),'в месяц','accent'],
+    ['Потенциал (формир.)',fmt(o.mrr_forming_potential),'если соберутся','accent'],
+  ].map(([l,n,s,c])=>`<div class="kpi ${c}"><div class="n">${n}</div><div class="l">${l}</div><div class="muted" style="font-size:11px;margin-top:3px">${s}</div></div>`).join('');
+
+  // Заявки
+  $('tblSubs').innerHTML=`<tr><th>#</th><th>Клиент</th><th>Телефон</th><th>Школа</th><th>Формат</th><th>Напр.</th><th>Детей</th><th>Км</th><th class="right-num">Цена/мес</th><th>Статус</th><th>Рейс</th></tr>`+
+    (DATA.subscriptions||[]).map(s=>`<tr><td>${s.id}</td><td>${esc(s.parent)}</td><td>${esc(s.phone)}</td><td>${esc(s.school)}</td>
+      <td>${s.mode==='private'?'личный':'совместный'}</td><td>${DIR[s.direction]||s.direction}</td><td>${s.children}</td>
+      <td>${s.distance_km}</td><td class="right-num">${fmt(s.monthly_price)}</td><td>${badge(s.status)}</td><td>${s.route_id?('#'+s.route_id):'—'}</td></tr>`).join('');
+
+  // Рейсы
+  $('tblRoutes').innerHTML=`<tr><th>#</th><th>Школа</th><th>Статус</th><th>Авто</th><th>Детей</th><th>Точек</th><th>Км</th><th>Водитель</th><th>Старт</th><th>Действие</th></tr>`+
+    (DATA.routes||[]).map(r=>`<tr><td>${r.id}</td><td>${esc(r.school)}</td><td>${badge(r.status)}</td><td>${VEH[r.vehicle_class]||r.vehicle_class}</td>
+      <td>${r.children}/${r.capacity} ${r.children<r.min_children?`<span class="muted">(нужно ${r.min_children})</span>`:''}</td>
+      <td>${r.stops}</td><td>${r.distance_km}</td><td>${r.driver?esc(r.driver):'<span class="muted">нет</span>'}</td><td>${r.start_date||'—'}</td><td>${routeAction(r)}</td></tr>`).join('');
+
+  // Водители
+  $('tblDrivers').innerHTML=`<tr><th>Имя</th><th>Телефон</th><th>Авто</th><th>Мест</th><th>Номер</th><th>Линия</th><th>Тек. рейс</th></tr>`+
+    (DATA.drivers||[]).map(d=>`<tr><td>${esc(d.name)}</td><td>${esc(d.phone)}</td><td>${VEH[d.vehicle_class]||d.vehicle_class}</td>
+      <td>${d.capacity}</td><td>${esc(d.plate)}</td><td><span class="dot ${d.online?'on':'off'}"></span>${d.online?'на линии':'офлайн'}</td>
+      <td>${d.route_id?('#'+d.route_id+' '+badge(d.route_status)):'—'}</td></tr>`).join('');
+
+  // Школы
+  $('tblSchools').innerHTML=`<tr><th>Название</th><th>Тип</th><th>Адрес</th><th>Уроки</th><th>Заявок</th><th>Координаты</th></tr>`+
+    (DATA.schools||[]).map(s=>`<tr><td>${esc(s.name)}</td><td>${s.type}</td><td>${esc(s.address)}</td>
+      <td>${s.start_time||'—'}–${s.end_time||'—'}</td><td>${s.subs}</td><td class="muted">${s.lat.toFixed(4)}, ${s.lon.toFixed(4)}</td></tr>`).join('');
+
+  // Клиенты
+  $('tblParents').innerHTML=`<tr><th>Имя</th><th>Телефон</th><th>Заявок</th><th class="right-num">Сумма/мес</th></tr>`+
+    (DATA.parents||[]).map(p=>`<tr><td>${esc(p.name)}</td><td>${esc(p.phone)}</td><td>${p.subs}</td><td class="right-num">${fmt(p.monthly)}</td></tr>`).join('');
+
+  // Биллинг
+  const bs=DATA.billing.by_school||{};
+  $('tblBillSchool').innerHTML=`<tr><th>Школа</th><th>Заявок</th><th>Активных</th><th class="right-num">MRR</th></tr>`+
+    Object.keys(bs).map(k=>`<tr><td>${esc(k)}</td><td>${bs[k].subs}</td><td>${bs[k].active}</td><td class="right-num">${fmt(bs[k].mrr)}</td></tr>`).join('')+
+    `<tr><td><b>Итого</b></td><td></td><td></td><td class="right-num"><b>${fmt(DATA.billing.mrr_active)}</b></td></tr>`;
+  $('billSummary').innerHTML=`
+    <div class="kpi" style="margin-bottom:10px"><div class="n" style="color:var(--ok)">${fmt(DATA.billing.mrr_active)}</div><div class="l">MRR активных подписок</div></div>
+    <div class="kpi" style="margin-bottom:10px"><div class="n" style="color:var(--accent)">${fmt(DATA.billing.mrr_forming_potential)}</div><div class="l">Потенциал формирующихся</div></div>
+    <p class="muted" style="font-size:13px">Демо-биллинг: суммы подписок (списаний/платёжного провайдера пока нет). Оплата (Payme/Paynet) — следующий шаг.</p>`;
+}
+async function reloadAll(){try{await loadDashboard();toast('Обновлено');}catch(e){toast('Ошибка обновления');}}
+async function runMatching(){
+  try{const r=await fetch(API+'/api/admin/run-matching',{method:'POST',headers:{'X-Admin-Token':TOKEN}});const j=await r.json();
+    if(j.ok){toast('Пулинг запущен');await loadDashboard();refreshLive();}}catch(e){toast('Ошибка пулинга');}
+}
+async function startRoute(id){
+  try{
+    const r=await fetch(API+'/api/admin/routes/'+id+'/start',{method:'POST',headers:{'X-Admin-Token':TOKEN}});
+    const j=await r.json();
+    if(j.ok){toast('Рейс #'+id+' стартовал'+(j.already?' (уже в пути)':''));await loadDashboard();if(typeof refreshLive==='function')refreshLive();}
+    else{toast(j.error||('Ошибка '+r.status));}
+  }catch(e){toast('Ошибка сети');}
+}
+
+/* ---------- MAP ---------- */
+async function bootMap(){
+  try{
+    const c=await (await fetch(API+'/api/config')).json();
+    if(!c||!c.yandex_js_key){$('liveInfo').textContent='(карта: JS-ключ не задан)';return;}
+    const s=document.createElement('script');
+    s.src='https://api-maps.yandex.ru/2.1/?apikey='+encodeURIComponent(c.yandex_js_key)+'&lang=ru_RU';
+    s.onload=()=>{if(window.ymaps)ymaps.ready(initMap);};document.head.appendChild(s);
+  }catch(e){}
+}
+function initMap(){
+  map=new ymaps.Map('map',{center:[41.3,69.25],zoom:11,controls:['zoomControl']},{suppressMapOpenBlock:true});
+  schoolLayer=new ymaps.GeoObjectCollection();liveLayer=new ymaps.GeoObjectCollection();
+  map.geoObjects.add(schoolLayer);map.geoObjects.add(liveLayer);
+  (DATA.schools||[]).forEach(s=>schoolLayer.add(new ymaps.Placemark([s.lat,s.lon],{hintContent:'Школа — '+s.name,balloonContent:esc(s.name)},{preset:'islands#redEducationCircleIcon'})));
+  refreshLive();
+}
+const ADM_BUS='<div class="busmk"><svg width="38" height="38" viewBox="0 0 38 38" style="transform:rotate($[properties.bearing]deg);transform-origin:19px 19px"><path d="M19 3 L30 33 L19 26 L8 33 Z" fill="#1c66c9" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/></svg></div>';
+function decodePolyA(str){if(!str)return[];let i=0,lat=0,lng=0,c=[],sh,res,b;while(i<str.length){sh=0;res=0;do{b=str.charCodeAt(i++)-63;res|=(b&0x1f)<<sh;sh+=5;}while(b>=0x20);lat+=((res&1)?~(res>>1):(res>>1));sh=0;res=0;do{b=str.charCodeAt(i++)-63;res|=(b&0x1f)<<sh;sh+=5;}while(b>=0x20);lng+=((res&1)?~(res>>1):(res>>1));c.push([lat/1e5,lng/1e5]);}return c;}
+function focusRoute(lat,lon){if(map&&lat){try{map.setCenter([lat,lon],15,{duration:400});}catch(e){}}}
+async function refreshLive(){
+  if(!map||!window.ymaps)return;
+  let live;try{live=await api('/api/admin/live');}catch(e){return;}
+  if(!live||!live.ok)return;
+  liveLayer.removeAll();
+  (live.routes||[]).forEach(r=>{
+    let line=decodePolyA(r.polyline);
+    if(!line.length){line=(r.stops||[]).map(s=>[s.lat,s.lon]);if(r.school_lat)line.push([r.school_lat,r.school_lon]);}
+    if(line.length>1)liveLayer.add(new ymaps.Polyline(line,{},{strokeColor:r.status==='running'?'#1c66c9':'#2e7d5b',strokeWidth:4,strokeOpacity:.7}));
+    (r.stops||[]).forEach(s=>liveLayer.add(new ymaps.Placemark([s.lat,s.lon],{iconContent:String(s.seq),hintContent:s.children+' детей · рейс #'+r.id},{preset:s.done?'islands#greenCircleIcon':'islands#grayCircleIcon'})));
+    if(r.school_lat)liveLayer.add(new ymaps.Placemark([r.school_lat,r.school_lon],{iconContent:'🏫',hintContent:esc(r.school)},{preset:'islands#redStretchyIcon'}));
+    if(r.bus){const sp=r.bus.speed!=null?Math.round(r.bus.speed)+' км/ч':'—';const drv=r.driver?(esc(r.driver.name)+(r.driver.plate?(' · '+esc(r.driver.plate)):'')):'';
+      liveLayer.add(new ymaps.Placemark([r.bus.lat,r.bus.lon],{bearing:r.bus.bearing!=null?r.bus.bearing:0,hintContent:'🚌 рейс #'+r.id+' · '+sp,balloonContent:`<b>Рейс #${r.id}</b><br>${drv}<br>Скорость: ${sp}<br>Забрал: ${r.picked}/${r.total}${r.next?('<br>→ '+esc(r.next.label)+(r.eta_min?(' · '+r.eta_min+' мин'):'')):''}`},{iconLayout:ymaps.templateLayoutFactory.createClass(ADM_BUS),iconShape:{type:'Circle',coordinates:[0,0],radius:19}}));}
+  });
+  (live.drivers||[]).forEach(d=>liveLayer.add(new ymaps.Placemark([d.lat,d.lon],{hintContent:'🚗 '+d.name+' ('+(VEH[d.vehicle_class]||d.vehicle_class)+')'},{preset:'islands#nightCircleIcon'})));
+  const nb=(live.routes||[]).filter(r=>r.bus).length;
+  $('liveInfo').textContent=`рейсов на карте: ${(live.routes||[]).length} · водителей онлайн: ${(live.drivers||[]).length} · в движении: ${nb}`;
+  const running=(live.routes||[]).filter(r=>r.status==='running');const card=$('liveCard');
+  if(running.length){card.style.display='';$('liveRoutes').innerHTML=running.map(r=>{
+    const pct=r.total?Math.round((r.picked/r.total)*100):0;const sp=r.bus&&r.bus.speed!=null?Math.round(r.bus.speed):'—';
+    return `<div class="lr"><h4>🚌 Рейс #${r.id} ${badge(r.status)}</h4>
+      <div class="muted" style="font-size:13px">${esc(r.school||'')}</div>
+      <div style="font-size:13px;margin-top:3px">Водитель: <b>${r.driver?esc(r.driver.name):'—'}</b>${r.driver&&r.driver.plate?(' · '+esc(r.driver.plate)):''}</div>
+      <div class="prog"><i style="width:${pct}%"></i></div>
+      <div class="m"><div class="mm"><b>${r.picked}/${r.total}</b><span>точек забрано</span></div>
+        <div class="mm"><b>${sp}</b><span>км/ч</span></div>
+        <div class="mm"><b>${r.eta_min||'—'}</b><span>мин до цели</span></div></div>
+      <div class="nx">${r.next?('→ '+esc(r.next.label)):''}</div>
+      <div style="margin-top:8px"><button class="ghost" onclick="focusRoute(${r.bus?r.bus.lat:0},${r.bus?r.bus.lon:0})">Показать на карте</button></div></div>`;
+  }).join('');}else{card.style.display='none';}
+}
+function startLive(){if(liveTimer)clearInterval(liveTimer);liveTimer=setInterval(refreshLive,4000);}
+function routeAction(r){
+  const track=`<button class="ghost" onclick="openRouteTrack(${r.id})">🗺 Трекинг</button>`;
+  if(r.status==='running') return track;
+  if(r.driver && r.status!=='done' && r.status!=='cancelled') return `<button class="ghost" onclick="startRoute(${r.id})">▶ Старт</button> ${track}`;
+  if(r.status==='done') return track;
+  return '—';
+}
+let rtMap=null,rtBus=null,rtStatics=null,rtStopMarks={},rtDrew=false,rtTimer=null;
+function rtEvIcon(t){return ({accepted:'✅',started:'🚌',picked:'🧒',arrived:'📍',completed:'🏁',done:'🏁',alert_speeding:'⚠️',alert_late:'⏰',alert_offroute:'🛰️'}[t])||'•';}
+function rtEvTime(ts){if(!ts)return '';const d=new Date(ts*1000);return d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});}
+function admDrvHtml(d){if(!d)return '';const ph=d.photo_url?`<img src="${d.photo_url}" style="width:44px;height:44px;border-radius:50%;object-fit:cover">`:`<div style="width:44px;height:44px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800">${esc((d.name||'?').slice(0,1))}</div>`;
+  return `<div style="display:flex;gap:10px;align-items:center">${ph}<div><div style="font-weight:800">${esc(d.name||'')} <span style="color:var(--accent)">★${(+d.rating||5).toFixed(1)}</span></div><div class="muted" style="font-size:13px">${esc(d.car_model||'')} · <b>${esc(d.plate||'')}</b></div></div></div>`;}
+function ensureRtOverlay(){
+  let ov=document.getElementById('rtOv');if(ov)return ov;
+  ov=document.createElement('div');ov.id='rtOv';ov.className='rt-ov';
+  ov.innerHTML=`<div class="rt-top"><button class="rt-back" onclick="closeRouteTrack()">‹</button>
+    <div class="rt-live"><span class="d"></span><span id="rtTitle">Рейс</span></div></div>
+    <div id="rtMap"></div>
+    <div class="rt-sheet"><div class="rt-grab"></div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="rt-eta"><b id="rtEta">—</b> <span class="muted" id="rtEtaU"></span></div>
+        <span id="rtStatus" style="margin-left:auto"></span></div>
+      <div id="rtNext" class="muted" style="font-size:13px;margin-top:4px"></div>
+      <div class="rt-prog"><i id="rtProg" style="width:0"></i></div>
+      <div class="rt-metrics">
+        <div class="rt-metric"><b id="rtPicked">—</b><span>точек забрано</span></div>
+        <div class="rt-metric"><b id="rtSpeed">—</b><span>км/ч</span></div>
+        <div class="rt-metric"><b id="rtEta2">—</b><span>мин до цели</span></div></div>
+      <div id="rtDrv" style="margin:10px 0"></div>
+      <div style="font-weight:700;text-transform:uppercase;font-size:12px;color:var(--muted);margin-top:6px">Действия рейса</div>
+      <div id="rtEv"></div>
+    </div>`;
+  document.body.appendChild(ov);return ov;
+}
+function openRouteTrack(id){
+  if(rtTimer)clearInterval(rtTimer);
+  rtDrew=false;rtBus=null;rtStopMarks={};
+  const ov=ensureRtOverlay();ov.classList.add('show');
+  const run=()=>ymaps.ready(()=>{const poll=async()=>{
+    let j;try{j=await api('/api/admin/routes/'+id+'/live');}catch(e){return;}
+    if(!j||!j.ok)return;
+    if(!rtMap){rtMap=new ymaps.Map('rtMap',{center:[41.31,69.28],zoom:12,controls:['zoomControl']},{suppressMapOpenBlock:true});}
+    if(!rtDrew){rtDrew=true;rtStatics=new ymaps.GeoObjectCollection();rtMap.geoObjects.add(rtStatics);
+      let line=decodePolyA(j.polyline);if(!line.length){line=(j.stops||[]).map(s=>[s.lat,s.lon]);if(j.school_lat)line.push([j.school_lat,j.school_lon]);}
+      if(line.length>1)rtStatics.add(new ymaps.Polyline(line,{},{strokeColor:'#1c66c9',strokeOpacity:.8,strokeWidth:6}));
+      if(j.school_lat)rtStatics.add(new ymaps.Placemark([j.school_lat,j.school_lon],{iconContent:'🏫',hintContent:esc(j.school||'')},{preset:'islands#redStretchyIcon'}));
+      (j.stops||[]).forEach(s=>{const pm=new ymaps.Placemark([s.lat,s.lon],{iconContent:String(s.seq),hintContent:s.children+' дет.'},{preset:s.done?'islands#greenCircleIcon':'islands#grayCircleIcon'});rtStopMarks[s.seq]=pm;rtStatics.add(pm);});
+      if(line.length){try{rtMap.setBounds(rtStatics.getBounds(),{checkZoomRange:true,zoomMargin:60});}catch(e){}}
+    }
+    (j.stops||[]).forEach(s=>{const pm=rtStopMarks[s.seq];if(pm)pm.options.set('preset',s.done?'islands#greenCircleIcon':'islands#grayCircleIcon');});
+    if(j.bus){const c=[j.bus.lat,j.bus.lon];const brg=j.bus.bearing!=null?j.bus.bearing:0;
+      if(!rtBus){rtBus=new ymaps.Placemark(c,{bearing:brg},{iconLayout:ymaps.templateLayoutFactory.createClass(ADM_BUS),iconShape:{type:'Circle',coordinates:[0,0],radius:19}});rtMap.geoObjects.add(rtBus);}
+      else{rtBus.geometry.setCoordinates(c);rtBus.properties.set('bearing',brg);}}
+    document.getElementById('rtTitle').textContent='Рейс #'+j.id+' · '+esc(j.school||'');
+    document.getElementById('rtStatus').innerHTML=badge(j.status);
+    const eta=document.getElementById('rtEta'),etaU=document.getElementById('rtEtaU');
+    if(j.status==='running'&&j.eta_min){eta.textContent=j.eta_min;etaU.textContent='мин до цели';}else{eta.textContent='—';etaU.textContent='';}
+    document.getElementById('rtNext').textContent=j.next?('→ '+j.next.label):'';
+    const pct=j.total?Math.round((j.picked/j.total)*100):0;document.getElementById('rtProg').style.width=pct+'%';
+    document.getElementById('rtPicked').textContent=(j.picked||0)+' / '+(j.total||0);
+    document.getElementById('rtSpeed').textContent=(j.bus&&j.bus.speed!=null)?Math.round(j.bus.speed):'—';
+    document.getElementById('rtEta2').textContent=j.eta_min||'—';
+    document.getElementById('rtDrv').innerHTML=admDrvHtml(j.driver);
+    document.getElementById('rtEv').innerHTML=(j.events&&j.events.length)?j.events.map(e=>`<div class="rt-ev"><span>${rtEvIcon(e.type)}</span><span style="flex:1">${esc(e.text)}</span><span class="muted" style="font-size:11px">${rtEvTime(e.created_at)}</span></div>`).join(''):'<div class="muted">Пока событий нет</div>';
+  };poll();rtTimer=setInterval(poll,3000);});
+  if(window.ymaps&&ymaps.Map)run();else{if(typeof bootMap==='function'&&!window.ymaps)bootMap();setTimeout(run,800);}
+}
+function closeRouteTrack(){if(rtTimer){clearInterval(rtTimer);rtTimer=null;}const ov=document.getElementById('rtOv');if(ov)ov.classList.remove('show');if(rtMap){try{rtMap.destroy();}catch(e){}rtMap=null;}rtBus=null;rtStatics=null;rtStopMarks={};rtDrew=false;}
+</script>
+</body>
+</html>

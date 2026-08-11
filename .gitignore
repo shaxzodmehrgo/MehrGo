@@ -1,0 +1,16 @@
+/vendor/
+/runtime/*
+!/runtime/.gitkeep
+/web/assets/
+.env
+config/*-local.php
+*.log
+*.bak
+*.save
+.DS_Store
+.idea/
+
+# Track-3 raw data — не коммитить (большие бинарники/LFS)
+track-3-data-main/
+track-3-data/
+*.zip

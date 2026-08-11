@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Birga — родителям</title>
+<style>
+  :root{
+    --bg:#f4f6f8; --card:#fff; --ink:#1c2a25; --muted:#6b7c74;
+    --brand:#2e7d5b; --brand-d:#246048; --accent:#f4a62a; --line:#e4eae7;
+    --ok:#2e7d5b; --warn:#e08a1e; --bad:#c0392b; --shadow:0 6px 24px rgba(20,50,40,.08);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+  header{background:linear-gradient(135deg,var(--brand),var(--brand-d));color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:20;box-shadow:var(--shadow)}
+  header .logo{font-weight:800;font-size:20px;letter-spacing:.3px}
+  header .logo span{color:var(--accent)}
+  header .right{margin-left:auto;display:flex;align-items:center;gap:12px}
+  header .who{font-size:13px;opacity:.95}
+  .lang{display:inline-flex;background:rgba(255,255,255,.15);border-radius:999px;overflow:hidden}
+  .lang button{border:0;background:transparent;color:#fff;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;opacity:.7}
+  .lang button.on{background:#fff;color:var(--brand-d);opacity:1}
+  .wrap{max-width:1050px;margin:0 auto;padding:18px}
+  .tabs{display:flex;gap:8px;margin:6px 0 16px}
+  .tabs button{border:0;background:#e8efec;color:var(--brand-d);padding:10px 16px;border-radius:999px;font-weight:600;cursor:pointer}
+  .tabs button.active{background:var(--brand);color:#fff}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px}
+  h2{margin:.1em 0 .6em;font-size:18px}
+  h3{margin:.2em 0 .5em;font-size:13px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+  label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+  input,select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px;background:#fff}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .row>*{flex:1;min-width:140px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .chip{padding:8px 14px;border:1px solid var(--line);border-radius:999px;cursor:pointer;user-select:none;font-size:14px;background:#fff}
+  .chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .chip.disabled{opacity:.35;pointer-events:none}
+  .seg{display:inline-flex;background:#eef3f1;border-radius:999px;padding:4px;gap:4px}
+  .seg button{border:0;background:transparent;padding:8px 16px;border-radius:999px;cursor:pointer;font-weight:600;color:var(--brand-d)}
+  .seg button.on{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .counter{display:inline-flex;align-items:center;gap:14px}
+  .counter button{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:20px;font-weight:700;cursor:pointer;color:var(--brand-d)}
+  .counter .n{font-size:22px;font-weight:800;min-width:28px;text-align:center}
+  button.primary{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer}
+  button.primary:hover{background:var(--brand-d)}
+  button.ghost{background:#eef3f1;color:var(--brand-d);border:0;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
+  .geo{display:inline-flex;align-items:center;gap:6px}
+  .map{height:260px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#e9eeec}
+  .muted{color:var(--muted);font-size:13px}
+  .variant{border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;transition:.15s}
+  .variant:hover{border-color:var(--brand)}
+  .variant.sel{border-color:var(--brand);box-shadow:0 0 0 2px rgba(46,125,91,.18)}
+  .variant .m{font-size:22px;font-weight:800;color:var(--brand-d)}
+  .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700}
+  .b-forming{background:#fff3e0;color:var(--warn)}
+  .b-active{background:#e6f4ec;color:var(--ok)}
+  .b-running{background:#e3f0ff;color:#1c66c9}
+  .b-done{background:#eee;color:#666}
+  .stops{list-style:none;padding:0;margin:8px 0}
+  .stops li{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line)}
+  .dot{width:24px;height:24px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex:none}
+  .picked .dot{background:var(--accent)}
+  .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .cal .d{aspect-ratio:1;border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px}
+  .cal .d.sched{cursor:pointer;background:#f0f7f4}
+  .cal .d.cancelled{background:#fdecea;color:var(--bad)}
+  .cal .d.off{opacity:.4}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1c2a25;color:#fff;padding:12px 18px;border-radius:12px;box-shadow:var(--shadow);opacity:0;transition:.3s;z-index:50}
+  .toast.show{opacity:1}
+  .hidden{display:none}
+  .kv{display:flex;justify-content:space-between;padding:4px 0;font-size:14px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.grid2{grid-template-columns:1fr}}
+  /* --- MaktabGo: driver card + events feed --- */
+  .drv-card{display:flex;gap:12px;align-items:center;margin-top:10px;padding:10px;border:1px solid var(--line);border-radius:14px;background:#f8fbfa}
+  .drv-ph{width:56px;height:56px;border-radius:50%;object-fit:cover;flex:0 0 auto;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+  .drv-ph-ph{display:flex;align-items:center;justify-content:center;background:var(--brand);color:#fff;font-weight:800;font-size:22px}
+  .drv-main{min-width:0;flex:1 1 auto}
+  .drv-name{font-weight:800;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .drv-ver{font-size:11px;font-weight:700;color:#0a7d33;background:#e7f7ec;border:1px solid #b8e6c6;border-radius:20px;padding:1px 8px}
+  .stars{color:var(--accent);letter-spacing:1px}
+  .stars.sm{font-size:12px}
+  .drv-rate{margin-top:2px}
+  .drv-sub{font-size:13px;margin-top:1px}
+  .drv-car{font-size:13px;margin-top:3px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .drv-plate{display:inline-block;border:1px solid #cbd5e1;border-radius:6px;padding:0 6px;font-weight:800;letter-spacing:1px;background:#fff}
+  .drv-revs{margin-top:8px}
+  .drv-rev{font-size:13px;margin:2px 0}
+  .ev-feed{border-left:2px solid var(--line);margin:4px 0 0;padding-left:10px}
+  .ev{display:flex;gap:8px;align-items:baseline;font-size:13px;margin:5px 0}
+  .ev-i{flex:0 0 auto}
+  .ev-t{flex:1 1 auto}
+  .ev-ts{flex:0 0 auto;font-size:11px}
+  .ev-title{margin-top:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;font-size:12px}
+  .rev-form{margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)}
+  .rev-stars{font-size:26px;color:var(--accent);cursor:pointer;letter-spacing:3px;user-select:none;margin:2px 0}
+  .rev-star{cursor:pointer}
+  .rev-text{width:100%;margin:6px 0;padding:8px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff}
+  /* --- live tracking overlay (Uber/Yandex Go style) --- */
+  .trk-ov{position:fixed;inset:0;z-index:2000;background:#e9eeec;display:flex;flex-direction:column}
+  .trk-ov.hidden{display:none}
+  .trk-top{position:absolute;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;gap:10px;padding:12px 14px;pointer-events:none}
+  .trk-back{pointer-events:auto;width:42px;height:42px;border-radius:50%;border:none;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.16);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#123}
+  .trk-livep{pointer-events:auto;display:flex;align-items:center;gap:7px;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.16);border-radius:22px;padding:8px 14px;font-weight:800;font-size:13px}
+  .trk-livep .d{width:9px;height:9px;border-radius:50%;background:#e11d1d;animation:pulse 1.2s infinite}
+  @keyframes pulse{0%{opacity:1}50%{opacity:.25}100%{opacity:1}}
+  #trkMap{flex:1 1 auto;width:100%;min-height:200px}
+  .trk-sheet{background:#fff;border-radius:22px 22px 0 0;box-shadow:0 -6px 26px rgba(0,0,0,.16);padding:12px 16px 20px;max-height:56vh;overflow:auto}
+  .trk-grab{width:42px;height:5px;border-radius:3px;background:#d7dedb;margin:0 auto 12px}
+  .trk-row1{display:flex;align-items:center;gap:12px}
+  .trk-eta{display:flex;align-items:baseline;gap:6px}
+  .trk-eta b{font-size:32px;color:var(--brand-d,#0d5c3a);line-height:1;font-weight:900}
+  .trk-eta .u{color:#667}
+  .trk-status{margin-left:auto;font-weight:800;font-size:12.5px;padding:6px 13px;border-radius:20px;background:#e7f7ec;color:#0a7d33;white-space:nowrap}
+  .trk-status.wait{background:#fff5e6;color:#9a6400}.trk-status.done{background:#eef2f1;color:#555}
+  .trk-prog{height:8px;border-radius:6px;background:#eef2f1;margin:12px 0 4px;overflow:hidden}
+  .trk-prog>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#1b8f5a,#39b878);border-radius:6px;transition:width .6s}
+  .trk-prog-txt{font-size:12px;color:#667}
+  .trk-metrics{display:flex;gap:10px;margin:12px 0 2px}
+  .trk-metric{flex:1;background:#f8fbfa;border:1px solid var(--line,#e3e9e7);border-radius:14px;padding:9px 10px;text-align:center}
+  .trk-metric b{font-size:19px}.trk-metric span{font-size:11px;color:#667;display:block;margin-top:1px}
+  .trk-tg{width:100%;margin-top:12px;background:#2aa5e0;color:#fff;border:none;border-radius:14px;padding:13px;font-weight:800;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+  .trk-tg.linked{background:#e7f7ec;color:#0a7d33}
+  .trk-drv{margin-top:12px}
+  .busmk{width:40px;height:40px;margin:-20px 0 0 -20px;pointer-events:none}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Bir<span>ga</span></div>
+  <div class="right">
+    <div class="lang" id="lang">
+      <button data-l="uz">UZ</button><button data-l="ru" class="on">RU</button><button data-l="en">EN</button>
+    </div>
+    <div class="who" id="who"></div>
+  </div>
+</header>
+<div class="wrap">
+
+  <!-- LOGIN -->
+  <div id="login" class="card" style="max-width:440px;margin:40px auto">
+    <h2 data-t="login_title">Вход для родителей</h2>
+    <p class="muted" data-t="login_hint">Введите номер телефона — придёт код подтверждения (демо: 1111).</p>
+    <label data-t="phone">Телефон</label>
+    <input id="phone" value="+998901000009" placeholder="+998 90 000 00 00">
+    <label data-t="name">Ваше имя</label>
+    <input id="pname" value="Родитель Азиз">
+    <div id="otpBox" class="hidden">
+      <label data-t="code">Код из SMS / Telegram</label>
+      <input id="code" value="1111" maxlength="6">
+    </div>
+    <div style="margin-top:14px;display:flex;gap:10px">
+      <button class="primary" id="btnOtp" data-t="get_code">Получить код</button>
+      <button class="primary hidden" id="btnVerify" data-t="enter">Войти</button>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="app" class="hidden">
+    <div class="tabs">
+      <button data-tab="new" class="active" data-t="tab_new">Новая заявка</button>
+      <button data-tab="subs" data-t="tab_subs">Мои подписки</button>
+    </div>
+
+    <div id="tab-new">
+      <div class="grid2">
+        <div class="card">
+          <h2 data-t="c1_title">1. Дети и школа</h2>
+
+          <label data-t="children">Сколько детей</label>
+          <div class="counter">
+            <button id="cMinus">−</button><span class="n" id="cNum">1</span><button id="cPlus">+</button>
+          </div>
+
+          <label data-t="school">Школа / центр (точка Б)</label>
+          <select id="schoolSel"></select>
+
+          <h3 style="margin-top:16px" data-t="format">Формат</h3>
+          <div class="seg" id="mode">
+            <button data-m="shared" class="on" data-t="shared">Совместный рейс</button>
+            <button data-m="private" data-t="private">Личный водитель</button>
+          </div>
+          <p class="muted" id="modeHint"></p>
+
+          <h3 style="margin-top:16px" data-t="direction">Направление</h3>
+          <div class="seg" id="dir">
+            <button data-d="both" class="on" data-t="dir_both">Туда-обратно</button>
+            <button data-d="am" data-t="dir_am">Только утром</button>
+            <button data-d="pm" data-t="dir_pm">Только вечером</button>
+          </div>
+
+          <div id="vehBlock">
+            <h3 style="margin-top:16px" data-t="vehicles">Приемлемые автомобили (по местам)</h3>
+            <div class="chips" id="vehicles"></div>
+          </div>
+
+          <h3 style="margin-top:16px" data-t="days">Дни недели</h3>
+          <div class="chips" id="days"></div>
+          <p class="muted" id="daysHint"></p>
+
+          <h3 style="margin-top:16px" data-t="extra">Дополнительно</h3>
+          <div class="chips" id="opts">
+            <div class="chip" data-o="teacher" data-t="opt_teacher">Педагог-водитель</div>
+            <div class="chip" data-o="child_seat" data-t="opt_seat">Детское кресло</div>
+            <div class="chip" data-o="elementary" data-t="opt_elem">Только началка</div>
+          </div>
+          <label data-t="needs_label">Ваши нужды (необязательно)</label>
+          <textarea id="needs" rows="2" style="width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit"></textarea>
+        </div>
+
+        <div class="card">
+          <h2 data-t="c2_title">2. Адрес (точка A)</h2>
+          <label data-t="search_addr" style="margin-top:0">🔎 Найти адрес (точка A)</label>
+          <input id="searchA" autocomplete="off" placeholder="Улица, дом, ориентир…" style="margin-bottom:10px">
+          <div id="map" class="map"></div>
+          <div style="margin-top:10px">
+            <button class="ghost geo" id="btnGeo">📍 <span data-t="my_location">Моё местоположение</span></button>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <div><label data-t="lat">Широта</label><input id="lat" value="41.2860"></div>
+            <div><label data-t="lon">Долгота</label><input id="lon" value="69.2010"></div>
+          </div>
+          <label data-t="addr">Адрес (описание)</label>
+          <input id="addr" value="Чиланзар, кв. 10">
+          <button class="primary" id="btnCalc" style="margin-top:14px;width:100%" data-t="calc">Рассчитать стоимость</button>
+        </div>
+      </div>
+
+      <div id="calcResult" class="card hidden">
+        <h2><span data-t="variants_title">Варианты подписки</span> <span class="muted" id="calcDist"></span></h2>
+        <div class="row" id="variants"></div>
+        <div id="estNote" class="muted" style="margin-top:10px;font-size:13px"></div>
+        <div style="margin-top:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <button class="primary" id="btnSubscribe" data-t="subscribe">Оформить подписку</button>
+          <button class="ghost" type="button" onclick="openHowCalc()" data-t="how_calc">❓ Как считается цена</button>
+          <span class="muted" id="poolHint"></span>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-subs" class="hidden"><div id="subsList"></div></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- Модалка «как считается цена» -->
+<div id="howModal" style="position:fixed;inset:0;background:rgba(20,40,32,.5);z-index:60;display:none;align-items:center;justify-content:center;padding:16px">
+  <div class="card" style="max-width:560px;width:100%;max-height:88vh;overflow:auto;margin:0">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <h2 style="margin:0" data-t="how_title">Как считается стоимость</h2>
+      <button class="ghost" style="margin-left:auto" type="button" onclick="closeHowCalc()" data-t="close">Закрыть</button>
+    </div>
+    <div id="howBody"></div>
+  </div>
+</div>
+
+<script>
+const API = location.origin;
+let TOKEN=null, ME=null, lang='ru';
+let selectedVariant=null;
+
+/* ---------- i18n ---------- */
+const I18N = {
+  ru:{login_title:'Вход для родителей',login_hint:'Введите номер телефона — придёт код подтверждения (демо: 1111).',phone:'Телефон',name:'Ваше имя',code:'Код из SMS / Telegram',get_code:'Получить код',enter:'Войти',
+    tab_new:'Новая заявка',tab_subs:'Мои подписки',c1_title:'1. Дети и школа',children:'Сколько детей',school:'Школа / центр (точка Б)',format:'Формат',shared:'Совместный рейс',private:'Личный водитель',
+    vehicles:'Приемлемые автомобили (по местам)',days:'Дни недели',c2_title:'2. Адрес (точка A)',my_location:'Моё местоположение',lat:'Широта',lon:'Долгота',addr:'Адрес (описание)',calc:'Рассчитать стоимость',
+    variants_title:'Варианты подписки',subscribe:'Оформить подписку',
+    hint_shared:'Дешевле: цена делится между детьми. Фургон — отмена без возврата; легковой — возврат 60%.',
+    hint_private:'Выделенная машина только для ваших детей. Дороже. Отмена дня — 100% возврат. До 7 дней.',
+    days_van:'Фургонные рейсы ходят Пн–Пт.',days_light:'Легковой и личный — до 7 дней.',
+    per_child:'За ребёнка/мес',car_month:'Машина/мес',family:'Итого за семью',min_children:'Мин. детей',seats:'мест',need_car:'Нужно машин',pool:'скидка пула',
+    monthly:'/мес',forming:'формируется',active:'активна',running:'в пути',done:'завершён',
+    watch:'Следить за машиной',calendar:'Календарь и отмена дня',start_trip:'Старт рейса',driver:'Водитель',pickup_points:'Общие точки сбора',pickup_door:'Забор от двери',distance:'Дистанция',auto:'Автомобиль',experience:'стаж',years:'лет',profession:'Профессия',verified:'Личность подтверждена',reviews:'Отзывы',rides:'рейсов',events:'Лента рейса',no_events:'Пока событий нет',arrived:'на точке',rate_driver:'Оцените водителя',send_review:'Отправить отзыв',comment_ph:'Комментарий (необязательно)',pick_rating:'Выберите оценку',thanks:'Спасибо за отзыв!'},
+  uz:{login_title:'Ota-onalar uchun kirish',login_hint:'Telefon raqamini kiriting — tasdiqlash kodi keladi (demo: 1111).',phone:'Telefon',name:'Ismingiz',code:'SMS / Telegram kodi',get_code:'Kod olish',enter:'Kirish',
+    tab_new:'Yangi ariza',tab_subs:'Obunalarim',c1_title:'1. Bolalar va maktab',children:'Nechta bola',school:'Maktab / markaz (B nuqta)',format:'Format',shared:'Birgalikda reys',private:'Shaxsiy haydovchi',
+    vehicles:'Mos avtomobillar (o‘rin bo‘yicha)',days:'Hafta kunlari',c2_title:'2. Manzil (A nuqta)',my_location:'Mening joylashuvim',lat:'Kenglik',lon:'Uzunlik',addr:'Manzil (izoh)',calc:'Narxni hisoblash',
+    variants_title:'Obuna variantlari',subscribe:'Obuna rasmiylashtirish',
+    hint_shared:'Arzonroq: narx bolalar orasida bo‘linadi. Furgon — qaytarilmaydi; yengil — 60% qaytariladi.',
+    hint_private:'Faqat sizning bolalaringiz uchun alohida mashina. Qimmatroq. Bekor qilinsa — 100% qaytariladi. 7 kungacha.',
+    days_van:'Furgon reyslari Du–Ju.',days_light:'Yengil va shaxsiy — 7 kungacha.',
+    per_child:'Bola uchun/oy',car_month:'Mashina/oy',family:'Oila uchun jami',min_children:'Min. bolalar',seats:'o‘rin',need_car:'Mashina kerak',pool:'pul chegirmasi',
+    monthly:'/oy',forming:'shakllanmoqda',active:'faol',running:'yo‘lda',done:'tugadi',
+    watch:'Mashinani kuzatish',calendar:'Kalendar va kunni bekor qilish',start_trip:'Reys boshlanishi',driver:'Haydovchi',pickup_points:'Umumiy yig‘ilish nuqtalari',pickup_door:'Eshik oldidan',distance:'Masofa',auto:'Avtomobil',experience:'tajriba',years:'yil',profession:'Kasbi',verified:'Shaxsi tasdiqlangan',reviews:'Sharhlar',rides:'reys',events:'Reys tasmasi',no_events:'Hozircha voqealar yo‘q',arrived:'nuqtada',rate_driver:'Haydovchini baholang',send_review:'Sharh yuborish',comment_ph:'Izoh (ixtiyoriy)',pick_rating:'Baho tanlang',thanks:'Sharhingiz uchun rahmat!'},
+  en:{login_title:'Parent sign in',login_hint:'Enter your phone — a verification code will arrive (demo: 1111).',phone:'Phone',name:'Your name',code:'SMS / Telegram code',get_code:'Get code',enter:'Sign in',
+    tab_new:'New request',tab_subs:'My subscriptions',c1_title:'1. Children & school',children:'How many children',school:'School / center (point B)',format:'Format',shared:'Shared route',private:'Private driver',
+    vehicles:'Acceptable vehicles (by seats)',days:'Weekdays',c2_title:'2. Address (point A)',my_location:'My location',lat:'Latitude',lon:'Longitude',addr:'Address (note)',calc:'Calculate price',
+    variants_title:'Subscription options',subscribe:'Subscribe',
+    hint_shared:'Cheaper: cost is split between children. Van — no refund; light car — 60% refund.',
+    hint_private:'Dedicated car for your children only. More expensive. Cancel day — 100% refund. Up to 7 days.',
+    days_van:'Van routes run Mon–Fri.',days_light:'Light car & private — up to 7 days.',
+    per_child:'Per child/mo',car_month:'Car/mo',family:'Family total',min_children:'Min children',seats:'seats',need_car:'Cars needed',pool:'pool discount',
+    monthly:'/mo',forming:'forming',active:'active',running:'en route',done:'done',
+    watch:'Track the car',calendar:'Calendar & cancel a day',start_trip:'Route start',driver:'Driver',pickup_points:'Common pickup points',pickup_door:'Door pickup',distance:'Distance',auto:'Vehicle',experience:'exp.',years:'yrs',profession:'Profession',verified:'ID verified',reviews:'Reviews',rides:'rides',events:'Trip feed',no_events:'No events yet',arrived:'at stop',rate_driver:'Rate the driver',send_review:'Send review',comment_ph:'Comment (optional)',pick_rating:'Pick a rating',thanks:'Thanks for your review!'}
+};
+Object.assign(I18N.ru,{direction:'Направление',dir_both:'Туда-обратно',dir_am:'Только утром',dir_pm:'Только вечером',extra:'Дополнительно',opt_teacher:'Педагог-водитель',opt_seat:'Детское кресло',opt_elem:'Только началка',needs_label:'Ваши нужды (необязательно)',pickup_time:'Время выхода ребёнка',final_price:'Итоговая стоимость'});
+Object.assign(I18N.uz,{direction:'Yo‘nalish',dir_both:'Borish-kelish',dir_am:'Faqat ertalab',dir_pm:'Faqat kechqurun',extra:'Qo‘shimcha',opt_teacher:'Pedagog-haydovchi',opt_seat:'Bolalar kreslosi',opt_elem:'Faqat boshlang‘ich',needs_label:'Ehtiyojlaringiz (ixtiyoriy)',pickup_time:'Bola chiqish vaqti',final_price:'Yakuniy narx'});
+Object.assign(I18N.en,{direction:'Direction',dir_both:'Round trip',dir_am:'Morning only',dir_pm:'Evening only',extra:'Extra',opt_teacher:'Teacher-driver',opt_seat:'Child seat',opt_elem:'Elementary only',needs_label:'Your needs (optional)',pickup_time:'Child leave time',final_price:'Final price'});
+Object.assign(I18N.ru,{search_addr:'🔎 Найти адрес (точка A)'});
+Object.assign(I18N.uz,{search_addr:'🔎 Manzilni topish (A nuqta)'});
+Object.assign(I18N.en,{search_addr:'🔎 Find address (point A)'});
+Object.assign(I18N.ru,{type_state:'Гос. школа',type_private:'Частная школа',type_center:'Учебный центр',km:'км',est_note:'Это примерная стоимость. Окончательная зависит от того, сколько соседей поедут с вами в одном рейсе — чем больше, тем дешевле каждому.',how_calc:'❓ Как считается цена',how_title:'Как считается стоимость',close:'Закрыть',your_case:'Ваш случай:'});
+Object.assign(I18N.uz,{type_state:'Davlat maktabi',type_private:'Xususiy maktab',type_center:'O‘quv markazi',km:'km',est_note:'Bu taxminiy narx. Yakuniy narx bir reysda siz bilan ketadigan qo‘shnilar soniga bog‘liq — qancha ko‘p bo‘lsa, har biriga shuncha arzon.',how_calc:'❓ Narx qanday hisoblanadi',how_title:'Narx qanday hisoblanadi',close:'Yopish',your_case:'Sizning holatingiz:'});
+Object.assign(I18N.en,{type_state:'Public school',type_private:'Private school',type_center:'Learning center',km:'km',est_note:'This is an estimate. The final price depends on how many neighbours share your route — the more, the cheaper for each.',how_calc:'❓ How the price is calculated',how_title:'How the price is calculated',close:'Close',your_case:'Your case:'});
+Object.assign(I18N.ru,{trk_title:'Автобус вашего ребёнка',trk_live:'В эфире',trk_eta:'до следующей точки',trk_min:'мин',trk_arr:'прибытие',trk_speed:'скорость',trk_kmh:'км/ч',trk_picked:'Забрал точек',trk_of:'из',trk_connect_tg:'Подключить Telegram',trk_tg_linked:'Telegram подключён',trk_no_pos:'Ждём геолокацию водителя…',st_running:'В пути',st_forming:'Формируется',st_active:'Ожидание',st_done:'Завершён',trk_next_school:'Едет в школу'});
+Object.assign(I18N.uz,{trk_title:'Farzandingiz avtobusi',trk_live:'Efirda',trk_eta:'keyingi nuqtagacha',trk_min:'daq',trk_arr:'yetib borish',trk_speed:'tezlik',trk_kmh:'km/soat',trk_picked:'Olingan nuqtalar',trk_of:'/',trk_connect_tg:'Telegram ulash',trk_tg_linked:'Telegram ulangan',trk_no_pos:'Haydovchi geolokatsiyasi kutilmoqda…',st_running:'Yo‘lda',st_forming:'Shakllanmoqda',st_active:'Kutish',st_done:'Yakunlandi',trk_next_school:'Maktabga ketmoqda'});
+Object.assign(I18N.en,{trk_title:'Your child’s bus',trk_live:'Live',trk_eta:'to next stop',trk_min:'min',trk_arr:'arrival',trk_speed:'speed',trk_kmh:'km/h',trk_picked:'Stops done',trk_of:'of',trk_connect_tg:'Connect Telegram',trk_tg_linked:'Telegram connected',trk_no_pos:'Waiting for driver location…',st_running:'On the way',st_forming:'Forming',st_active:'Waiting',st_done:'Completed',trk_next_school:'Heading to school'});
+function t(k){return (I18N[lang]&&I18N[lang][k])||k;}
+/* Склонение «ребёнок/ребёнка/детей» по языку */
+function childWord(n){
+  if(lang==='ru'){const a=n%10,b=n%100;return (a===1&&b!==11)?'ребёнок':((a>=2&&a<=4)&&(b<12||b>14))?'ребёнка':'детей';}
+  if(lang==='en')return n===1?'child':'children';
+  return 'bola';
+}
+function poolHintText(need,near){
+  if(lang==='uz')return need>0?`Reys uchun yana ${need} ${childWord(need)} kerak. Yaqin atrofda: ${near}.`:`Yaqin atrofda ${near} — reys darrov boshlanadi!`;
+  if(lang==='en')return need>0?`${need} more ${childWord(need)} needed to start a route. Nearby: ${near}.`:`${near} nearby — the route starts right away!`;
+  return need>0?`Нужно ещё ${need} ${childWord(need)} для запуска рейса. Рядом уже: ${near}.`:`Рядом уже ${near} — рейс запустится сразу!`;
+}
+function applyLang(){
+  document.querySelectorAll('[data-t]').forEach(el=>{const k=el.getAttribute('data-t');if(I18N[lang][k])el.textContent=I18N[lang][k];});
+  updateModeHint();updateDaysHint();
+  renderSchools();
+  if(window.LAST_CALC)renderCalc(window.LAST_CALC);
+  document.documentElement.lang=lang;
+}
+document.querySelectorAll('#lang button').forEach(b=>b.onclick=()=>{
+  lang=b.dataset.l;document.querySelectorAll('#lang button').forEach(x=>x.classList.toggle('on',x===b));applyLang();
+});
+
+/* Автомобили по местам */
+const VEH = {car4:'4',car7:'7',van9:'9',van10:'10',van20:'20'};
+const VEH_NOTE = {car7:'Kia Carnival'};
+const VANS = ['van9','van10','van20'];
+const DAY_LABELS = {ru:['Пн','Вт','Ср','Чт','Пт','Сб','Вс'],uz:['Du','Se','Ch','Pa','Ju','Sh','Ya'],en:['Mon','Tue','Wed','Thu','Fri','Sat','Sun']};
+
+function toast(m){const el=document.getElementById('toast');el.textContent=m;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200);}
+function fmt(n){return (n||0).toLocaleString('ru-RU')+' '+(lang==='uz'?'so‘m':lang==='en'?'UZS':'сум');}
+async function api(method,path,body){
+  const h={'Content-Type':'application/json'};if(TOKEN)h['Authorization']='Bearer '+TOKEN;
+  const r=await fetch(API+path,{method,headers:h,body:body?JSON.stringify(body):undefined});
+  const j=await r.json();if(!j.ok&&j.error)toast(j.error);return j;
+}
+
+/* ---------- AUTH ---------- */
+document.getElementById('btnOtp').onclick=async()=>{
+  const j=await api('POST','/api/auth/otp',{phone:phone.value});
+  if(j.ok){otpBox.classList.remove('hidden');btnVerify.classList.remove('hidden');btnOtp.classList.add('hidden');
+    if(j.dev_code)code.value=j.dev_code;toast(j.message||'Код отправлен');}
+};
+document.getElementById('btnVerify').onclick=async()=>{
+  const j=await api('POST','/api/auth/verify',{phone:phone.value,code:code.value,name:pname.value});
+  if(j.ok){TOKEN=j.token;ME=j.parent;startApp();}
+};
+function startApp(){
+  login.classList.add('hidden');app.classList.remove('hidden');
+  document.getElementById('who').textContent=ME.name+' · '+ME.phone;
+  buildDays();buildVehicles();loadSchools();applyLang();
+}
+
+/* ---------- TABS ---------- */
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  const tab=b.dataset.tab;
+  document.getElementById('tab-new').classList.toggle('hidden',tab!=='new');
+  document.getElementById('tab-subs').classList.toggle('hidden',tab!=='subs');
+  if(tab==='subs')loadSubs();
+});
+
+/* ---------- FORM STATE ---------- */
+let childrenCount=1, dayMask=31, vehSet=new Set(['car7','van10']), mode='shared', direction='both';
+document.querySelectorAll('#dir button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#dir button').forEach(x=>x.classList.remove('on'));b.classList.add('on');direction=b.dataset.d;});
+document.querySelectorAll('#opts .chip').forEach(c=>c.onclick=()=>c.classList.toggle('on'));
+function optOn(o){const c=document.querySelector('#opts .chip[data-o="'+o+'"]');return c&&c.classList.contains('on');}
+
+document.getElementById('cPlus').onclick=()=>{childrenCount++;cNum.textContent=childrenCount;};
+document.getElementById('cMinus').onclick=()=>{if(childrenCount>1){childrenCount--;cNum.textContent=childrenCount;}};
+
+function buildDays(){
+  const el=document.getElementById('days');el.innerHTML='';
+  DAY_LABELS[lang].forEach((d,i)=>{
+    const c=document.createElement('div');c.className='chip'+((dayMask&(1<<i))?' on':'');c.textContent=d;c.dataset.i=i;
+    c.onclick=()=>{if(c.classList.contains('disabled'))return;dayMask^=(1<<i);c.classList.toggle('on');};
+    el.appendChild(c);
+  });
+  applyDaysRule();
+}
+function buildVehicles(){
+  const el=document.getElementById('vehicles');el.innerHTML='';
+  Object.keys(VEH).forEach(k=>{
+    const c=document.createElement('div');c.className='chip'+(vehSet.has(k)?' on':'');
+    c.textContent=VEH[k]+' '+t('seats')+(VEH_NOTE[k]?' ('+VEH_NOTE[k]+')':'');
+    c.onclick=()=>{vehSet.has(k)?vehSet.delete(k):vehSet.add(k);c.classList.toggle('on');applyDaysRule();};
+    el.appendChild(c);
+  });
+}
+function hasVanSelected(){return [...vehSet].some(v=>VANS.includes(v));}
+function applyDaysRule(){
+  // Фургонные совместные рейсы — только Пн–Пт; иначе до 7 дней.
+  const lockWeekend = (mode==='shared' && hasVanSelected());
+  document.querySelectorAll('#days .chip').forEach(c=>{
+    const i=+c.dataset.i;
+    if(i>=5){ // Сб, Вс
+      c.classList.toggle('disabled',lockWeekend);
+      if(lockWeekend && (dayMask&(1<<i))){dayMask&=~(1<<i);c.classList.remove('on');}
+    }
+  });
+  updateDaysHint();
+}
+function updateDaysHint(){document.getElementById('daysHint').textContent = (mode==='shared'&&hasVanSelected())?t('days_van'):t('days_light');}
+function updateModeHint(){document.getElementById('modeHint').textContent = mode==='shared'?t('hint_shared'):t('hint_private');}
+
+document.querySelectorAll('#mode button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#mode button').forEach(x=>x.classList.remove('on'));b.classList.add('on');mode=b.dataset.m;
+  document.getElementById('vehBlock').classList.toggle('hidden',mode==='private');
+  updateModeHint();applyDaysRule();
+});
+
+async function loadSchools(){
+  const j=await api('GET','/api/schools');
+  window.SCHOOLS=j.schools||[];
+  renderSchools();
+}
+function renderSchools(){
+  const sel=document.getElementById('schoolSel');if(!sel||!window.SCHOOLS)return;
+  const cur=sel.value;sel.innerHTML='';
+  window.SCHOOLS.forEach(s=>{
+    const o=document.createElement('option');o.value=s.id;
+    const typeLabel=t('type_'+s.type);
+    o.textContent=s.name+(typeLabel&&typeLabel!=='type_'+s.type?' · '+typeLabel:'');
+    sel.appendChild(o);
+  });
+  if(cur)sel.value=cur;
+}
+
+/* ---------- GEOLOCATION ---------- */
+document.getElementById('btnGeo').onclick=()=>{
+  if(!navigator.geolocation){toast('Геолокация недоступна');return;}
+  toast('Определяю местоположение…');
+  navigator.geolocation.getCurrentPosition(p=>{
+    document.getElementById('lat').value=p.coords.latitude.toFixed(6);
+    document.getElementById('lon').value=p.coords.longitude.toFixed(6);
+    if(window.setMapMarker)setMapMarker(p.coords.latitude,p.coords.longitude);
+    toast('Готово');
+  },()=>toast('Не удалось получить местоположение'),{enableHighAccuracy:true,timeout:8000});
+};
+
+/* ---------- CALC ---------- */
+document.getElementById('btnCalc').onclick=async()=>{
+  const j=await api('POST','/api/calc',{
+    home_lat:+lat.value, home_lon:+lon.value, school_id:+schoolSel.value,
+    days_mask:dayMask, children_count:childrenCount, direction:direction, vehicle_options:[...vehSet]
+  });
+  if(!j.ok)return;
+  window.LAST_CALC=j;
+  renderCalc(j);
+};
+function renderCalc(j){
+  document.getElementById('calcResult').classList.remove('hidden');
+  const n=j.children_count||childrenCount;
+  document.getElementById('calcDist').textContent='· '+j.distance_km+' '+t('km')+' · '+n+' '+childWord(n)+(j.pickup_time?' · '+t('pickup_time')+' '+j.pickup_time:'');
+  const box=document.getElementById('variants');box.innerHTML='';selectedVariant=null;
+  j.variants.forEach(v=>{
+    if(mode==='private'&&v.mode!=='private')return;
+    if(mode==='shared'&&v.mode==='private')return;
+    const d=document.createElement('div');d.className='variant';d.style.flex='1';d.style.minWidth='210px';
+    const title = v.mode==='private'?t('private'):(VEH[v.vehicle_class]+' '+t('seats')+(VEH_NOTE[v.vehicle_class]?' ('+VEH_NOTE[v.vehicle_class]+')':''));
+    const priceMain = v.mode==='private'
+      ? `<div class="m">${fmt(v.car_monthly)}<span class="muted" style="font-size:13px">${t('monthly')}</span></div><div class="kv"><span>${t('car_month')}</span><b>${fmt(v.car_monthly)}</b></div>`
+      : `<div class="m">${fmt(v.per_child_monthly)}<span class="muted" style="font-size:13px">${t('monthly')}</span></div><div class="kv"><span>${t('per_child')}</span><b>${fmt(v.per_child_monthly)}</b></div>`;
+    d.innerHTML=`<div class="muted">${title}</div>${priceMain}
+      <div class="kv"><span>${t('family')} (${n})</span><b>${fmt(v.family_monthly)}</b></div>
+      <div class="kv"><span>${t('min_children')}</span><b>${v.min_children}</b></div>
+      ${v.routes_needed>1?`<div class="kv"><span>${t('need_car')}</span><b>${v.routes_needed}</b></div>`:''}`;
+    d.onclick=()=>{document.querySelectorAll('.variant').forEach(x=>x.classList.remove('sel'));d.classList.add('sel');selectedVariant=v;};
+    box.appendChild(d);
+    if(!selectedVariant)d.onclick();
+  });
+  document.getElementById('estNote').textContent=t('est_note');
+  document.getElementById('poolHint').textContent=poolHintText(j.need_more,j.nearby_forming);
+}
+
+/* ---------- Как считается цена (схема) ---------- */
+function openHowCalc(){
+  const j=window.LAST_CALC; if(!j){toast(t('calc'));return;}
+  document.getElementById('howBody').innerHTML=howCalcHTML(j);
+  document.getElementById('howModal').style.display='flex';
+}
+function closeHowCalc(){document.getElementById('howModal').style.display='none';}
+function howCalcHTML(j){
+  const km=j.distance_km;
+  // Иллюстративный маршрут: 3 дома по пути к школе (наглядная схема пулинга).
+  const pins=[{x:60,lab:'1',sub:{ru:'1-я точка',uz:'1-nuqta',en:'1st point'}[lang]},
+              {x:180,lab:'2',sub:{ru:'2-я',uz:'2-nuqta',en:'2nd'}[lang]},
+              {x:300,lab:'3',sub:{ru:'3-я',uz:'3-nuqta',en:'3rd'}[lang]}];
+  const houses=pins.map(p=>`
+    <g>
+      <line x1="${p.x}" y1="120" x2="${p.x+120}" y2="120" stroke="#9dc3b2" stroke-width="3" stroke-dasharray="4 4"/>
+      <circle cx="${p.x}" cy="120" r="17" fill="#2e7d5b"/><text x="${p.x}" y="126" text-anchor="middle" fill="#fff" font-weight="800" font-size="15">${p.lab}</text>
+      <text x="${p.x}" y="160" text-anchor="middle" fill="#6b7c74" font-size="12">🏠 ${p.sub}</text>
+    </g>`).join('');
+  const svg=`<svg viewBox="0 0 480 190" width="100%" style="max-width:480px">
+    ${houses}
+    <circle cx="420" cy="120" r="21" fill="#c0392b"/><text x="420" y="127" text-anchor="middle" fill="#fff" font-size="18">🏫</text>
+    <text x="420" y="162" text-anchor="middle" fill="#6b7c74" font-size="12">${{ru:'Школа (Б)',uz:'Maktab (B)',en:'School (B)'}[lang]}</text>
+  </svg>`;
+  const steps={
+    ru:['Детей собираем по одному по пути к школе: 1-я точка → 2-я → 3-я → школа.',
+        'Стоимость всей машины за поездку = 20 000 + 4 000 × км маршрута.',
+        'Делим между семьями по их расстоянию: кто дальше — платит больше, но всем дешевле, чем свой водитель.',
+        'Чем больше соседей рядом — тем ниже цена каждому.'],
+    uz:['Bolalarni maktab yo‘lida birma-bir olamiz: 1-nuqta → 2 → 3 → maktab.',
+        'Butun mashina bir yo‘l uchun = 20 000 + 4 000 × yo‘l km.',
+        'Oilalar orasida masofaga qarab bo‘linadi: uzoqroq — ko‘proq to‘laydi, lekin hammaga shaxsiydan arzon.',
+        'Qancha qo‘shni ko‘p bo‘lsa — har biriga shuncha arzon.'],
+    en:['Children are picked up one by one on the way to school: point 1 → 2 → 3 → school.',
+        'Whole-car cost per trip = 20,000 + 4,000 × route km.',
+        'Split between families by their distance: farther pays more, but everyone pays less than a private car.',
+        'The more neighbours nearby — the cheaper for each.']
+  }[lang];
+  const example={ru:'Пример: маршрут 12 км → машина 68 000 за поездку. Семьи за 10 / 6 / 2 км платят 37 778 / 22 667 / 7 556.',
+                 uz:'Misol: 12 km yo‘l → mashina 68 000. 10 / 6 / 2 km oilalar 37 778 / 22 667 / 7 556 to‘laydi.',
+                 en:'Example: 12 km route → car 68,000/trip. Families at 10 / 6 / 2 km pay 37,778 / 22,667 / 7,556.'}[lang];
+  return `<div style="text-align:center;margin-bottom:6px">${svg}</div>
+    <p style="background:#fff7ea;border:1px solid #f0dcae;border-radius:10px;padding:10px;font-size:13.5px">${t('est_note')}</p>
+    <ol style="padding-left:18px;font-size:14px;line-height:1.5">${steps.map(s=>`<li style="margin-bottom:4px">${s}</li>`).join('')}</ol>
+    <p class="muted" style="font-size:13px">${example}</p>
+    <p style="font-size:14px"><b>${t('your_case')}</b> ${km} ${t('km')} ${'· '+({ru:'начальная оценка',uz:'boshlang‘ich baho',en:'initial estimate'}[lang])}.</p>`;
+}
+
+/* ---------- SUBSCRIBE ---------- */
+document.getElementById('btnSubscribe').onclick=async()=>{
+  const v=selectedVariant;if(!v){toast('Выберите вариант');return;}
+  const veh = v.mode==='private' ? [v.vehicle_class] : [v.vehicle_class];
+  const j=await api('POST','/api/subscriptions',{
+    school_id:+schoolSel.value, home_lat:+lat.value, home_lon:+lon.value,
+    home_address:addr.value, children_count:childrenCount, mode:v.mode, direction:direction,
+    days_mask:dayMask, vehicle_options:veh, needs:document.getElementById('needs').value,
+    opt_teacher:optOn('teacher')?1:0, opt_child_seat:optOn('child_seat')?1:0, opt_elementary:optOn('elementary')?1:0
+  });
+  if(j.ok){toast('Подписка оформлена!');document.querySelector('.tabs button[data-tab="subs"]').click();}
+};
+
+/* ---------- MY SUBSCRIPTIONS ---------- */
+let trackTimer=null;
+async function loadSubs(){
+  const j=await api('GET','/api/subscriptions');const box=document.getElementById('subsList');box.innerHTML='';
+  if(!(j.subscriptions||[]).length){box.innerHTML='<div class="card muted">—</div>';return;}
+  for(const s of j.subscriptions){box.appendChild(await subCard(s));}
+}
+function badge(st){const m={forming:['b-forming',t('forming')],active:['b-active',t('active')],running:['b-running',t('running')],done:['b-done',t('done')],paused:['b-forming','pause'],cancelled:['b-done','x']};const[c,txt]=m[st]||['b-done',st];return `<span class="badge ${c}">${txt}</span>`;}
+
+function mgStars(rating){const rt=Math.round((+rating||5)*2)/2;let s='';for(let i=1;i<=5;i++){s+= rt>=i?'★':'☆';}return s;}
+function mgEvIcon(type){return ({accepted:'✅',started:'🚌',started_route:'🚌',picked:'🧒',pickup:'🧒',arrived:'📍',completed:'🏁',done:'🏁',alert_speeding:'⚠️',alert_late:'⏰',alert_offroute:'🛰️',alert:'⚠️'}[type])||'•';}
+function mgTime(ts){if(!ts)return '';const d=new Date(ts*1000);return d.toLocaleTimeString(lang==='ru'?'ru-RU':lang==='uz'?'uz-UZ':'en-US',{hour:'2-digit',minute:'2-digit'});}
+function mgEsc(x){return (x||'').toString().replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));}
+function driverCardHtml(d){
+  if(!d)return '';
+  const ph=d.photo_url?`<img class="drv-ph" src="${mgEsc(d.photo_url)}" alt="">`:`<div class="drv-ph drv-ph-ph">${mgEsc((d.name||'?').slice(0,1))}</div>`;
+  const ver=d.id_verified?`<span class="drv-ver">✔ ${t('verified')}</span>`:'';
+  const car=[d.car_color,d.car_model].filter(Boolean).map(mgEsc).join(' ');
+  const plate=d.plate?`<span class="drv-plate">${mgEsc(d.plate)}</span>`:'';
+  const prof=d.profession?mgEsc(d.profession):'';
+  const exp=d.experience_years?`${d.experience_years} ${t('years')} ${t('experience')}`:'';
+  const sub=[prof,exp].filter(Boolean).join(' · ');
+  const rv=(d.reviews||[]).slice(0,3).map(r=>`<div class="drv-rev"><span class="stars sm">${mgStars(r.stars)}</span> <span class="muted">${mgEsc(r.text)}</span></div>`).join('');
+  const rvBlock=(d.reviews&&d.reviews.length)?`<div class="drv-revs"><div class="muted" style="margin:6px 0 2px;font-size:12px">${t('reviews')}</div>${rv}</div>`:'';
+  return `<div class="drv-card">${ph}<div class="drv-main">
+    <div class="drv-name">${mgEsc(d.name)} ${ver}</div>
+    <div class="drv-rate"><span class="stars">${mgStars(d.rating)}</span> <b>${(+d.rating||5).toFixed(1)}</b> <span class="muted">· ${d.rides_count||0} ${t('rides')}</span></div>
+    ${sub?`<div class="muted drv-sub">${sub}</div>`:''}
+    ${(car||plate)?`<div class="drv-car">${car} ${plate}</div>`:''}
+  </div></div>${rvBlock}`;
+}
+function eventsHtml(events){
+  if(!events||!events.length)return `<div class="muted">${t('no_events')}</div>`;
+  return `<div class="ev-feed">`+events.map(e=>`<div class="ev"><span class="ev-i">${mgEvIcon(e.type)}</span><span class="ev-t">${mgEsc(e.text)}</span><span class="ev-ts muted">${mgTime(e.created_at)}</span></div>`).join('')+`</div>`;
+}
+const mgReviewStars={};
+function setRevStars(subId,n){mgReviewStars[subId]=n;const box=document.querySelector('.rev-stars[data-sub="'+subId+'"]');if(box)box.querySelectorAll('.rev-star').forEach((el,i)=>el.textContent=(i<n)?'★':'☆');}
+function reviewFormHtml(subId){return `<div class="rev-form" id="revf-${subId}"><div class="ev-title muted">${t('rate_driver')}</div><div class="rev-stars" data-sub="${subId}">${[1,2,3,4,5].map(n=>`<span class="rev-star" data-n="${n}" onclick="setRevStars(${subId},${n})">☆</span>`).join('')}</div><textarea class="rev-text" id="revt-${subId}" rows="2" placeholder="${t('comment_ph')}"></textarea><button class="ghost" onclick="submitReview(${subId})">${t('send_review')}</button></div>`;}
+async function submitReview(subId){const stars=mgReviewStars[subId]||0;if(stars<1){toast(t('pick_rating'));return;}const text=(document.getElementById('revt-'+subId)?.value||'').trim();const j=await api('POST','/api/subscriptions/'+subId+'/review',{stars,text});if(j&&j.ok){toast(t('thanks')+' ★'+stars);loadSubs();}else{toast((j&&j.error)||'Ошибка');}}
+async function subCard(s){
+  const full=await api('GET','/api/subscriptions/'+s.id);const sub=full.subscription;const r=sub.route;
+  const card=document.createElement('div');card.className='card';
+  let routeHtml='';
+  if(r){
+    const need=r.need_more>0?`<p class="muted">Рейс формируется — нужно ещё ${r.need_more}.</p>`:'';
+    const pmode=r.pickup_mode==='points'?t('pickup_points'):t('pickup_door');
+    const stops=(r.stops||[]).map(p=>{
+      const allPicked=(p.pickups||[]).every(x=>x.status==='picked');
+      const walks=(p.pickups||[]).map(x=>x.walk_m?`${x.children_count}×(${x.walk_m} м)`:`${x.children_count}`).join(', ');
+      return `<li class="${allPicked?'picked':''}"><span class="dot">${p.seq}</span><div><div>${p.children_total} ${t('children').toLowerCase()} · ${walks}</div><div class="muted">${p.type==='point'?t('pickup_points'):t('pickup_door')}</div></div></li>`;
+    }).join('');
+    const drv=`<div class="drv-wrap" id="drv-${s.id}">${r.driver?driverCardHtml(r.driver):''}</div>`;
+    routeHtml=`<h3 style="margin-top:8px">${t('auto')}: ${VEH[r.vehicle_class]} ${t('seats')} ${badge(r.status)}</h3>${need}
+      <div class="kv"><span>${t('auto')}</span><b>${r.current_children}/${r.seats} ${t('seats')} · ${pmode}</b></div>
+      <div class="kv"><span>${t('distance')}</span><b>${r.distance_km} км</b></div>
+      <div class="kv"><span>${t('start_trip')}</span><b>${r.start_date||'—'}</b></div>${drv}
+      <ul class="stops">${stops}</ul>
+      <div class="ev-title muted">${t('events')}</div><div id="ev-${s.id}">${eventsHtml(sub.events||[])}</div>
+      ${(r.driver && (r.status==='running'||r.status==='done'))?reviewFormHtml(s.id):''}
+      <div id="trk-${s.id}" class="muted" style="margin-top:6px"></div>`;
+  }
+  const modeLabel=sub.mode==='shared'?t('shared'):t('private');
+  card.innerHTML=`<div style="display:flex;align-items:center;gap:10px"><h2 style="margin:0">${sub.children_count} ${t('children').toLowerCase()} → ${sub.school?sub.school.name:''}</h2>${badge(sub.status)}</div>
+    <div class="kv"><span>${t('format')}</span><b>${modeLabel}</b></div>
+    <div class="kv"><span>${t('family')}</span><span class="m" style="font-size:20px;color:var(--brand-d)">${fmt(sub.monthly_price)}<span class="muted" style="font-size:13px">${t('monthly')}</span></span></div>
+    ${routeHtml}
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="ghost" data-cal="${s.id}">${t('calendar')}</button>
+      ${r?`<button class="ghost" data-track="${s.id}">${t('watch')}</button>`:''}
+    </div>
+    <div id="cal-${s.id}" class="hidden" style="margin-top:12px"></div>`;
+  card.querySelector('[data-cal]').onclick=()=>toggleCalendar(s.id);
+  const tb=card.querySelector('[data-track]');if(tb)tb.onclick=()=>startTrack(s.id);
+  return card;
+}
+let trkMap=null,trkBus=null,trkStatics=null,trkStopMarks={},trkDrew=false,trkTgInfo=null;
+function statusText(st){return t('st_'+st)||t(st)||st;}
+function decodePoly(str,precision){
+  if(!str)return[];let index=0,lat=0,lng=0,coords=[],shift,result,byte,factor=Math.pow(10,precision||5);
+  while(index<str.length){shift=0;result=0;do{byte=str.charCodeAt(index++)-63;result|=(byte&0x1f)<<shift;shift+=5;}while(byte>=0x20);
+    lat+=((result&1)?~(result>>1):(result>>1));shift=0;result=0;
+    do{byte=str.charCodeAt(index++)-63;result|=(byte&0x1f)<<shift;shift+=5;}while(byte>=0x20);
+    lng+=((result&1)?~(result>>1):(result>>1));coords.push([lat/factor,lng/factor]);}
+  return coords;
+}
+function ensureTrkOverlay(){
+  let ov=document.getElementById('trkOv');if(ov)return ov;
+  ov=document.createElement('div');ov.id='trkOv';ov.className='trk-ov hidden';
+  ov.innerHTML=`<div class="trk-top"><button class="trk-back" onclick="closeTrack()">‹</button>
+    <div class="trk-livep"><span class="d"></span><span>${t('trk_live')}</span></div></div>
+    <div id="trkMap"></div>
+    <div class="trk-sheet"><div class="trk-grab"></div>
+      <div class="trk-row1"><div class="trk-eta"><b id="trkEta">—</b><span class="u" id="trkEtaU"></span></div>
+        <span class="trk-status" id="trkStatus">—</span></div>
+      <div id="trkNext" class="muted" style="margin-top:4px;font-size:13px"></div>
+      <div class="trk-prog"><i id="trkProg"></i></div>
+      <div class="trk-prog-txt" id="trkProgTxt"></div>
+      <div class="trk-metrics">
+        <div class="trk-metric"><b id="trkSpeed">—</b><span>${t('trk_speed')}, ${t('trk_kmh')}</span></div>
+        <div class="trk-metric"><b id="trkPicked">—</b><span>${t('trk_picked')}</span></div>
+      </div>
+      <button class="trk-tg" id="trkTg" style="display:none" onclick="connectTg()">✈️ ${t('trk_connect_tg')}</button>
+      <div class="trk-drv" id="trkDrv"></div>
+      <div class="ev-title muted">${t('events')}</div><div id="trkEv"></div>
+    </div>`;
+  document.body.appendChild(ov);return ov;
+}
+const BUS_SVG='<div class="busmk"><svg width="40" height="40" viewBox="0 0 40 40" style="transform:rotate($[properties.bearing]deg);transform-origin:20px 20px"><path d="M20 4 L32 34 L20 27 L8 34 Z" fill="#1b8f5a" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/></svg></div>';
+function drawTrkStatics(j){
+  if(!window.ymaps||!ymaps.Map)return;
+  if(!trkMap){trkMap=new ymaps.Map('trkMap',{center:[41.31,69.28],zoom:12,controls:['zoomControl']},{suppressMapOpenBlock:true});}
+  if(trkDrew)return;trkDrew=true;trkStopMarks={};
+  trkStatics=new ymaps.GeoObjectCollection();trkMap.geoObjects.add(trkStatics);
+  let line=decodePoly(j.polyline,5);
+  if(!line.length){line=[];(j.stops||[]).forEach(s=>line.push([s.lat,s.lon]));if(j.school)line.push([j.school.lat,j.school.lon]);}
+  if(line.length>1)trkStatics.add(new ymaps.Polyline(line,{},{strokeColor:'#1b8f5a',strokeOpacity:0.85,strokeWidth:6}));
+  if(j.school)trkStatics.add(new ymaps.Placemark([j.school.lat,j.school.lon],{iconContent:'🏫',hintContent:j.school.name},{preset:'islands#redStretchyIcon'}));
+  (j.stops||[]).forEach(s=>{const pm=new ymaps.Placemark([s.lat,s.lon],{iconContent:String(s.seq),hintContent:s.children+' дет.'},{preset:s.done?'islands#greenCircleIcon':'islands#grayCircleIcon'});trkStopMarks[s.seq]=pm;trkStatics.add(pm);});
+  if(j.home)trkStatics.add(new ymaps.Placemark([j.home.lat,j.home.lon],{hintContent:'Ваш дом'},{preset:'islands#blueHomeCircleIcon'}));
+  if(line.length){try{trkMap.setBounds(trkStatics.getBounds(),{checkZoomRange:true,zoomMargin:60});}catch(e){}}
+}
+async function startTrack(id){
+  if(trackTimer)clearInterval(trackTimer);
+  trkDrew=false;trkTgInfo=null;trkBus=null;
+  const ov=ensureTrkOverlay();ov.classList.remove('hidden');
+  const run=()=>ymaps.ready(()=>{const poll=async()=>{
+    const j=await api('GET','/api/subscriptions/'+id+'/track');if(!j||!j.ok)return;
+    drawTrkStatics(j);
+    if(j.position&&trkMap){const c=[j.position.lat,j.position.lon];const brg=j.position.bearing!=null?j.position.bearing:0;
+      if(!trkBus){trkBus=new ymaps.Placemark(c,{bearing:brg},{iconLayout:ymaps.templateLayoutFactory.createClass(BUS_SVG),iconShape:{type:'Circle',coordinates:[0,0],radius:20}});trkMap.geoObjects.add(trkBus);}
+      else{trkBus.geometry.setCoordinates(c);trkBus.properties.set('bearing',brg);}}
+    (j.stops||[]).forEach(s=>{const pm=trkStopMarks[s.seq];if(pm)pm.options.set('preset',s.done?'islands#greenCircleIcon':'islands#grayCircleIcon');});
+    const st=j.route_status||'active';const sEl=document.getElementById('trkStatus');
+    sEl.textContent=statusText(st);sEl.className='trk-status'+(st==='done'?' done':(st==='running'?'':' wait'));
+    const eta=document.getElementById('trkEta'),etaU=document.getElementById('trkEtaU');
+    if(st==='running'&&j.eta_min){eta.textContent=j.eta_min;etaU.textContent=t('trk_min');}else{eta.textContent='—';etaU.textContent='';}
+    document.getElementById('trkNext').textContent=!j.position?t('trk_no_pos'):(j.next?(j.next.type==='school'?t('trk_next_school'):('→ '+j.next.label)):'');
+    const sp=(j.position&&j.position.speed!=null)?Math.round(j.position.speed):null;
+    document.getElementById('trkSpeed').textContent=sp!=null?sp:'—';
+    document.getElementById('trkPicked').textContent=(j.picked||0)+' '+t('trk_of')+' '+(j.total||0);
+    const pct=j.total?Math.round((j.picked/j.total)*100):0;document.getElementById('trkProg').style.width=pct+'%';
+    document.getElementById('trkProgTxt').textContent=j.picked+' / '+j.total+' · '+pct+'%';
+    document.getElementById('trkDrv').innerHTML=j.driver?driverCardHtml(j.driver):'';
+    document.getElementById('trkEv').innerHTML=eventsHtml(j.events||[]);
+    ensureTgButton(id);
+  };poll();trackTimer=setInterval(poll,3000);});
+  if(window.ymaps&&ymaps.Map){run();}else{setTimeout(run,600);}
+}
+function closeTrack(){
+  if(trackTimer){clearInterval(trackTimer);trackTimer=null;}
+  const ov=document.getElementById('trkOv');if(ov)ov.classList.add('hidden');
+  if(trkMap){try{trkMap.destroy();}catch(e){}trkMap=null;}
+  trkBus=null;trkStatics=null;trkStopMarks={};trkDrew=false;
+}
+async function ensureTgButton(id){
+  if(trkTgInfo!==null)return;trkTgInfo='pending';
+  const j=await api('GET','/api/subscriptions/'+id+'/tg-link');const btn=document.getElementById('trkTg');if(!btn)return;
+  if(!j||!j.ok||!j.enabled){trkTgInfo={};btn.style.display='none';return;}
+  trkTgInfo=j;btn.style.display='';
+  if(j.linked){btn.classList.add('linked');btn.innerHTML='✅ '+t('trk_tg_linked');}
+  else{btn.classList.remove('linked');btn.innerHTML='✈️ '+t('trk_connect_tg');}
+}
+function connectTg(){if(trkTgInfo&&trkTgInfo.link)window.open(trkTgInfo.link,'_blank');else toast('Telegram недоступен');}
+async function toggleCalendar(id){
+  const box=document.getElementById('cal-'+id);
+  if(!box.classList.contains('hidden')){box.classList.add('hidden');return;}
+  box.classList.remove('hidden');
+  const j=await api('GET','/api/subscriptions/'+id+'/calendar');
+  let html='<div class="cal">';DAY_LABELS[lang].forEach(d=>html+=`<div class="muted" style="text-align:center">${d}</div>`);
+  const first=j.days[0]?j.days[0].weekday:1;for(let i=1;i<first;i++)html+='<div></div>';
+  j.days.forEach(d=>{const cls=d.status==='cancelled'?'cancelled':(d.scheduled?'sched':'off');const day=+d.date.split('-')[2];
+    html+=`<div class="d ${cls}" data-date="${d.date}" data-sub="${id}">${day}${d.status==='cancelled'?'<span style="font-size:10px">×</span>':''}</div>`;});
+  html+='</div><p class="muted">Нажмите на учебный день, чтобы отменить.</p>';box.innerHTML=html;
+  box.querySelectorAll('.d.sched').forEach(el=>el.onclick=()=>dayOff(el.dataset.sub,el.dataset.date));
+}
+async function dayOff(id,date){
+  if(!confirm('Отменить '+date+'?'))return;
+  const j=await api('POST','/api/subscriptions/'+id+'/day-off',{date});
+  if(j.ok){const r=j.result;toast(`Возврат ${r.refund_percent}% = ${fmt(r.refund_amount)} · удержано ${fmt(r.charge_amount)}`);toggleCalendar(id);toggleCalendar(id);}
+}
+</script>
+
+<!-- ==================== Yandex map + geosuggest (point A) ==================== -->
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const TASHKENT=[41.2995,69.2401];                 // [lat, lon]
+  const UZ_BOUNDS=[[41.05,68.90],[41.60,69.65]];    // bias geocoding to Tashkent
+  let map=null,homeMark=null,schoolMark=null,schoolsById={},sugBox=null,sugTimer=null;
+
+  // Used by the "My location" button in the main script.
+  window.setMapMarker=function(la,lo){
+    if(homeMark){homeMark.geometry.setCoordinates([la,lo]); if(map)map.setCenter([la,lo],15);}
+  };
+
+  boot();
+  async function boot(){
+    try{
+      const c=await (await fetch(location.origin+'/api/config')).json();
+      try{const s=await (await fetch(location.origin+'/api/schools')).json();
+        (s.schools||[]).forEach(x=>schoolsById[x.id]={lat:x.lat,lon:x.lon,name:x.name});}catch(e){}
+      setupSuggest();                                // works even before the map loads
+      if(c&&c.yandex_js_key) loadYmaps(c.yandex_js_key);
+    }catch(e){/* map is optional — manual lat/lon still works */}
+  }
+  function loadYmaps(key){
+    const s=document.createElement('script');
+    s.src='https://api-maps.yandex.ru/2.1/?apikey='+encodeURIComponent(key)+'&lang=ru_RU';
+    s.onload=()=>{if(window.ymaps)ymaps.ready(initMap);};
+    document.head.appendChild(s);
+  }
+  function curLatLon(){return [parseFloat($('lat').value)||TASHKENT[0],parseFloat($('lon').value)||TASHKENT[1]];}
+  function initMap(){
+    const c=curLatLon();
+    map=new ymaps.Map('map',{center:c,zoom:13,controls:['zoomControl','geolocationControl']},{suppressMapOpenBlock:true});
+    homeMark=new ymaps.Placemark(c,{hintContent:'Точка A — дом'},{draggable:true,preset:'islands#greenHomeCircleIcon'});
+    map.geoObjects.add(homeMark);
+    homeMark.events.add('dragend',()=>applyPoint(homeMark.geometry.getCoordinates(),true));
+    map.events.add('click',e=>{const p=e.get('coords');homeMark.geometry.setCoordinates(p);applyPoint(p,true);});
+    const sel=$('schoolSel'); if(sel) sel.addEventListener('change',updateSchool);
+    updateSchool();
+    // #map lives inside #app (hidden until login): re-fit when it becomes visible.
+    const appEl=$('app');
+    if(appEl){new MutationObserver(()=>{if(!appEl.classList.contains('hidden'))
+      setTimeout(()=>{try{map.container.fitToViewport();fitBoth();}catch(e){}},80);})
+      .observe(appEl,{attributes:true,attributeFilter:['class']});}
+  }
+  function applyPoint(p,reverse){$('lat').value=p[0].toFixed(6);$('lon').value=p[1].toFixed(6);if(reverse)reverseGeo(p);}
+  function reverseGeo(p){
+    if(!window.ymaps||!ymaps.geocode)return;
+    ymaps.geocode(p,{results:1}).then(r=>{const o=r.geoObjects.get(0);if(o)$('addr').value=o.getAddressLine();}).catch(()=>{});
+  }
+  function updateSchool(){
+    if(!map)return; const sel=$('schoolSel'); const s=sel&&schoolsById[sel.value]; if(!s)return;
+    const pos=[s.lat,s.lon];
+    if(!schoolMark){schoolMark=new ymaps.Placemark(pos,{hintContent:'Точка Б — '+s.name},{preset:'islands#redEducationCircleIcon'});map.geoObjects.add(schoolMark);}
+    else schoolMark.geometry.setCoordinates(pos);
+    fitBoth();
+  }
+  function fitBoth(){if(!map)return;try{const b=map.geoObjects.getBounds();if(b)map.setBounds(b,{checkZoomRange:true,zoomMargin:45});}catch(e){}}
+
+  /* ---- Geosuggest via backend proxy (/api/geo/suggest) ---- */
+  function setupSuggest(){
+    const inp=$('searchA'); if(!inp)return;
+    const wrap=document.createElement('div'); wrap.style.position='relative';
+    inp.parentNode.insertBefore(wrap,inp); wrap.appendChild(inp);
+    inp.setAttribute('autocomplete','off');
+    sugBox=document.createElement('div');
+    sugBox.style.cssText='position:absolute;left:0;right:0;top:100%;z-index:40;background:#fff;border:1px solid #e4eae7;border-top:0;border-radius:0 0 10px 10px;box-shadow:0 8px 24px rgba(20,50,40,.12);max-height:240px;overflow:auto;display:none';
+    wrap.appendChild(sugBox);
+    inp.addEventListener('input',()=>{clearTimeout(sugTimer);const q=inp.value.trim();if(q.length<3){hideSug();return;}sugTimer=setTimeout(()=>querySug(q),250);});
+    document.addEventListener('click',e=>{if(!wrap.contains(e.target))hideSug();});
+  }
+  function hideSug(){if(sugBox){sugBox.style.display='none';sugBox.innerHTML='';}}
+  async function querySug(q){
+    try{
+      const ll=(parseFloat($('lon').value)||TASHKENT[1])+','+(parseFloat($('lat').value)||TASHKENT[0]);
+      const j=await (await fetch(location.origin+'/api/geo/suggest?text='+encodeURIComponent(q)+'&ll='+encodeURIComponent(ll))).json();
+      renderSug(j.items||[]);
+    }catch(e){hideSug();}
+  }
+  function renderSug(items){
+    if(!items.length){hideSug();return;}
+    sugBox.innerHTML='';
+    items.forEach(it=>{
+      const row=document.createElement('div');
+      row.style.cssText='padding:9px 12px;cursor:pointer;border-bottom:1px solid #f0f4f2;font-size:14px';
+      row.onmouseenter=()=>row.style.background='#f2f8f5';row.onmouseleave=()=>row.style.background='#fff';
+      row.innerHTML='<div style="font-weight:600;color:#1c2a25">'+esc(it.title)+'</div>'+(it.subtitle?'<div style="color:#6b7c74;font-size:12px">'+esc(it.subtitle)+'</div>':'');
+      row.onmousedown=ev=>{ev.preventDefault();pickSug(it);};
+      sugBox.appendChild(row);
+    });
+    sugBox.style.display='block';
+  }
+  function pickSug(it){
+    const full=it.address||((it.title||'')+(it.subtitle?', '+it.subtitle:''));
+    $('searchA').value=full; $('addr').value=full; hideSug();
+    resolveAndPlace(full);
+  }
+  // Address -> coordinates: try JS-API geocoder first, fall back to backend /api/geo/geocode.
+  function resolveAndPlace(q){
+    if(window.ymaps&&ymaps.geocode){
+      ymaps.geocode(q,{results:1,boundedBy:UZ_BOUNDS}).then(r=>{
+        const o=r.geoObjects.get(0);
+        if(o){place(o.geometry.getCoordinates());} else backendGeocode(q);
+      }).catch(()=>backendGeocode(q));
+    } else backendGeocode(q);
+  }
+  function backendGeocode(q){
+    fetch(location.origin+'/api/geo/geocode?text='+encodeURIComponent(q))
+      .then(r=>r.json()).then(j=>{ if(j&&j.found) place([j.lat,j.lon]); }).catch(()=>{});
+  }
+  function place(p){ if(homeMark)homeMark.geometry.setCoordinates(p); if(map)map.setCenter(p,16); applyPoint(p,false); }
+  function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+})();
+</script>
+</body>
+</html>

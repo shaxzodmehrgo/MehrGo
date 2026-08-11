@@ -1,0 +1,35 @@
+{
+    "name": "teamwork/maktabgo",
+    "description": "MaktabGo — school shuttle backend (Yii2, API-only)",
+    "type": "project",
+    "license": "proprietary",
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=8.1",
+        "ext-pdo": "*",
+        "ext-json": "*",
+        "yiisoft/yii2": "~2.0.49"
+    },
+    "comment": "bower-asset/* заменены заглушками — бэкенд API-only, фронт-ассеты Yii2 не нужны.",
+    "replace": {
+        "bower-asset/jquery": ">=1.11.0",
+        "bower-asset/inputmask": ">=3.1.0",
+        "bower-asset/punycode": ">=1.3.0",
+        "bower-asset/yii2-pjax": ">=2.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "app\\": "src/",
+            "app\\models\\": "models/",
+            "app\\services\\": "services/",
+            "app\\controllers\\": "controllers/",
+            "app\\commands\\": "commands/",
+            "app\\migrations\\": "migrations/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
+        }
+    }
+}

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/background_dialog_bsh"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/space_8">
+
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/space_4"
+            android:layout_marginBottom="@dimen/space_8"
+            android:background="@drawable/bg_badge_pill"
+            android:backgroundTint="@color/gray_middle_black_middle" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/space_8"
+            android:src="@drawable/ic_close_dialog_bsh"
+            android:visibility="gone"
+            app:tint="@color/gray_full" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/space_12"
+            android:paddingBottom="@dimen/space_16">
+
+            <TextView
+                android:id="@+id/tvCamera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:drawablePadding="@dimen/space_16"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:minHeight="56dp"
+                android:padding="@dimen/space_16"
+                android:text="@string/camera"
+                android:textAppearance="@style/TextAppearance.App.Headline"
+                android:textColor="@color/black_white"
+                app:drawableStartCompat="@drawable/baseline_camera_alt_24"
+                app:drawableTint="@color/app_color" />
+
+            <TextView
+                android:id="@+id/tvGallery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:drawablePadding="@dimen/space_16"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:minHeight="56dp"
+                android:padding="@dimen/space_16"
+                android:text="@string/gallery"
+                android:textAppearance="@style/TextAppearance.App.Headline"
+                android:textColor="@color/black_white"
+                app:drawableStartCompat="@drawable/baseline_image_search_24"
+                app:drawableTint="@color/app_color" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

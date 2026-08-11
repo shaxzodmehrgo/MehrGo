@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?><!-- One stop row in the "choose destination" picker: a bordered card (accent border = the active
+     target, gray = the rest, set in the adapter), a letter badge (A/B/C), the address, and the two
+     actions — Local (in-app re-route) and External (open in the driver's map app). -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mcvRow"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="@dimen/space_6"
+    app:cardBackgroundColor="@color/white_black"
+    app:cardCornerRadius="@dimen/radius_lg"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/gray_light_black_light"
+    app:strokeWidth="1.2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/space_12"
+        android:paddingVertical="@dimen/space_10">
+
+        <TextView
+            android:id="@+id/tvLetter"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/shape_dot"
+            android:backgroundTint="@color/app_color_soft"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:textColor="@color/app_color"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="A" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_12"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/black_white"
+            android:textSize="15sp"
+            tools:text="Qoraqamish 4-ko'chasi 1, Toshkent" />
+
+        <!-- Local: re-route to this stop INSIDE our app. -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcvInApp"
+            style="@style/Widget.App.Card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_8"
+            app:cardBackgroundColor="@color/app_color_soft"
+            app:cardCornerRadius="@dimen/radius_sm">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/space_8"
+                android:scaleX="-1"
+                android:src="@drawable/ph_navigation_arrow"
+                app:tint="@color/app_color" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- External: open this stop in the driver's map/nav app. -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcvMap"
+            style="@style/Widget.App.Card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_8"
+            app:cardBackgroundColor="@color/app_color_soft"
+            app:cardCornerRadius="@dimen/radius_sm">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/space_8"
+                android:src="@drawable/icon_map"
+                app:tint="@color/app_color" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

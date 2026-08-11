@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Single-select choice chip (cancel-reason sheet).
+     UNSELECTED is still an outlined pill — a hairline neutral border on a transparent fill — so
+     every option reads as a tappable object before anything is picked (a borderless soft fill
+     disappears on the dark sheet). SELECTED swaps the outline + wash to the brand accent.
+     Stroke width changes (1dp → 1.5dp) do not affect layout, so picking a chip never reflows the
+     row. Driven by android:state_selected — the adapter sets itemView.isSelected. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/app_color_soft" />
+            <stroke android:width="1.5dp" android:color="@color/app_color" />
+            <corners android:radius="@dimen/radius_pill" />
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <stroke android:width="1dp" android:color="@color/gray" />
+            <corners android:radius="@dimen/radius_pill" />
+        </shape>
+    </item>
+
+</selector>

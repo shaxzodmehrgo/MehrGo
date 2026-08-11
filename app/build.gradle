@@ -1,0 +1,174 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'androidx.navigation.safeargs'
+    id 'kotlin-parcelize'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+}
+
+android {
+    namespace 'uz.teamwork.mehrgodriver'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "uz.teamwork.mehrgodriver"
+        minSdk 26
+        targetSdk 36
+        versionCode 71
+        versionName "2.7.1"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    buildFeatures {
+        viewBinding true
+        buildConfig = true
+    }
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+    // Extract native libs (.so) to the filesystem at install. The AGP 8 default
+    // (useLegacyPackaging = false) loads them straight from the compressed APK, which some
+    // devices' linkers fail to dlopen for a large lib like Yandex MapKit's libmaps-mobile.so —
+    // the "UnsatisfiedLinkError - dlopen failed" crash in App.onCreate. Extracting fixes it
+    // (minor install-size cost).
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+    sourceSets {
+        main {
+            assets {
+                srcDirs 'src/main/assets'
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    // Pinned at 1.12.0: Material 1.13.0 removed R.attr.editTextStyle, which
+    // the unmaintained `com.github.santalu:maskara:1.0.0` library still
+    // references in its compiled bytecode — bumping causes MaskEditText to
+    // throw NoSuchFieldError at inflation time. Revisit only after maskara
+    // is replaced or updated.
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+    implementation 'com.google.firebase:firebase-crashlytics:20.0.3'
+    implementation("com.google.firebase:firebase-analytics:23.0.0")
+    implementation 'com.google.firebase:firebase-messaging:24.1.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+
+    // Coroutine Lifecycle Scopes
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
+
+    // Navigation component
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+
+    // View pager
+    implementation 'com.github.zhpanvip:viewpagerindicator:1.2.2'
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.2"
+    implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2"
+
+    // Google Maps Location Services
+    implementation 'com.google.android.gms:play-services-location:21.3.0'
+    implementation 'com.google.android.gms:play-services-maps:19.0.0'
+
+    // Image compressor
+    implementation 'id.zelory:compressor:3.0.1'
+
+    // MapKit
+    implementation 'com.yandex.android:maps.mobile:4.25.0-lite'
+
+    // Room
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+
+    // Other libraries
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.github.santalu:maskara:1.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
+    // Service icons are served as SVG ("@uploads/services/icons/x.svg") and Glide cannot decode
+    // them — a .svg would fail silently and fall back forever. Same version the client app uses.
+    implementation 'com.caverock:androidsvg-aar:1.4'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation 'androidx.paging:paging-runtime:3.1.1'
+    implementation 'com.github.maxwell-kimaiyo:Swipe-Animated-Button:0.1.0'
+    implementation 'com.github.MAXDeliveryNG:slideview:1.1.0'
+    implementation "com.ncorti:slidetoact:0.10.0"
+
+    // Chuck
+    debugImplementation "com.github.chuckerteam.chucker:library:3.5.2"
+    releaseImplementation "com.github.chuckerteam.chucker:library-no-op:3.5.2"
+
+    // Map utils
+    implementation 'com.google.maps.android:android-maps-utils:3.8.2'
+
+    // Charts (Driver Earnings graph)
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // Meta (Facebook) SDK — app-events / install attribution & conversion
+    // measurement ONLY (no Login/Share). Declares the AD_ID permission and pulls
+    // the Play Install Referrer library itself via manifest merge; mirrors iOS
+    // FacebookCore. Never add the Facebook App Secret to the app.
+    implementation 'com.facebook.android:facebook-core:18.0.3'
+
+    // Hilt for Dependency injection
+    implementation "com.google.dagger:hilt-android:2.51"
+    kapt "com.google.dagger:hilt-compiler:2.51"
+
+    // View binding
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.9'
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.5.9'
+
+}
+configurations.all {
+    exclude group: 'com.google.android.gms', module: 'play-services-safetynet'
+}
+
+kapt {
+    correctErrorTypes true
+}

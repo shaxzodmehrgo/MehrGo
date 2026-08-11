@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  One intermediate route stop for the COMPACT order-pool list item: an app_color dot in a 24dp
+  column (aligned with the pickup/dropoff icons) + the address only. Populated by RoutePointsBinder.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="@dimen/space_4">
+
+    <FrameLayout
+        android:layout_width="24dp"
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/shape_dot"
+            android:backgroundTint="@color/app_color" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvPointAddress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textAppearance="@style/TextAppearance.App.BodyMedium"
+        android:textColor="@color/black_white" />
+</LinearLayout>

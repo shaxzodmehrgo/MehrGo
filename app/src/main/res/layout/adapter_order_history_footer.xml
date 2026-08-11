@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Paging 3 footer: spinner while the next page loads, retry on error. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="@dimen/space_16">
+
+    <ProgressBar
+        android:id="@+id/pbFooter"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/app_color"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvFooterRetry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="sans-serif-medium"
+        android:paddingHorizontal="@dimen/space_16"
+        android:paddingVertical="@dimen/space_8"
+        android:text="@string/history_retry"
+        android:textColor="@color/app_color"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+</FrameLayout>

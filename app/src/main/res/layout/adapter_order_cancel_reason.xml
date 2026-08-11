@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Cancel-reason CHIP: a wrap_content outlined pill, flowed + wrapped by the sheet's
+     FlexboxLayoutManager. Always bordered (so an untouched list still reads as a set of options);
+     border, wash and label turn brand-accent once picked — see bg_chip_choice / chip_choice_text,
+     both keyed on state_selected. Single-select; the adapter drives itemView.isSelected.
+     No maxLines: a reason longer than the sheet is flex-shrunk onto its own line and wraps, rather
+     than being truncated. -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/space_8"
+    android:layout_marginBottom="@dimen/space_8"
+    android:background="@drawable/bg_chip_choice"
+    android:clickable="true"
+    android:focusable="true"
+    android:fontFamily="sans-serif-medium"
+    android:foreground="@drawable/ripple_pill"
+    android:gravity="center"
+    android:minHeight="42dp"
+    android:paddingHorizontal="@dimen/space_16"
+    android:paddingVertical="@dimen/space_10"
+    android:textColor="@color/chip_choice_text"
+    android:textSize="14sp"
+    tools:text="Rejalar o'zgardi" />

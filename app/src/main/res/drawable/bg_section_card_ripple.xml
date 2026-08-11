@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><!-- bg_section_card + a touch ripple clipped to the card's own corners.
+     ?attr/selectableItemBackground would draw a hard RECTANGLE over the rounded
+     card, which is exactly the artefact this replaces: the mask item below is what
+     rounds the ripple, and its radius must stay in step with bg_section_card. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorControlHighlight">
+
+    <item android:drawable="@drawable/bg_section_card" />
+
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white" />
+            <corners android:radius="@dimen/radius_lg" />
+        </shape>
+    </item>
+</ripple>

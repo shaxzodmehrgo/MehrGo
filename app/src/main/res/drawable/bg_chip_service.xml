@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Service chip: soft brand wash + a hairline brand outline, so the chip
+     still reads as a distinct object against the section card it sits on
+     (bg_pill_orange_soft alone loses its edge on the dark surface). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/app_color_soft" />
+    <stroke
+        android:width="1dp"
+        android:color="@color/app_color" />
+    <corners android:radius="@dimen/radius_pill" />
+</shape>

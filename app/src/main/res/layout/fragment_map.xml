@@ -1,0 +1,896 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.maps.yandex_map.MapFragment">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/app_color"
+        android:visibility="gone" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.yandex.mapkit.mapview.MapView
+                android:id="@+id/mapKit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <!-- Soft red wash shown over the map when offline/inactive (iOS parity).
+                 Visibility is driven together with tvNoConnection in MapFragment. -->
+            <View
+                android:id="@+id/vOfflineWash"
+                android:layout_width="match_parent"
+                android:layout_height="340dp"
+                android:layout_gravity="top"
+                android:background="@drawable/bg_offline_wash"
+                android:visibility="gone" />
+
+            <!-- Profile (top-right) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvSettings"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardBackgroundColor="@color/app_color"
+                app:cardCornerRadius="@dimen/radius_pill"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/gray_middle_black_middle"
+                app:strokeWidth="2dp">
+
+                <!-- Placeholder glyph on the brand fill: holds the button until the driver's
+                     photo decodes, so the control is never a blank disc. -->
+                <ImageView
+                    android:id="@+id/ivProfilePlaceholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="18dp"
+                    android:src="@drawable/icon_user"
+                    app:tint="@color/white" />
+
+                <!-- Full-bleed photo, revealed only on a successful load. INVISIBLE, not gone:
+                     Glide never starts a load into an unmeasured view. -->
+                <ImageView
+                    android:id="@+id/ivProfilePhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:visibility="invisible"
+                    tools:visibility="visible" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Right rail (orders / bell / geo / + / −) — centred, nudged up like iOS -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginBottom="56dp"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cvOrders"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:backgroundTint="@color/white_black"
+                        app:cardCornerRadius="@dimen/radius_sm"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/gray_middle_black_middle"
+                        app:strokeWidth="1dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/baseline_format_list_bulleted_24"
+                            app:tint="@color/black_white" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cvOrderCount"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:backgroundTint="@color/red"
+                        android:visibility="gone"
+                        app:cardCornerRadius="@dimen/radius_pill"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/white_black"
+                        app:strokeWidth="1.5dp">
+
+                        <TextView
+                            android:id="@+id/tvOrderCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+
+                </FrameLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvNotifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="@color/white_black"
+                    app:cardCornerRadius="@dimen/radius_sm"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/gray_middle_black_middle"
+                    app:strokeWidth="1dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/ic_notifications_black_24dp"
+                        app:tint="@color/black_white" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:clipToPadding="false"
+                    android:orientation="vertical"
+                    tools:ignore="RtlSymmetry">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cvMyCurrentLocationEnabled"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@color/white_black"
+                        app:cardCornerRadius="@dimen/radius_sm"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/gray_middle_black_middle"
+                        app:strokeWidth="1dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/outline_near_me_24"
+                            app:tint="@color/app_color" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cvMyCurrentLocationDisabled"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@color/white_black"
+                        app:cardCornerRadius="@dimen/radius_sm"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/gray_middle_black_middle"
+                        app:strokeWidth="1dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/outline_near_me_disabled_24"
+                            app:tint="@color/black_white" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cvPlus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@color/white_black"
+                        app:cardCornerRadius="@dimen/radius_sm"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/gray_middle_black_middle"
+                        app:strokeWidth="1dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/baseline_add_24"
+                            app:tint="@color/black_white" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cvMinus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white_black"
+                        app:cardCornerRadius="@dimen/radius_sm"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/gray_middle_black_middle"
+                        app:strokeWidth="1dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/baseline_remove_24"
+                            app:tint="@color/black_white" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </LinearLayout>
+
+            <!-- Centered today-earnings capsule (matches the iOS earningsPill) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvTodayEarnings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/white_black"
+                app:cardCornerRadius="@dimen/radius_pill"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/gray_middle_black_middle"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="@dimen/space_20"
+                    android:paddingVertical="@dimen/space_8">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="true"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvTodayPrice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textAppearance="@style/TextAppearance.App.Price" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="@string/sum"
+                            android:textAppearance="@style/TextAppearance.App.Caption" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:src="@drawable/baseline_check_circle_24"
+                            app:tint="@color/app_color" />
+
+                        <TextView
+                            android:id="@+id/tvTodayCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="0"
+                            android:textColor="@color/black_white"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Optional / under-review verification chip — shown at the connection-badge
+                 slot once the driver is online (white bg, amber icon + text). -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvVerificationChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginHorizontal="@dimen/space_16"
+                android:layout_marginTop="92dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/white_black"
+                app:cardCornerRadius="@dimen/radius_pill"
+                app:cardElevation="2dp"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/space_16"
+                    android:paddingVertical="@dimen/space_10">
+
+                    <ImageView
+                        android:id="@+id/ivChipIcon"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ph_warning"
+                        app:tint="@color/app_color" />
+
+                    <TextView
+                        android:id="@+id/tvChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_8"
+                        android:ellipsize="end"
+                        android:fontFamily="sans-serif-medium"
+                        android:maxLines="1"
+                        android:text="@string/verification_chip_suggestion"
+                        android:textColor="@color/app_color"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvSpeed"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/white_black"
+                app:cardCornerRadius="@dimen/radius_pill"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/gray_middle_black_middle"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white_black"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvSpeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="0"
+                        android:textColor="@color/black_white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="km/h"
+                        android:textColor="@color/gray_full"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!--            <androidx.appcompat.widget.LinearLayoutCompat-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginEnd="16dp"-->
+            <!--                android:clipToPadding="false"-->
+            <!--                android:orientation="vertical"-->
+            <!--                android:layout_marginBottom="170dp"-->
+            <!--                android:layout_gravity="bottom|end"-->
+            <!--                tools:ignore="RtlSymmetry">-->
+
+            <!--                <com.google.android.material.card.MaterialCardView-->
+            <!--                    android:id="@+id/cvMyCurrentLocationEnabled"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:backgroundTint="@color/white_black"-->
+            <!--                    app:strokeColor="@color/gray_middle_black_middle"-->
+            <!--                    android:layout_marginBottom="8dp"-->
+            <!--                    app:strokeWidth="1dp"-->
+            <!--                    app:cardElevation="0dp"-->
+            <!--                    app:cardCornerRadius="8dp">-->
+
+            <!--                    <ImageView-->
+            <!--                        android:layout_width="28dp"-->
+            <!--                        android:layout_height="28dp"-->
+            <!--                        android:layout_margin="8dp"-->
+            <!--                        app:tint="@color/black_white"-->
+            <!--                        android:src="@drawable/outline_near_me_24"/>-->
+
+            <!--                </com.google.android.material.card.MaterialCardView>-->
+
+            <!--                <com.google.android.material.card.MaterialCardView-->
+            <!--                    android:id="@+id/cvMyCurrentLocationDisabled"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:backgroundTint="@color/white_black"-->
+            <!--                    app:strokeColor="@color/gray_middle_black_middle"-->
+            <!--                    android:layout_marginBottom="8dp"-->
+            <!--                    app:strokeWidth="1dp"-->
+            <!--                    app:cardElevation="0dp"-->
+            <!--                    app:cardCornerRadius="8dp">-->
+
+            <!--                    <ImageView-->
+            <!--                        android:layout_width="28dp"-->
+            <!--                        android:layout_height="28dp"-->
+            <!--                        android:layout_margin="8dp"-->
+            <!--                        app:tint="@color/black_white"-->
+            <!--                        android:src="@drawable/outline_near_me_disabled_24"/>-->
+
+            <!--                </com.google.android.material.card.MaterialCardView>-->
+
+            <!--                <com.google.android.material.card.MaterialCardView-->
+            <!--                    android:id="@+id/cvPlus"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:backgroundTint="@color/white_black"-->
+            <!--                    app:strokeColor="@color/gray_middle_black_middle"-->
+            <!--                    android:layout_marginBottom="8dp"-->
+            <!--                    app:strokeWidth="1dp"-->
+            <!--                    app:cardElevation="0dp"-->
+            <!--                    app:cardCornerRadius="8dp">-->
+
+            <!--                    <ImageView-->
+            <!--                        android:layout_width="28dp"-->
+            <!--                        android:layout_height="28dp"-->
+            <!--                        android:layout_margin="8dp"-->
+            <!--                        app:tint="@color/black_white"-->
+            <!--                        android:src="@drawable/baseline_add_24"/>-->
+
+            <!--                </com.google.android.material.card.MaterialCardView>-->
+
+            <!--                <com.google.android.material.card.MaterialCardView-->
+            <!--                    android:id="@+id/cvMinus"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:backgroundTint="@color/white_black"-->
+            <!--                    app:strokeColor="@color/gray_middle_black_middle"-->
+            <!--                    app:strokeWidth="1dp"-->
+            <!--                    app:cardElevation="0dp"-->
+            <!--                    app:cardCornerRadius="8dp">-->
+
+            <!--                    <ImageView-->
+            <!--                        android:layout_width="28dp"-->
+            <!--                        android:layout_height="28dp"-->
+            <!--                        android:layout_margin="8dp"-->
+            <!--                        app:tint="@color/black_white"-->
+            <!--                        android:src="@drawable/baseline_remove_24"/>-->
+
+            <!--                </com.google.android.material.card.MaterialCardView>-->
+            <!--                -->
+            <!--            </androidx.appcompat.widget.LinearLayoutCompat>-->
+
+            <!-- Connection status badge. Connecting/reconnecting → live spinner;
+                 off-shift → static error icon. -->
+            <LinearLayout
+                android:id="@+id/llConnectionBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="92dp"
+                android:background="@drawable/bg_badge_pill"
+                android:backgroundTint="@color/white_black"
+                android:elevation="0dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/space_16"
+                android:paddingVertical="@dimen/space_10">
+
+                <ProgressBar
+                    android:id="@+id/pbBadgeSpinner"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:indeterminateTint="@color/gray_full"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/ivBadgeIcon"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_error_circle"
+                    android:visibility="gone"
+                    app:tint="@color/gray_full" />
+
+                <TextView
+                    android:id="@+id/tvNoConnection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_8"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/you_do_not_at_work"
+                    android:textColor="@color/gray_full"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llBottomArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="26dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="vertical">
+
+                <!-- Active-trip resume mini-card (shown while the trip page is minimised) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvResumeTrip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="@drawable/ripple_button"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/white_black"
+                    app:cardCornerRadius="@dimen/radius_lg"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/green"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="12dp">
+
+                        <FrameLayout
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="@drawable/shape_dot"
+                            android:backgroundTint="@color/green_soft">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ph_car"
+                                app:tint="@color/green" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvResumeLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/active_trip"
+                                android:textAppearance="@style/TextAppearance.App.Micro"
+                                android:textColor="@color/green" />
+
+                            <TextView
+                                android:id="@+id/tvResumeAddress"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="@string/not_showed"
+                                android:textAppearance="@style/TextAppearance.App.BodyMedium"
+                                android:textColor="@color/black_white" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:background="@drawable/bg_pill_green"
+                            android:drawablePadding="4dp"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center_vertical"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="7dp"
+                            android:text="@string/to_continue"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            app:drawableEndCompat="@drawable/ph_caret_right"
+                            app:drawableTint="@color/white" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Verification required card (offline + a mandatory check failing) — sits
+                     above the slide-to-start, styled like the active-trip card but bigger. -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvVerificationCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="@drawable/ripple_button"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/white_black"
+                    app:cardCornerRadius="@dimen/radius_lg"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/red"
+                    app:strokeWidth="1dp"
+                    tools:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/space_14">
+
+                        <FrameLayout
+                            android:id="@+id/flVerifDot"
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
+                            android:background="@drawable/shape_dot"
+                            android:backgroundTint="@color/red_soft">
+
+                            <ImageView
+                                android:id="@+id/ivVerifIcon"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ph_warning"
+                                app:tint="@color/red" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvVerifStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/verification_status_required"
+                                android:textAppearance="@style/TextAppearance.App.Micro"
+                                android:textColor="@color/red" />
+
+                            <TextView
+                                android:id="@+id/tvVerifTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="@string/verification_chip_required"
+                                android:textAppearance="@style/TextAppearance.App.BodyMedium"
+                                android:textColor="@color/black_white" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ivVerifCaret"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/ph_caret_right"
+                            app:tint="@color/red" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <FrameLayout
+                    android:id="@+id/flBottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false"
+                    android:clipToPadding="false">
+
+                    <LinearLayout
+                        android:id="@+id/llFinishJobAndCall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cvFinishJob"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/space_6"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/red"
+                            app:cardCornerRadius="@dimen/radius_lg"
+                            app:cardElevation="0dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:drawablePadding="@dimen/space_8"
+                                android:ellipsize="end"
+                                android:fontFamily="sans-serif-medium"
+                                android:gravity="center"
+                                android:maxLines="1"
+                                android:paddingHorizontal="@dimen/space_8"
+                                android:paddingVertical="16dp"
+                                android:text="@string/exit"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                app:drawableStartCompat="@drawable/baseline_power_settings_new_24"
+                                app:drawableTint="@color/white" />
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cvDispatcher"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_6"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/app_color"
+                            app:cardCornerRadius="@dimen/radius_lg"
+                            app:cardElevation="0dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:drawablePadding="@dimen/space_8"
+                                android:ellipsize="end"
+                                android:fontFamily="sans-serif-medium"
+                                android:gravity="center"
+                                android:maxLines="1"
+                                android:paddingHorizontal="@dimen/space_8"
+                                android:paddingVertical="16dp"
+                                android:text="@string/dispatcher"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                app:drawableStartCompat="@drawable/baseline_phone_iphone_24"
+                                app:drawableTint="@color/white" />
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </LinearLayout>
+
+                    <!-- Bordered (1dp, NO elevation/shadow) so the swiper reads as a defined pill
+                         against the map — replaces the earlier shadow. -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="@color/white_black"
+                        app:cardCornerRadius="28dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/gray_middle_black_middle"
+                        app:strokeWidth="1dp">
+
+                        <com.ncorti.slidetoact.SlideToActView
+                            android:id="@+id/sbStartJob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible"
+                            app:animation_duration="250"
+                            app:area_margin="4dp"
+                            app:inner_color="@color/app_color"
+                            app:outer_color="@color/white_black"
+                            app:slider_height="55dp"
+                            app:slider_locked="false"
+                            app:text="@string/start_job"
+                            app:text_color="@color/app_color"
+                            app:text_size="16sp"
+                            app:text_style="bold" />
+
+                        <!-- Connecting section: replaces the slider while going online, so the
+                             swipe knob is hidden and the driver only waits (no re-swipe). -->
+                        <LinearLayout
+                            android:id="@+id/llConnecting"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            tools:visibility="visible">
+
+                            <ProgressBar
+                                android:id="@+id/pbConnecting"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:indeterminateTint="@color/app_color" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_10"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="@string/connecting"
+                                android:textColor="@color/app_color"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <include
+            android:id="@+id/includeDialog"
+            layout="@layout/dialog_bsh_order_state"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- Branded loading screen shown over the map while its GL surface builds (black until
+         the first frame). It reuses the launch splash image, so on a fresh build — cold
+         start AND the theme/locale activity recreate — the map area shows the splash instead
+         of a dark/near-black surface: never reads as a "black screen", in light OR dark mode,
+         and makes cold start seamless (splash → map). Visible on a fresh inflate; MapFragment
+         fades it out shortly after build. Cached re-entry keeps it hidden. -->
+    <FrameLayout
+        android:id="@+id/flMapLoadingMask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/app_color"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo_splash" />
+
+        <ProgressBar
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="72dp"
+            android:indeterminateTint="@color/white" />
+
+    </FrameLayout>
+
+</FrameLayout>

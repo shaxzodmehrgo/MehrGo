@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Adaptive-icon foreground for the brand icon.
+
+  Brand artwork fills the full 108dp adaptive-icon canvas. The bitmap drawable
+  is the regenerated logo (stretched to square by the apply_brand_icon.ps1
+  script), so its rounded teal square + steering wheel content reach every
+  edge of the canvas. Launcher masks (circle, squircle, square) clip cleanly
+  with no halo, because there's no inset gap exposing the background drawable.
+-->
+<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="fill"
+    android:src="@drawable/logo" />

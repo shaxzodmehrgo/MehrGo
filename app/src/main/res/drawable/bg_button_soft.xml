@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Tertiary CTA — soft amber fill, no border. Sits below the primary pill for the
+     "another way in" actions (open the bot, switch delivery channel): clearly tappable
+     and on-brand, but visually quieter than the primary so it never competes with it.
+     app_color_soft is a ~12% alpha of app_color and has its own values-night value, so
+     this reads correctly in both themes. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/app_color_soft" />
+    <corners android:radius="@dimen/radius_lg" />
+</shape>

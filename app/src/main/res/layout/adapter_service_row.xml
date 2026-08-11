@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?><!-- One service row in the services sheet: its own glyph in a soft chip · name · price.
+     The glyph is picked by ServiceIcons.iconFor(name) so this sheet and the trip-sheet
+     chips always show the same symbol for the same add-on. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingVertical="@dimen/space_12">
+
+    <!-- One disc size for the whole service family: 36dp shell / 20dp glyph, and the SAME
+         treatment on the section headers above. Growing it to 42dp did not help, because the
+         problem was never the size — the wash had no edge, so the eye anchored on the glyph,
+         12dp inside the disc, and read both a broken left margin and a 26dp icon-to-text gap
+         where the XML says 12dp. bg_service_icon_chip carries its own 1dp outline; do NOT add
+         backgroundTint here or it repaints the outline away. -->
+    <FrameLayout
+        android:layout_width="@dimen/icon_chip_size"
+        android:layout_height="@dimen/icon_chip_size"
+        android:background="@drawable/bg_service_icon_chip">
+
+        <ImageView
+            android:id="@+id/ivServiceIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            app:tint="@color/app_color" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_12"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvServiceName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.App.BodyMedium"
+            android:textColor="@color/black_white"
+            android:textSize="16sp"
+            tools:text="Konditsioner" />
+
+        <TextView
+            android:id="@+id/tvServiceInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.App.Caption"
+            android:visibility="gone"
+            tools:text="Salon sovutiladi" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvServicePrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_12"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/app_color"
+        android:textSize="16sp"
+        tools:text="3 000 so'm" />
+
+</LinearLayout>

@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="uz.teamwork.mehrgodriver">
+
+    <queries>
+        <package android:name="uz.gotaxi.margilan.driver" />
+        <package android:name="uz.bo1056.driver" />
+        <package android:name="uz.onlinetaxi.driver" />
+        <package android:name="uz.onlinetaxi.taxi1313.driver" />
+        <package android:name="taximaster.tmtaxicaller.id3265" />
+        <package android:name="ru.yandex.taximeter" />
+        <package android:name="uz.promo.uzDriver" />
+        <package android:name="uz.royaltaxi.driver" />
+        <package android:name="ru.tmdriver.new" />
+        <package android:name="com.google.android.apps.maps" />
+        <package android:name="ru.yandex.yandexmaps" />
+        <package android:name="ru.yandex.yandexnavi" />
+        <package android:name="ru.dublgis.dgismobile" />
+        <package android:name="com.waze" />
+    </queries>
+
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!--    <uses-permission android:name="android.permission.SEND_SMS" />-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <application
+        android:name="uz.teamwork.mehrgodriver.common.App"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
+        android:roundIcon="@drawable/logo"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.TeamworkTaxi"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="YOUR_GOOGLE_MAPS_KEY" />
+
+        <meta-data
+            android:name="google_analytics_adid_collection_enabled"
+            android:value="false" />
+
+        <!--
+            Tells FCM which channel to use when it auto-displays a push that arrived
+            while the app was backgrounded (the SDK does not call onMessageReceived
+            in that case). Both meta-data entries are referenced by package name in
+            driver_fcm_mobile_integration.md В§2.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="new_notification_channel" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notifications_black_24dp" />
+
+        <!--
+            Meta (Facebook) SDK вЂ” app-events / install attribution (measurement only).
+            The SDK auto-initializes from these meta-data via its ContentProvider; no
+            fb<AppID> URL scheme or Login/Share activities (measurement only).
+        -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token" />
+        <meta-data
+            android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
+            android:value="true" />
+        <meta-data
+            android:name="com.facebook.sdk.AdvertiserIDCollectionEnabled"
+            android:value="true" />
+
+        <!-- Portrait-only, both activities. `portrait` (not sensorPortrait/userPortrait) so the
+             screen never flips to landscape OR upside-down: the driver mounts the phone in a
+             cradle and a rotation would also recreate the Activity mid-trip. -->
+        <activity
+            android:name="uz.teamwork.mehrgodriver.presentation.activity.splash.FirstActivity"
+            android:exported="true"
+            android:keepScreenOn="true"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.TeamworkTaxi.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="uz.teamwork.mehrgodriver.presentation.activity.main.MainActivity"
+            android:exported="true"
+            android:keepScreenOn="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
+
+            <!-- Telegram bot "Buyurtmani qabul qilish" button в†’ open the app on that order.
+                 Telegram only allows https:// in inline buttons, so this is an App Link, not a
+                 custom scheme. Points at MainActivity (not FirstActivity, not a new Activity) for
+                 the same reason the FCM notification PendingIntent does: it is the one screen that
+                 already owns the NavController and can route on arrival.
+
+                 host/pathPrefix are PER BRAND вЂ” keep in sync with Constants.DEEPLINK_HOST /
+                 DEEPLINK_ORDER_PATH.
+
+                 autoVerify only takes effect once the domain serves
+                 https://mehrgo.uz/.well-known/assetlinks.json (HTTPS, no redirect) listing the
+                 RELEASE signing SHA-256 for uz.teamwork.mehrgodriver. Until then the link opens in
+                 the browser instead of the app. Check with:
+                   adb shell pm get-app-links uz.teamwork.mehrgodriver -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="mehrgo.uz"
+                    android:pathPrefix="/driver/order/"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="uz.teamwork.mehrgodriver"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
+        </provider>
+
+        <service
+            android:name="uz.teamwork.mehrgodriver.common.services.MyTrackingService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <service android:name="uz.teamwork.mehrgodriver.common.services.AutoOfferService" />
+        <service android:name="uz.teamwork.mehrgodriver.common.services.WindowToAppService" />
+        <service android:name="uz.teamwork.mehrgodriver.common.services.InfoPopupOverlayService" />
+
+        <service
+            android:name="uz.teamwork.mehrgodriver.common.services.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <!--        <service android:name="uz.teamwork.mehrgodriver.common.services.RouteInstructionService" />-->
+        <!--        <service android:name="uz.teamwork.mehrgodriver.common.services.instroction.RouteNavControllerService" />-->
+        <!--        <service android:name="uz.teamwork.mehrgodriver.common.services.instroction.VoiceService" />-->
+    </application>
+
+</manifest>

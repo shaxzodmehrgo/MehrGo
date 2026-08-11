@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  History card (client-parity): soft low-contrast card on a white screen. Top row = status pill +
+  date; middle = teal route (filled dot = pickup, hollow ring = drop-off, "+N nuqta" for mid-stops);
+  bottom row = bold price + tariff pill.
+-->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/space_8"
+    android:layout_marginVertical="@dimen/space_6"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@color/gray_light_black_light"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/space_16">
+
+        <!-- Top: status pill (left) · date-time (right) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_badge_pill"
+                android:fontFamily="sans-serif-medium"
+                android:paddingHorizontal="@dimen/space_10"
+                android:paddingVertical="3dp"
+                android:textColor="@color/app_color"
+                android:textSize="12sp"
+                app:backgroundTint="@color/app_color_soft"
+                tools:text="Yakunlandi" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_8"
+                android:textColor="@color/gray_full"
+                android:textSize="12sp"
+                tools:text="Jul 03, 2026 17:52" />
+
+        </LinearLayout>
+
+        <!-- Pickup -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_14"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginEnd="@dimen/space_10"
+                android:src="@drawable/shape_dot"
+                app:tint="@color/app_color" />
+
+            <TextView
+                android:id="@+id/tvFrom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:textColor="@color/black_white"
+                android:textSize="15sp"
+                tools:text="Kalonov ko'cha 6, Toshkent" />
+
+        </LinearLayout>
+
+        <!-- Intermediate stops ("+N nuqta") — shown only when the trip has mid-stops -->
+        <LinearLayout
+            android:id="@+id/llVia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="@dimen/space_4"
+            android:background="@drawable/bg_badge_pill"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:visibility="gone"
+            app:backgroundTint="@color/app_color_soft"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/ph_dots_three"
+                app:tint="@color/app_color" />
+
+            <TextView
+                android:id="@+id/tvVia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/app_color"
+                android:textSize="11sp"
+                tools:text="+2 nuqta" />
+
+        </LinearLayout>
+
+        <!-- Drop-off -->
+        <LinearLayout
+            android:id="@+id/llTo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_6"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginEnd="@dimen/space_10"
+                android:src="@drawable/bg_route_ring_accent" />
+
+            <TextView
+                android:id="@+id/tvTo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:textColor="@color/black_white"
+                android:textSize="15sp"
+                tools:text="Qoraqamish 4-ko'chasi 1, Toshkent" />
+
+        </LinearLayout>
+
+        <!-- Bottom: price (left) · tariff pill (right) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_14"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/black_white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="19 130 so'm" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tvTariff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_8"
+                android:background="@drawable/bg_badge_pill"
+                android:fontFamily="sans-serif-medium"
+                android:paddingHorizontal="@dimen/space_10"
+                android:paddingVertical="3dp"
+                android:textColor="@color/app_color"
+                android:textSize="12sp"
+                app:backgroundTint="@color/app_color_soft"
+                tools:text="Standart." />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

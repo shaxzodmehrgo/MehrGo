@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Withdrawal-request sheet: pick a card, enter the amount (max = withdrawable balance),
+     submit. The request goes to admin moderation (A2C on approval). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_sheet_top_rounded"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/space_16"
+    android:paddingBottom="@dimen/space_24">
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/space_12"
+        android:background="@drawable/bg_badge_pill"
+        android:backgroundTint="@color/gray_middle_black_middle" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_8"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:text="@string/withdraw_money"
+        android:textColor="@color/black_white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvSheetWithdrawable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_6"
+        android:gravity="center"
+        android:textColor="@color/gray_full"
+        android:textSize="13sp"
+        tools:text="Chiqarish mumkin: 194 161 so'm" />
+
+    <!-- Card picker -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_16"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/my_cards"
+        android:textColor="@color/gray_full"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:id="@+id/llSheetCards"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_6"
+        android:divider="@null"
+        android:orientation="vertical"
+        android:showDividers="none" />
+
+    <!-- Amount -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_16"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/amount"
+        android:textColor="@color/gray_full"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_6"
+        android:background="@drawable/bg_input_field"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/space_16"
+        android:paddingVertical="@dimen/space_14">
+
+        <EditText
+            android:id="@+id/etWithdrawAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:fontFamily="sans-serif-medium"
+            android:hint="0"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:textColor="@color/black_white"
+            android:textColorHint="@color/gray_full"
+            android:textSize="22sp"
+            tools:ignore="HardcodedText,LabelFor" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/sum"
+            android:textColor="@color/gray_full"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvWithdrawLimits"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_6"
+        android:textColor="@color/gray_full"
+        android:textSize="12sp"
+        android:visibility="gone"
+        tools:text="Min: 10 · Maks: 50 000"
+        tools:visibility="visible" />
+
+    <!-- Inline reason shown when the typed amount is out of bounds, so the disabled button is
+         never a silent dead-end (was: button just greyed out with no explanation). -->
+    <TextView
+        android:id="@+id/tvWithdrawError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_6"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/red"
+        android:textSize="12sp"
+        android:visibility="gone"
+        tools:text="Bir martada eng ko'pi: 50 000 so'm"
+        tools:visibility="visible" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_20">
+
+        <TextView
+            android:id="@+id/btnWithdrawSubmit"
+            style="@style/Widget.App.Button.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/withdraw_money" />
+
+        <ProgressBar
+            android:id="@+id/pbWithdrawSubmit"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/white_black"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+</LinearLayout>

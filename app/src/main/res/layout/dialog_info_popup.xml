@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Reusable centered info / warning popup (iOS-style) — soft circular glyph,
+  title, message and a single full-width OK button. Driven via showInfoPopup().
+
+  Plain CardView (NOT MaterialCardView): this layout is also inflated by
+  InfoPopupOverlayService in a bare service/overlay context that has no
+  Theme.MaterialComponents, where a MaterialCardView crashes ThemeEnforcement.
+  (Same reason layout_service_auto_offer.xml uses a plain CardView.)
+-->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/white_black"
+    app:cardCornerRadius="@dimen/radius_xl"
+    app:cardElevation="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <FrameLayout
+            android:layout_width="72dp"
+            android:layout_height="72dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/shape_dot"
+                android:backgroundTint="@color/app_color_soft" />
+
+            <!--
+              android:tint, NOT app:tint. This layout is ALSO inflated by
+              InfoPopupOverlayService in a bare service context that has no
+              AppCompat view inflater, where app:tint is silently dropped and
+              the glyph falls back to its intrinsic BLACK — which is what the
+              "you have arrived" overlay showed over the navigator. The
+              framework attribute is honoured in both contexts.
+              (Same rule as layout_service_auto_offer.xml.)
+            -->
+            <ImageView
+                android:id="@+id/ivIcon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_error_circle"
+                android:tint="@color/app_color" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.App.Title"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.App.Body"
+            android:textColor="@color/gray_full"
+            android:visibility="gone" />
+
+        <!-- Button row. Single-button uses (InfoPopup.show): btnCancel stays GONE and btnOk fills.
+             Confirm uses (InfoPopup.confirm): btnCancel is shown (Yo'q) and btnOk carries the
+             action (Ha) with an in-button spinner (pbOk) while the request is in flight. -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/btnCancel"
+                style="@style/Widget.App.Button.Primary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/space_8"
+                android:layout_weight="1"
+                android:background="@drawable/bg_button_secondary"
+                android:text="@string/no"
+                android:textColor="@color/black_white"
+                android:visibility="gone" />
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/btnOk"
+                    style="@style/Widget.App.Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ok" />
+
+                <ProgressBar
+                    android:id="@+id/pbOk"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@color/white"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

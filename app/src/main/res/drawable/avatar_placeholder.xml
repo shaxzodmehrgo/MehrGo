@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Default profile-photo placeholder: soft-amber disc with a centered Phosphor "user"
+  glyph in accent. Replaces the old icon_profile (an oversized dark glyph that
+  overflowed the circle). Used by CompleteDriverInfoFragment's civMyPhoto.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="256"
+    android:viewportHeight="256">
+
+    <!-- Soft accent disc -->
+    <path
+        android:fillColor="@color/app_color_soft"
+        android:pathData="M128,0a128,128 0,1 1,0 256a128,128 0,1 1,0 -256z" />
+
+    <!-- Phosphor "user" glyph, scaled to ~55% and centered -->
+    <group
+        android:scaleX="0.55"
+        android:scaleY="0.55"
+        android:translateX="57.6"
+        android:translateY="57.6">
+        <path
+            android:fillColor="@color/app_color"
+            android:pathData="M230.93,220a8,8,0,0,1-6.93,4H32a8,8,0,0,1-6.92-12c15.23-26.33,38.7-45.21,66.09-54.16a72,72,0,1,1,73.66,0c27.39,8.95,50.86,27.83,66.09,54.16A8,8,0,0,1,230.93,220Z" />
+    </group>
+</vector>

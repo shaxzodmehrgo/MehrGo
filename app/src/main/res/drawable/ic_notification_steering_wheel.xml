@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Status-bar / foreground-service notification icon.
+
+  Android renders notification small icons as a monochrome silhouette: the
+  system reads the alpha channel only and tints the result. So every visible
+  pixel here is opaque white, and the "gaps" in the steering wheel are
+  achieved by simply not drawing pixels there (sub-paths with even-odd fill).
+
+  Design: brand steering wheel — annular rim with three notches at the top,
+  three spokes (left / right / bottom) joining a central hub. 24dp viewport
+  matches the Material small-icon grid.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Rim: outer circle minus inner circle minus three top notches.
+         Even-odd fill makes each enclosed sub-path toggle "inside" state, so
+         odd-overlap regions stay transparent. -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="
+            M12,2.5
+            C17.25,2.5 21.5,6.75 21.5,12
+            C21.5,17.25 17.25,21.5 12,21.5
+            C6.75,21.5 2.5,17.25 2.5,12
+            C2.5,6.75 6.75,2.5 12,2.5 Z
+
+            M12,5.5
+            C8.41,5.5 5.5,8.41 5.5,12
+            C5.5,15.59 8.41,18.5 12,18.5
+            C15.59,18.5 18.5,15.59 18.5,12
+            C18.5,8.41 15.59,5.5 12,5.5 Z
+
+            M9.0,2.85 L9.7,4.55 L8.6,4.85 L7.95,3.15 Z
+            M11.2,2.55 L12.8,2.55 L12.8,4.45 L11.2,4.45 Z
+            M15.0,2.85 L16.05,3.15 L15.4,4.85 L14.3,4.55 Z" />
+
+    <!-- Hub -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M12,9.5 C13.38,9.5 14.5,10.62 14.5,12 C14.5,13.38 13.38,14.5 12,14.5 C10.62,14.5 9.5,13.38 9.5,12 C9.5,10.62 10.62,9.5 12,9.5 Z" />
+
+    <!-- Left spoke -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M5.5,11.2 L10.5,11.2 L10.5,12.8 L5.5,12.8 Z" />
+
+    <!-- Right spoke -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M13.5,11.2 L18.5,11.2 L18.5,12.8 L13.5,12.8 Z" />
+
+    <!-- Bottom spoke -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M11.2,13.5 L12.8,13.5 L12.8,18.5 L11.2,18.5 Z" />
+</vector>

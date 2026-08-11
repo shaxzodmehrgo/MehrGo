@@ -1,0 +1,18 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        // Only added this line for jitpack library
+        maven { url 'https://jitpack.io' }
+    }
+}
+rootProject.name = "TeamworkTaxiDriver"
+include ':app'

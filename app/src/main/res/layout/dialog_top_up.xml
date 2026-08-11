@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_sheet_top_rounded"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/space_16"
+    android:paddingBottom="@dimen/space_24">
+
+    <!-- Grabber + title -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/space_12"
+        android:background="@drawable/bg_badge_pill"
+        android:backgroundTint="@color/gray_middle_black_middle" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_8"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:text="@string/top_up"
+        android:textColor="@color/black_white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- Amount -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_20"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/amount"
+        android:textColor="@color/gray_full"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_6"
+        android:background="@drawable/bg_input_field"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/space_16"
+        android:paddingVertical="@dimen/space_14">
+
+        <EditText
+            android:id="@+id/etSumma"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:fontFamily="sans-serif-medium"
+            android:hint="0"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:textColor="@color/black_white"
+            android:textColorHint="@color/gray_full"
+            android:textSize="22sp"
+            tools:ignore="LabelFor" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/sum"
+            android:textColor="@color/gray_full"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <!-- Quick amounts -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_16"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/quick_amount"
+        android:textColor="@color/gray_full"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_6"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/chip50"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_8"
+            android:layout_weight="1"
+            android:background="@drawable/bg_badge_pill"
+            android:backgroundTint="@color/app_color_soft"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:paddingVertical="@dimen/space_10"
+            android:text="50 000"
+            android:textColor="@color/app_color"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/chip100"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_8"
+            android:layout_weight="1"
+            android:background="@drawable/bg_badge_pill"
+            android:backgroundTint="@color/app_color_soft"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:paddingVertical="@dimen/space_10"
+            android:text="100 000"
+            android:textColor="@color/app_color"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/chip200"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_8"
+            android:layout_weight="1"
+            android:background="@drawable/bg_badge_pill"
+            android:backgroundTint="@color/app_color_soft"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:paddingVertical="@dimen/space_10"
+            android:text="200 000"
+            android:textColor="@color/app_color"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/chip500"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_badge_pill"
+            android:backgroundTint="@color/app_color_soft"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:paddingVertical="@dimen/space_10"
+            android:text="500 000"
+            android:textColor="@color/app_color"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <!-- Payment method -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_16"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/choose_payment"
+        android:textColor="@color/gray_full"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_8"
+        android:orientation="horizontal">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvClickTile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_8"
+            android:layout_weight="1"
+            android:alpha="0.5"
+            app:cardBackgroundColor="@color/click_blue"
+            app:cardCornerRadius="@dimen/radius_md"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingVertical="@dimen/space_14">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/baseline_payment_24"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_8"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/pay_click"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvPayMeTile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_8"
+            android:layout_weight="1"
+            android:alpha="0.5"
+            app:cardBackgroundColor="@color/payme_teal"
+            app:cardCornerRadius="@dimen/radius_md"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingVertical="@dimen/space_14">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/baseline_payment_24"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_8"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/pay_payme"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+</LinearLayout>

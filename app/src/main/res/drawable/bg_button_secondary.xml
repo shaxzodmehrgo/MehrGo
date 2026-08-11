@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Secondary CTA — outlined (amber border, transparent fill, 14dp) so it reads
+     as a clearly tappable action and is never confused with a disabled gray button. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@android:color/transparent" />
+    <stroke
+        android:width="1.5dp"
+        android:color="@color/app_color" />
+    <corners android:radius="@dimen/radius_lg" />
+</shape>

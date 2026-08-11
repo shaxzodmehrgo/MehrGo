@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Balance hero card gradient: brand amber → pressed amber, top-left to bottom-right
+     (matches iOS BalanceView LinearGradient). The MaterialCardView clips the corners. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="315"
+        android:endColor="@color/app_color_pressed"
+        android:startColor="@color/app_color"
+        android:type="linear" />
+</shape>

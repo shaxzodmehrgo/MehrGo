@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    HomeFragment is a pure router (navigator-only build) — it navigates away in onCreate before
+    this view is ever meaningfully shown. Kept as a plain branded background so the one-frame
+    inflation between launch and the redirect matches the splash rather than flashing empty list UI.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_black" />

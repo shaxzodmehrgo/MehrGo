@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Brand: Premium Amber -->
+    <!--    <color name="app_color">#FBBD06</color>-->
+    <!--    <color name="app_color">#FF7A1A</color>-->
+    <!--    <color name="app_color">#ef5694</color>-->
+    <!--    <color name="app_color">#003c86</color>-->
+    <color name="app_color">#F59E0B</color>
+    <color name="app_color_pressed">#D97706</color>
+    <color name="app_color_soft">#1FF59E0B</color>
+
+    <!-- Neutrals -->
+    <color name="black_middle">#374151</color>
+    <color name="black_light">#1F2937</color>
+    <color name="gray_full">#6B7280</color>
+    <color name="gray">#9CA3AF</color>
+    <color name="gray_middle">#E5E7EB</color>
+    <color name="gray_light">#F3F4F6</color>
+    <color name="text_color">#0F172A</color>
+
+    <!-- Accents -->
+    <color name="blue_full">#1E3A8A</color>
+    <color name="blue_middle">#2563EB</color>
+    <color name="red">#EF4444</color>
+    <color name="green">#10B981</color>
+    <!-- Soft red for the "not on the line" status bar (iOS parity, dark icons). -->
+    <color name="offline_status_red">#F2A6A6</color>
+
+    <!-- Theme tokens (light) -->
+    <color name="white_black">#FFFFFFFF</color>
+    <color name="gray_light_black_light">#F4F5F8</color>
+    <color name="gray_middle_black_middle">#E5E7EB</color>
+    <color name="black_white">#0F172A</color>
+
+    <!-- Soft status washes (~15% alpha) for badges, route markers, chips -->
+    <color name="green_soft">#2610B981</color>
+    <color name="red_soft">#26EF4444</color>
+    <color name="blue_soft">#262563EB</color>
+    <!-- Deep solids for floating cards over the map (white text contrast) -->
+    <color name="amber_deep">#D97706</color>
+    <color name="green_deep">#047857</color>
+    <color name="amber_soft">#26F59E0B</color>
+    <!-- Profile "member since" chip (iOS rgb(0.61,0.35,0.86)) -->
+    <color name="purple">#9C59DB</color>
+    <color name="purple_soft">#269C59DB</color>
+    <!-- Fixed amber for the onboarding status badge — iOS uses a hard amber here
+         regardless of brand, so don't tie it to the per-brand app_color. -->
+    <color name="status_amber">#F59E0B</color>
+    <!-- Top-up payment tiles (match iOS Click blue / PayMe teal) -->
+    <color name="click_blue">#2680F2</color>
+    <color name="payme_teal">#29BD9E</color>
+
+    <!-- Mehrgo splash brand teal — matches the bottom band of logo_splash.png so the
+         navigation bar blends seamlessly with the splash art. -->
+    <color name="brand_teal">#00B7AA</color>
+
+    <!-- Switch -->
+    <color name="switch_active">#10B981</color>
+    <color name="switch_thumb">#F1F1F1</color>
+    <color name="switch_foreground">#4210B981</color>
+
+</resources>

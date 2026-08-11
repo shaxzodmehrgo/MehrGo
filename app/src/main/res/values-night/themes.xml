@@ -1,0 +1,98 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.TeamworkTaxi" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/app_color</item>
+        <item name="colorPrimaryVariant">@color/app_color</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/app_color</item>
+        <item name="colorSecondaryVariant">@color/app_color</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <!-- Untinted indeterminate ProgressBars (and other activated controls) follow the brand
+             accent instead of the Material default teal-green. -->
+        <item name="colorControlActivated">@color/app_color</item>
+
+        <!-- Transparent status + navigation bars: app content draws behind both,
+             edge-to-edge. These bar-color attributes only take effect below Android 15 —
+             on 15+ edge-to-edge is enforced (bars always transparent, attributes ignored)
+             and the in-window backing views paint the bar areas. See values/themes.xml. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!-- Solid nav bar (dark surface in dark mode) + top divider, matching the light theme. -->
+        <item name="android:navigationBarColor">@color/white_black</item>
+        <item name="android:navigationBarDividerColor" tools:targetApi="p">
+            @color/gray_middle_black_middle
+        </item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+
+        <!-- Neutral surface window background so heavy recreates (locale change) and screen
+             transitions never flash the platform's near-black default; day/night aware. -->
+        <item name="android:windowBackground">@color/white_black</item>
+
+        <!-- Autofill highlight: rounded to match the field shape instead of a hard rectangle. -->
+        <item name="android:autofilledHighlight" tools:targetApi="o">@drawable/autofill_highlight
+        </item>
+
+        <!-- Customize your theme here. -->
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+        <!-- See values/themes.xml: opt plain Dialog() windows out of Android 15 forced
+             edge-to-edge so their content insets from the bars. -->
+        <item name="android:dialogTheme">@style/AppDialogTheme</item>
+    </style>
+
+    <!-- See values/themes.xml: sheets run under Android 15 edge-to-edge enforcement;
+         the nav-bar strip is painted by the sheet's own background via DialogInsets.kt. -->
+    <!-- Dark sibling of the day parent. This was Theme.Design.LIGHT in the night bucket too, so
+         every BottomSheetDialog kept a light theme in dark mode: unstyled text resolved to a dark
+         ink, and ?attr/colorControlHighlight stayed the light-theme dark scrim, which is invisible
+         as a ripple on a dark surface. Staying in the Design family keeps widget styling identical
+         to the day sheet — only the day/night polarity flips. -->
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetModalStyle</item>
+    </style>
+
+    <style name="BottomSheetModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/background_dialog_bsh</item>
+    </style>
+
+    <!-- Rounded, gray-filled field matching the Registration fields (same
+         gray_middle_black_middle surface), with an amber border only on focus. -->
+    <style name="ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxBackgroundColor">@color/gray_middle_black_middle</item>
+        <item name="boxStrokeColor">@color/app_color</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="boxCornerRadiusTopStart">@dimen/radius_md</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/radius_md</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/radius_md</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/radius_md</item>
+        <item name="colorOnPrimary">@color/app_color</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="strokeColor">@color/white</item>
+        <item name="colorPrimary">@color/white</item>
+    </style>
+
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxBackgroundColor">@color/gray_middle_black_middle</item>
+        <item name="boxStrokeColor">@color/app_color</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="boxCornerRadiusTopStart">@dimen/radius_md</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/radius_md</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/radius_md</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/radius_md</item>
+        <item name="colorOnPrimary">@color/app_color</item>
+        <item name="colorAccent">@color/white</item>
+    </style>
+
+    <style name="CustomTabLayoutStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">14sp</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:letterSpacing">0.025</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+</resources>

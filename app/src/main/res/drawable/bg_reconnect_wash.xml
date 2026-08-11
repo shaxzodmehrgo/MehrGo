@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Soft amber wash over the top of the map while the driver is ON shift but the
+     socket has briefly dropped and is auto-reconnecting. Calmer than the red
+     offline wash — the driver is still working, this is only transient. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:endColor="#00F59E0B"
+        android:startColor="#40F59E0B"
+        android:type="linear" />
+</shape>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Floating "return to app" bubble shown over other apps (WindowToAppService).
+  A rounded-square mini app-icon: the brand logo fills the rounded card edge-to-edge
+  (teal card bg behind the logo's transparent corners) with a soft shadow so it reads
+  clearly on top of any app behind it. The root fills
+  the (slightly larger) overlay window so the card's shadow isn't clipped.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/currentOrderList"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_centerInParent="true"
+        app:cardBackgroundColor="#00BAC0"
+        app:cardCornerRadius="@dimen/radius_lg"
+        app:cardElevation="6dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo" />
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

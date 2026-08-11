@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Choice-chip label: brand accent once picked, normal body colour otherwise.
+     Weight stays sans-serif-medium in both states — switching to bold on select would change the
+     chip's width and reflow the whole group on every tap. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/app_color" android:state_selected="true" />
+    <item android:color="@color/black_white" />
+</selector>

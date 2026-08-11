@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?><!-- iOS services sheet: the add-ons the client turned on for this order.
+     Mirrors the trip sheet's activated-services card — same disc badge, same eyebrow+count
+     header, same per-service glyphs, same total — so tapping the card feels like zooming into
+     it rather than landing somewhere unrelated.
+
+     Follows the SECTION-CARD RULE documented on llServices in dialog_bsh_order_state.xml:
+     the root and the card carry NO horizontal padding, each row supplies its own gutter, and
+     the rule is a plain match_parent child. Negative margins do not work — clipToPadding
+     defaults to true and clips a child's DRAWING back to the padding box. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_dialog_bsh"
+    android:orientation="vertical"
+    android:paddingBottom="28dp">
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/shape_dot"
+        android:backgroundTint="@color/gray_middle_black_middle" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="34dp">
+
+        <!-- 34dp, not 20dp: the card below is inset 20dp AND adds 14dp of its own padding, so its
+             rows and the "Jami" label both start 34dp from the screen edge. At 20dp this badge
+             hung 14dp to their left — the one genuinely broken alignment on this sheet. -->
+        <FrameLayout
+            android:layout_width="@dimen/icon_chip_size"
+            android:layout_height="@dimen/icon_chip_size"
+            android:background="@drawable/bg_service_icon_chip">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ph_seal_check"
+                app:tint="@color/app_color" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_12"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Eyebrow over value, same hierarchy as the trip-sheet card. -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:letterSpacing="0.06"
+                android:maxLines="1"
+                android:text="@string/activated_services"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.App.Micro" />
+
+            <TextView
+                android:id="@+id/tvServicesSheetCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textAppearance="@style/TextAppearance.App.Headline"
+                tools:text="2 ta xizmat faol" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- One grouped section: the service rows and their total read as a single object
+         instead of a flat stack. Hidden wholesale by showServicesSheet on the empty
+         path — without the id it would collapse to a stranded 8dp stroked box. -->
+    <LinearLayout
+        android:id="@+id/llServicesCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_section_card"
+        android:orientation="vertical"
+        android:paddingVertical="4dp">
+
+        <LinearLayout
+            android:id="@+id/llServicesList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="14dp" />
+
+        <View
+            android:id="@+id/vServicesSheetDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_middle_black_middle" />
+
+        <LinearLayout
+            android:id="@+id/llServicesSheetTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="14dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/total_services"
+                android:textAppearance="@style/TextAppearance.App.Body"
+                android:textColor="@color/gray_full" />
+
+            <TextView
+                android:id="@+id/tvServicesSheetTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.App.Price"
+                tools:text="12 000 so'm" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvServicesEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:paddingHorizontal="20dp"
+        android:text="@string/no_services"
+        android:textAppearance="@style/TextAppearance.App.Body"
+        android:textColor="@color/gray_full"
+        android:visibility="gone" />
+
+</LinearLayout>

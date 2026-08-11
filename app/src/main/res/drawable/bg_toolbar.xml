@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Standard navigation toolbar background: surface fill + a 1dp hairline divider along
+  the bottom edge that separates the toolbar from the screen content. Day/night aware.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/white_black" />
+    <item
+        android:height="1dp"
+        android:gravity="bottom">
+        <color android:color="@color/gray_middle_black_middle" />
+    </item>
+</layer-list>

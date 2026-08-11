@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Inner fill for the over-other-apps offer card. Sits 1.5dp inside a CardView
+  whose background is the border colour, so the gap reads as a crisp 1.5dp
+  border. Plain shape (no Material stroke) because the overlay/service context
+  has no Material Components theme.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/gray_light_black_light" />
+    <corners android:radius="@dimen/radius_lg" />
+</shape>

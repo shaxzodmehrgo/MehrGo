@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Cancel-reason bottom sheet: handle · centered title · reason CHIPS · single Confirm button.
+     Dismissed by swipe / tap-outside (BottomSheetDialog). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_dialog_bsh"
+    android:orientation="vertical"
+    android:paddingHorizontal="20dp"
+    android:paddingBottom="20dp">
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="14dp"
+        android:background="@drawable/shape_dot"
+        android:backgroundTint="@color/gray_middle_black_middle" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/select_cancellation_reason"
+        android:textAppearance="@style/TextAppearance.App.Headline"
+        android:textColor="@color/black_white"
+        android:textStyle="bold" />
+
+    <!-- The chips flow and wrap: the layout manager is a FlexboxLayoutManager set in code
+         (MapFragment.showDialogOrderCancel), so no app:layoutManager here. Inter-chip spacing comes
+         from each chip's own end/bottom margin (adapter_order_cancel_reason), not from an item
+         decoration. splitMotionEvents=false keeps two chips from being picked by one two-finger
+         touch. -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvReasons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:overScrollMode="never"
+        android:splitMotionEvents="false"
+        tools:listitem="@layout/adapter_order_cancel_reason" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/tvSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_submit_state"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/ripple_button"
+            android:gravity="center"
+            android:paddingVertical="@dimen/space_14"
+            android:text="@string/submit"
+            android:textAppearance="@style/TextAppearance.App.Headline"
+            android:textColor="@color/text_submit_state" />
+
+        <!-- In-button spinner shown while the cancel request is in flight (button text hidden). -->
+        <ProgressBar
+            android:id="@+id/pbSubmit"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/text_submit_state"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+</LinearLayout>

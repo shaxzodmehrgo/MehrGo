@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  "Open in external map / route" glyph: two location pins joined by a dashed route.
+  Pins = Material "place" (filled teardrop + hole). VectorDrawable has no dash-array,
+  so the route is drawn as individual round-capped stroke segments. Tints crisply
+  (ImageView app:tint recolours both the filled pins and the stroked dashes).
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+
+    <!-- Dashed route: bottom-left pin → along the bottom → up the right → top-right pin -->
+    <path
+        android:pathData="M148,461 L174,461"
+        android:strokeWidth="30"
+        android:strokeColor="#FF000000"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M216,461 L242,461"
+        android:strokeWidth="30"
+        android:strokeColor="#FF000000"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M284,461 L310,461"
+        android:strokeWidth="30"
+        android:strokeColor="#FF000000"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M346,458 L370,449"
+        android:strokeWidth="30"
+        android:strokeColor="#FF000000"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M392,433 L406,407"
+        android:strokeWidth="30"
+        android:strokeColor="#FF000000"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M424,377 L431,347"
+        android:strokeWidth="30"
+        android:strokeColor="#FF000000"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M427,315 L414,290"
+        android:strokeWidth="30"
+        android:strokeColor="#FF000000"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M404,266 L400,243"
+        android:strokeWidth="30"
+        android:strokeColor="#FF000000"
+        android:strokeLineCap="round" />
+
+    <!-- Bottom-left pin -->
+    <group
+        android:scaleX="11"
+        android:scaleY="11"
+        android:translateX="-27"
+        android:translateY="196">
+        <path
+            android:fillColor="#FF000000"
+            android:fillType="evenOdd"
+            android:pathData="M12,2C8.13,2 5,5.13 5,9c0,5.25 7,13 7,13s7,-7.75 7,-13c0,-3.87 -3.13,-7 -7,-7zM12,11.5c-1.38,0 -2.5,-1.12 -2.5,-2.5s1.12,-2.5 2.5,-2.5 2.5,1.12 2.5,2.5 -1.12,2.5 -2.5,2.5z" />
+    </group>
+
+    <!-- Top-right pin -->
+    <group
+        android:scaleX="11"
+        android:scaleY="11"
+        android:translateX="268"
+        android:translateY="-7">
+        <path
+            android:fillColor="#FF000000"
+            android:fillType="evenOdd"
+            android:pathData="M12,2C8.13,2 5,5.13 5,9c0,5.25 7,13 7,13s7,-7.75 7,-13c0,-3.87 -3.13,-7 -7,-7zM12,11.5c-1.38,0 -2.5,-1.12 -2.5,-2.5s1.12,-2.5 2.5,-2.5 2.5,1.12 2.5,2.5 -1.12,2.5 -2.5,2.5z" />
+    </group>
+</vector>

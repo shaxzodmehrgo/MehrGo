@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="materialCardViewStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:layout_width">36dp</item>
+        <item name="android:layout_height">36dp</item>
+    </style>
+
+    <!-- Applied with android:theme on Switch widgets, so it must be a ThemeOverlay: a full
+         Theme.AppCompat.Light parent REPLACES the theme for that view subtree and pinned those
+         switches to light colours even in dark mode. An overlay inherits the host theme and
+         changes only the three attributes below. -->
+    <style name="SCBSwitch" parent="ThemeOverlay.AppCompat">
+        <item name="colorControlActivated">@color/switch_active</item>
+        <item name="colorSwitchThumbNormal">@color/switch_thumb</item>
+        <item name="android:colorForeground">@color/switch_foreground</item>
+    </style>
+
+    <!-- ============================================================
+         App design-system components (match the iOS reference).
+         Visual-only; reference existing tokens/drawables only.
+         ============================================================ -->
+
+    <!-- Flat content card: white surface, 14dp radius, no elevation -->
+    <style name="Widget.App.Card" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/white_black</item>
+        <item name="cardCornerRadius">@dimen/radius_lg</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">0dp</item>
+    </style>
+
+    <!-- Floating card over the map: subtle lift -->
+    <style name="Widget.App.Card.Elevated" parent="Widget.App.Card">
+        <item name="cardElevation">3dp</item>
+    </style>
+
+    <!-- Muted group label above cards -->
+    <style name="Widget.App.SectionHeader" parent="">
+        <item name="android:textAppearance">@style/TextAppearance.App.Section</item>
+        <item name="android:paddingStart">@dimen/space_20</item>
+        <item name="android:paddingEnd">@dimen/space_20</item>
+        <item name="android:paddingTop">@dimen/space_20</item>
+        <item name="android:paddingBottom">@dimen/space_8</item>
+    </style>
+
+    <!-- Primary CTA — amber pill (applied to the existing hand-rolled TextView buttons).
+         Label is white in light mode / dark surface color in dark mode (text_submit_state),
+         and a touch bolder than the medium body weight. -->
+    <style name="Widget.App.Button.Primary" parent="">
+        <item name="android:background">@drawable/bg_submit_state</item>
+        <item name="android:foreground">@drawable/ripple_button</item>
+        <item name="android:textColor">@color/text_submit_state</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">@dimen/space_16</item>
+        <item name="android:paddingBottom">@dimen/space_16</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <!-- Secondary CTA — amber outlined (clearly actionable, not a disabled-looking gray fill) -->
+    <style name="Widget.App.Button.Secondary" parent="">
+        <item name="android:background">@drawable/bg_button_secondary</item>
+        <item name="android:foreground">@drawable/ripple_button</item>
+        <item name="android:textColor">@color/app_color</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">@dimen/space_16</item>
+        <item name="android:paddingBottom">@dimen/space_16</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <!-- Filled input field (12dp) -->
+    <style name="Widget.App.Field" parent="">
+        <item name="android:background">@drawable/background_solid_gray_middle_black_middle</item>
+        <item name="android:textColor">@color/black_white</item>
+        <item name="android:textColorHint">@color/gray_full</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">@dimen/space_16</item>
+    </style>
+
+    <!-- Capsule status badge — set android:backgroundTint + android:textColor per status -->
+    <style name="Widget.App.StatusBadge" parent="">
+        <item name="android:background">@drawable/bg_badge_pill</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:paddingStart">@dimen/space_10</item>
+        <item name="android:paddingEnd">@dimen/space_10</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
+    </style>
+</resources>

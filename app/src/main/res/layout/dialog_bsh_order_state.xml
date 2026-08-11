@@ -1,0 +1,1397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llBottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <!-- Upper area: the draggable info sheet floats here over the map; the pinned action bar
+         sits BELOW it (always visible). Transparent so the map shows through where the sheet isn't.
+         clip disabled so the sheet's elevation shadow draws above its top edge over the map. -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipChildren="false"
+        android:clipToPadding="false">
+
+        <!-- Draggable 3-state trip info sheet (Yandex-style): peek · half · expanded. -->
+        <LinearLayout
+            android:id="@+id/tripInfoSheet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_sheet_rounded_top"
+            android:elevation="14dp"
+            android:orientation="vertical"
+            android:outlineAmbientShadowColor="#33000000"
+            android:outlineProvider="background"
+            android:outlineSpotShadowColor="#4D000000"
+            app:behavior_fitToContents="false"
+            app:behavior_halfExpandedRatio="0.5"
+            app:behavior_hideable="false"
+            app:behavior_peekHeight="60dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <!-- Grabber drag-handle. -->
+            <View
+                android:layout_width="36dp"
+                android:layout_height="4dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/bg_grabber" />
+
+            <!-- Toolbar (iOS TripView): minimise · stage title · cancel -->
+            <LinearLayout
+                android:id="@+id/llTripToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white_black"
+                android:gravity="center_vertical"
+                android:minHeight="56dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="4dp">
+
+                <TextView
+                    android:id="@+id/tvStageTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_16"
+                    android:layout_marginEnd="@dimen/space_8"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/stage_accepted"
+                    android:textAppearance="@style/TextAppearance.App.Headline"
+                    android:textStyle="bold" />
+
+                <!-- Dispatcher call — icon-only, top-right of the toolbar (moved out of the action row). -->
+                <FrameLayout
+                    android:id="@+id/llCallDispatcher"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="@drawable/ripple_button">
+
+                    <FrameLayout
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/shape_dot"
+                        android:backgroundTint="@color/app_color_soft">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ph_headset"
+                            app:tint="@color/app_color" />
+                    </FrameLayout>
+                </FrameLayout>
+            </LinearLayout>
+
+            <!-- Toolbar hairline. Same token as every card rule and as bg_section_card's own
+                 stroke: gray_light_black_light is DARKER than the white_black surface in dark
+                 mode (#0F1115 on #1B1E24), so it read as a gouge rather than a separator. -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_middle_black_middle" />
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="64dp">
+
+                        <!-- Mini-map hidden + lifecycle-gated off (MapFragment skips it while cvMiniMap is
+                             gone); the Xarita action button opens navigation instead. -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cvMiniMap"
+                            android:layout_width="match_parent"
+                            android:layout_height="240dp"
+                            android:layout_marginBottom="12dp"
+                            android:visibility="gone"
+                            app:cardCornerRadius="@dimen/radius_lg"
+                            app:cardElevation="0dp"
+                            app:strokeColor="@color/gray_middle_black_middle"
+                            app:strokeWidth="1dp">
+
+                            <com.yandex.mapkit.mapview.MapView
+                                android:id="@+id/mapTripMini"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+
+                            <!-- Transparent tap target: gestures disabled, tap opens the full map. -->
+                            <View
+                                android:id="@+id/vMapTripClick"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="@drawable/ripple_button" />
+
+                            <!-- Expand hint (iOS arrows.out), top-leading. -->
+                            <FrameLayout
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_gravity="top|start"
+                                android:layout_margin="10dp"
+                                android:background="@drawable/shape_dot"
+                                android:backgroundTint="@color/white_black"
+                                android:elevation="2dp">
+
+                                <ImageView
+                                    android:layout_width="14dp"
+                                    android:layout_height="14dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ph_arrows_out"
+                                    app:tint="@color/black_white" />
+                            </FrameLayout>
+
+                            <!-- iOS navigationMenu: one-tap launches the driver's chosen external
+                                 map/nav app with the route. Drawn last so it sits ABOVE the
+                                 full-card tap target and its tap takes priority. -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/cvTripNavigate"
+                                android:layout_width="46dp"
+                                android:layout_height="46dp"
+                                android:layout_gravity="bottom|end"
+                                android:layout_margin="12dp"
+                                android:clickable="true"
+                                android:focusable="true"
+                                app:cardBackgroundColor="@color/white_black"
+                                app:cardCornerRadius="23dp"
+                                app:cardElevation="3dp"
+                                app:rippleColor="@color/app_color"
+                                app:strokeColor="@color/gray_middle_black_middle"
+                                app:strokeWidth="1dp">
+
+                                <ImageView
+                                    android:id="@+id/ivTripNavigate"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_open_map"
+                                    app:tint="@color/app_color" />
+                            </com.google.android.material.card.MaterialCardView>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- iOS fareCard: agreed price hero — pinned at the TOP (right after the map). -->
+                        <LinearLayout
+                            android:id="@+id/llOrderInfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_section_card"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:paddingHorizontal="16dp"
+                                android:paddingVertical="20dp">
+
+                                <TextView
+                                    android:id="@+id/tvPriceLabel"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/agreed_price"
+                                    android:textAppearance="@style/TextAppearance.App.Caption"
+                                    android:textColor="@color/gray_full" />
+
+                                <TextView
+                                    android:id="@+id/tvPrice"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="~0 So'm"
+                                    android:textColor="@color/app_color"
+                                    android:textSize="34sp"
+                                    android:textStyle="bold" />
+
+                                <LinearLayout
+                                    android:id="@+id/llAddedPrice"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:id="@+id/ivAddPrice"
+                                        android:layout_width="14dp"
+                                        android:layout_height="14dp"
+                                        android:layout_marginEnd="3dp"
+                                        android:src="@drawable/ph_arrow_up"
+                                        app:tint="@color/green" />
+
+                                    <TextView
+                                        android:id="@+id/tvAddPrice"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0 so'm"
+                                        android:textAppearance="@style/TextAppearance.App.Caption"
+                                        android:textColor="@color/green" />
+                                </LinearLayout>
+
+                                <!-- iOS fareCard footnote: agreed price disclaimer (live-meter
+                                     wording for no-B/taximeter orders). -->
+                                <TextView
+                                    android:id="@+id/tvPriceHint"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:gravity="center"
+                                    android:text="@string/agreed_price_hint"
+                                    android:textAppearance="@style/TextAppearance.App.Caption"
+                                    android:textColor="@color/gray_full" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- iOS metricsRow: Distance + Speed + Time tiles -->
+                        <LinearLayout
+                            android:id="@+id/llMetricsRow"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="4dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_section_card"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:paddingVertical="14dp">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/icon_distance"
+                                    app:tint="@color/app_color" />
+
+                                <TextView
+                                    android:id="@+id/tvDistance"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="0.00 km"
+                                    android:textColor="@color/black_white"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="@string/distance"
+                                    android:textAppearance="@style/TextAppearance.App.Caption"
+                                    android:textColor="@color/gray_full" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="4dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_section_card"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:paddingVertical="14dp">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ph_gauge"
+                                    app:tint="@color/app_color" />
+
+                                <TextView
+                                    android:id="@+id/tvSpeed"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="0"
+                                    android:textColor="@color/black_white"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="@string/speed"
+                                    android:textAppearance="@style/TextAppearance.App.Caption"
+                                    android:textColor="@color/gray_full" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_section_card"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:paddingVertical="14dp">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ph_timer"
+                                    app:tint="@color/app_color" />
+
+                                <TextView
+                                    android:id="@+id/tvTripTime"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="00:00"
+                                    android:textColor="@color/black_white"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="@string/trip_time"
+                                    android:textAppearance="@style/TextAppearance.App.Caption"
+                                    android:textColor="@color/gray_full" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- Hidden bucket: legacy bound views kept so setOrderStateButton's per-state
+                             visibility toggles still resolve (data still binds; never shown). -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:id="@+id/llDistanceClient"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvDistanceClient"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0 km" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/llFinishAddress"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvFinishAddress"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/not_showed" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/llTariff"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal" />
+
+                            <LinearLayout
+                                android:id="@+id/llTrackTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvTrackTime"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="00:00:00" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- iOS routeCard: colored dots + addresses on a soft card. -->
+                        <LinearLayout
+                            android:id="@+id/llAddressInfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/bg_section_card"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <!-- Header: Yo'nalish + stop count (left) · trip distance (right) -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="12dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/route"
+                                    android:textAppearance="@style/TextAppearance.App.Section" />
+
+                                <TextView
+                                    android:id="@+id/tvStops"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="6dp"
+                                    android:layout_weight="1"
+                                    android:textAppearance="@style/TextAppearance.App.Caption"
+                                    android:textColor="@color/gray_full" />
+
+                                <!-- Trip-distance removed from order details per request (hidden; still bound). -->
+                                <TextView
+                                    android:id="@+id/tvDistanceTrack"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:textAppearance="@style/TextAppearance.App.Caption"
+                                    android:textColor="@color/gray_full"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+
+                            <!-- From -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:layout_width="10dp"
+                                    android:layout_height="10dp"
+                                    android:layout_marginTop="4dp"
+                                    android:background="@drawable/shape_dot"
+                                    android:backgroundTint="@color/green" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvAddress"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:ellipsize="end"
+                                        android:maxLines="2"
+                                        android:text="Ohunboboyev massiv"
+                                        android:textAppearance="@style/TextAppearance.App.BodyMedium"
+                                        android:textColor="@color/black_white" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <!-- Intermediate stops (everything between pickup and dropoff) -->
+                            <LinearLayout
+                                android:id="@+id/llMiddlePoints"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="gone" />
+
+                            <!-- To -->
+                            <LinearLayout
+                                android:id="@+id/llAddressFinish"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:layout_width="10dp"
+                                    android:layout_height="10dp"
+                                    android:layout_marginTop="4dp"
+                                    android:background="@drawable/shape_dot"
+                                    android:backgroundTint="@color/red" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvAddressFinish"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:ellipsize="end"
+                                        android:maxLines="2"
+                                        android:text="@string/not_showed"
+                                        android:textAppearance="@style/TextAppearance.App.BodyMedium"
+                                        android:textColor="@color/black_white" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- Activated services — its OWN card, not a row inside the details card,
+                             so the whole surface is one tap target that opens the services sheet.
+                             Background is the ripple-wrapped section card: a plain
+                             ?attr/selectableItemBackground draws a rectangular ripple that
+                             overflows the rounded corners.
+
+                             SECTION-CARD RULE (applies to every card below that holds a divider):
+                             a card containing a full-bleed rule carries NO horizontal padding —
+                             each content row supplies its own 16dp gutter instead, so the rule is
+                             an ordinary match_parent child whose bounds already equal the card.
+                             A negative margin does NOT work here and never did: clipToPadding
+                             defaults to true, so ViewGroup.dispatchDraw clips every child's
+                             DRAWING back to the padding box and the rule renders inset no matter
+                             what the margin says. Corollaries: no negative margins in either axis
+                             (paddingVertical keeps the vertical clip live), and never place a rule
+                             within radius_lg (14dp) of the card's top or bottom or it cuts across
+                             the corner arc and leaves ears outside the outline. -->
+                        <LinearLayout
+                            android:id="@+id/llServices"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/bg_section_card_ripple"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:orientation="vertical"
+                            android:paddingVertical="14dp"
+                            android:visibility="visible">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="16dp">
+
+                                <!-- Outlined disc, same family as the services sheet this card opens
+                                     — the plain soft wash is 1.10:1 on a white card, i.e. gone. -->
+                                <FrameLayout
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:background="@drawable/bg_service_icon_chip">
+
+                                    <ImageView
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/ph_seal_check"
+                                        app:tint="@color/app_color" />
+                                </FrameLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <!-- Eyebrow over value: the COUNT is what the driver scans for,
+                                         so the static label is the quieter of the two. -->
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:ellipsize="end"
+                                        android:letterSpacing="0.06"
+                                        android:maxLines="1"
+                                        android:text="@string/activated_services"
+                                        android:textAllCaps="true"
+                                        android:textAppearance="@style/TextAppearance.App.Micro" />
+
+                                    <TextView
+                                        android:id="@+id/tvServicesCount"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="1dp"
+                                        android:textAppearance="@style/TextAppearance.App.BodyMedium" />
+                                </LinearLayout>
+
+                                <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/ph_caret_right"
+                                    app:tint="@color/gray_full" />
+                            </LinearLayout>
+
+                            <com.google.android.material.chip.ChipGroup
+                                android:id="@+id/chipGroup"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginVertical="10dp"
+                                android:clickable="false"
+                                android:paddingHorizontal="16dp"
+                                app:chipSpacingHorizontal="@dimen/space_6"
+                                app:chipSpacingVertical="@dimen/space_6" />
+
+                            <!-- Services total + its divider are hidden on the order view: the
+                                 per-service and total amounts read as an add-on ON TOP of the fare,
+                                 but they are already inside order.price. Prices live in the services
+                                 sheet only (dialog_bsh_services). -->
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/gray_middle_black_middle"
+                                android:visibility="gone" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="16dp"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/total_services"
+                                    android:textAppearance="@style/TextAppearance.App.Body"
+                                    android:textColor="@color/gray_full" />
+
+                                <TextView
+                                    android:id="@+id/tvServicesTotal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="@style/TextAppearance.App.Price" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- iOS details card: description · waiting metrics · payment.
+                             No horizontal padding — see the SECTION-CARD RULE on llServices above.
+                             llInfo and the tariff/payment wrapper below stay unpadded too, which is
+                             what lets their rules (nested two levels deep) reach the card border. -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/bg_section_card"
+                            android:orientation="vertical"
+                            android:paddingVertical="4dp">
+
+                            <LinearLayout
+                                android:id="@+id/llInfo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:orientation="vertical"
+                                android:visibility="visible">
+
+                                <TextView
+                                    android:id="@+id/tvInfoTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingHorizontal="16dp"
+                                    android:text="@string/description"
+                                    android:textAppearance="@style/TextAppearance.App.Section" />
+
+                                <TextView
+                                    android:id="@+id/tvInfo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:paddingHorizontal="16dp"
+                                    android:text="Example desc"
+                                    android:textAppearance="@style/TextAppearance.App.Body"
+                                    android:textColor="@color/blue_middle" />
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@color/gray_middle_black_middle" />
+
+                            </LinearLayout>
+
+                            <!-- Waiting section moved to its own card (below tariff + payment). -->
+
+                            <!-- iOS order info: Tariff + Payment type, labeled rows -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:orientation="vertical"
+                                android:visibility="visible">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal"
+                                    android:paddingHorizontal="16dp"
+                                    android:paddingVertical="10dp">
+
+                                    <FrameLayout
+                                        android:layout_width="34dp"
+                                        android:layout_height="34dp"
+                                        android:background="@drawable/background_settings_icon_chip">
+
+                                        <ImageView
+                                            android:layout_width="18dp"
+                                            android:layout_height="18dp"
+                                            android:layout_gravity="center"
+                                            android:src="@drawable/baseline_directions_car_24"
+                                            app:tint="@color/app_color" />
+                                    </FrameLayout>
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="12dp"
+                                        android:layout_weight="1"
+                                        android:text="@string/tariff"
+                                        android:textColor="@color/gray_full"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/tvTariff"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:ellipsize="end"
+                                        android:fontFamily="sans-serif-medium"
+                                        android:maxLines="1"
+                                        android:textColor="@color/app_color"
+                                        android:textSize="15sp" />
+
+                                </LinearLayout>
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="@color/gray_middle_black_middle" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal"
+                                    android:paddingHorizontal="16dp"
+                                    android:paddingVertical="10dp">
+
+                                    <FrameLayout
+                                        android:layout_width="34dp"
+                                        android:layout_height="34dp"
+                                        android:background="@drawable/background_settings_icon_chip"
+                                        android:backgroundTint="#4010B981">
+
+                                        <ImageView
+                                            android:id="@+id/ivPaymentType"
+                                            android:layout_width="18dp"
+                                            android:layout_height="18dp"
+                                            android:layout_gravity="center"
+                                            android:src="@drawable/icon_cash"
+                                            app:tint="@color/green" />
+                                    </FrameLayout>
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="12dp"
+                                        android:layout_weight="1"
+                                        android:text="@string/payment_method"
+                                        android:textColor="@color/gray_full"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/tvPaymentType"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="sans-serif-medium"
+                                        android:text="@string/payment_type_cash"
+                                        android:textColor="@color/black_white"
+                                        android:textSize="15sp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </LinearLayout>
+                        <!-- /iOS details card -->
+
+                        <!-- iOS waiting card — its own section, placed below tariff + payment. -->
+                        <LinearLayout
+                            android:id="@+id/llTrackingInfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/bg_section_card"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="14dp"
+                            android:visibility="visible">
+
+                            <!-- iOS waiting row: label (left) · rate · time (right). -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="@string/wait_pickup"
+                                    android:textColor="@color/gray_full"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/tvRatePickup"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="10dp"
+                                    android:textColor="@color/gray_full"
+                                    android:textSize="11sp"
+                                    android:visibility="gone" />
+
+                                <TextView
+                                    android:id="@+id/tvWaitedTime"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="00:00:00"
+                                    android:textColor="@color/app_color"
+                                    android:textSize="18sp" />
+
+                            </LinearLayout>
+
+                            <!-- On-way waiting (mid-ride) — appears only once the rider is aboard. -->
+                            <LinearLayout
+                                android:id="@+id/llWaitOnWay"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="@string/wait_on_way"
+                                    android:textColor="@color/gray_full"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/tvRateOnWay"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="10dp"
+                                    android:textColor="@color/gray_full"
+                                    android:textSize="11sp"
+                                    android:visibility="gone" />
+
+                                <TextView
+                                    android:id="@+id/tvWaitOnWay"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="00:00:00"
+                                    android:textColor="@color/app_color"
+                                    android:textSize="18sp" />
+                            </LinearLayout>
+
+                            <!-- iOS waiting control: amber Start / red Stop toggle, inside the card. -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/cvWaitToggle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:clickable="true"
+                                android:focusable="true"
+                                app:cardBackgroundColor="@color/app_color"
+                                app:cardCornerRadius="@dimen/radius_lg"
+                                app:cardElevation="0dp"
+                                app:rippleColor="@color/white">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="horizontal"
+                                    android:paddingVertical="14dp">
+
+                                    <ImageView
+                                        android:id="@+id/ivWaitToggle"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:src="@drawable/ic_timer_start"
+                                        app:tint="@color/white_black" />
+
+                                    <TextView
+                                        android:id="@+id/tvWaitToggle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:fontFamily="sans-serif-medium"
+                                        android:text="@string/waiting"
+                                        android:textColor="@color/white_black"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llTotalPrice"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/tvTotalPrice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="0 So'm"
+                                android:textColor="@color/black_white"
+                                android:textSize="42sp" />
+
+                            <LinearLayout
+                                android:id="@+id/llBonus"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:text="Bonus:"
+                                    android:textColor="@color/black_white"
+                                    android:textSize="22sp" />
+
+                                <TextView
+                                    android:id="@+id/tvBonusPrice"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:maxLines="1"
+                                    android:text="-0 So'm"
+                                    android:textColor="@color/black_white"
+                                    android:textSize="22sp" />
+
+                            </LinearLayout>
+
+                            <!-- Deliberately NOT full-bleed: llTotalPrice has no card background,
+                                 so its nearest padded ancestor is the page gutter — a flush rule
+                                 here would run to the raw sheet edge across a centred summary. -->
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="8dp"
+                                android:background="@color/gray_middle_black_middle" />
+
+                        </LinearLayout>
+
+                        <!-- iOS action row: Client · Services · Cancel/Wait — icon over label. Cancel swaps
+                             to Wait once riding (visibility driven by MapFragment).
+                             NOTE: no animateLayoutChanges — the Xarita button first appears at STARTED,
+                             and a 300ms LayoutTransition here kept the sheet's tree dirty long enough to
+                             interrupt the "open to half on status change" settle and snap it back to peek. -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:orientation="horizontal">
+
+                            <!-- Mijoz -->
+                            <LinearLayout
+                                android:id="@+id/llCallClient"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="@drawable/ripple_rounded_16dp"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:paddingVertical="10dp">
+
+                                <FrameLayout
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:background="@drawable/shape_dot"
+                                    android:backgroundTint="@color/green_soft">
+
+                                    <ImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/ic_call"
+                                        app:tint="@color/green" />
+                                </FrameLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="@string/client"
+                                    android:textColor="@color/gray_full"
+                                    android:textSize="11sp" />
+                            </LinearLayout>
+
+                            <!-- Xarita (navigatsiya) -->
+                            <LinearLayout
+                                android:id="@+id/llGoToMap"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="@drawable/ripple_rounded_16dp"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:paddingVertical="10dp"
+                                android:visibility="gone">
+
+                                <FrameLayout
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:background="@drawable/shape_dot"
+                                    android:backgroundTint="@color/blue_soft">
+
+                                    <ImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/ph_map_trifold"
+                                        app:tint="@color/blue_middle" />
+                                </FrameLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="@string/map"
+                                    android:textColor="@color/gray_full"
+                                    android:textSize="11sp" />
+                            </LinearLayout>
+
+                            <!-- Xizmatlar -->
+                            <LinearLayout
+                                android:id="@+id/llServicesBtn"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="@drawable/ripple_rounded_16dp"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:paddingVertical="10dp">
+
+                                <FrameLayout
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:background="@drawable/shape_dot"
+                                    android:backgroundTint="@color/app_color_soft">
+
+                                    <ImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/baseline_format_list_bulleted_24"
+                                        app:tint="@color/app_color" />
+                                </FrameLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="@string/services"
+                                    android:textColor="@color/gray_full"
+                                    android:textSize="11sp" />
+                            </LinearLayout>
+
+                            <!-- Bekor qilish / Kutish (swaps once riding) -->
+                            <FrameLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:id="@+id/llOrderCancel"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:foreground="@drawable/ripple_rounded_16dp"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:paddingVertical="10dp"
+                                    android:visibility="gone">
+
+                                    <FrameLayout
+                                        android:layout_width="48dp"
+                                        android:layout_height="48dp"
+                                        android:background="@drawable/shape_dot"
+                                        android:backgroundTint="@color/red_soft">
+
+                                        <ImageView
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+                                            android:layout_gravity="center"
+                                            android:src="@drawable/baseline_close_24"
+                                            app:tint="@color/red" />
+                                    </FrameLayout>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="6dp"
+                                        android:fontFamily="sans-serif-medium"
+                                        android:text="@string/cancellation"
+                                        android:textColor="@color/gray_full"
+                                        android:textSize="11sp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/llWait"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:foreground="@drawable/ripple_rounded_16dp"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:paddingVertical="10dp">
+
+                                    <FrameLayout
+                                        android:layout_width="48dp"
+                                        android:layout_height="48dp"
+                                        android:background="@drawable/shape_dot"
+                                        android:backgroundTint="@color/app_color_soft">
+
+                                        <ImageView
+                                            android:id="@+id/ivWaitIcon"
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+                                            android:layout_gravity="center"
+                                            android:src="@drawable/ic_timer_start"
+                                            app:tint="@color/app_color" />
+                                    </FrameLayout>
+
+                                    <TextView
+                                        android:id="@+id/tvWaitTimeTitle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="6dp"
+                                        android:ellipsize="end"
+                                        android:fontFamily="sans-serif-medium"
+                                        android:maxLines="1"
+                                        android:text="@string/waiting"
+                                        android:textColor="@color/gray_full"
+                                        android:textSize="11sp" />
+                                </LinearLayout>
+
+                                <ImageView
+                                    android:id="@+id/ivWaitRound"
+                                    android:layout_width="1dp"
+                                    android:layout_height="1dp"
+                                    android:visibility="gone" />
+
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:indeterminateTint="@color/app_color"
+                        android:visibility="gone" />
+
+                </FrameLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </LinearLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- Hairline divider above the pinned swipe bar (iOS toolbar separator). -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_middle_black_middle" />
+
+    <!-- Pinned swipe bar (iOS TripView): only the Boshlash swipe stays fixed at the bottom; the
+         action buttons (Mijoz/Xarita/Xizmatlar/Bekor) scroll with the detail above. Surface bg
+         (white in light, dark in night) lifts it off the gray sheet. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_black"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="12dp">
+
+        <LinearLayout
+            android:id="@+id/llProcessing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_chip_soft"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingVertical="18dp"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:indeterminateTint="@color/app_color" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/processing"
+                android:textColor="@color/app_color"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <com.ncorti.slidetoact.SlideToActView
+            android:id="@+id/sbStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:foreground="@drawable/bg_swiper_border"
+            android:visibility="gone"
+            app:animation_duration="250"
+            app:area_margin="4dp"
+            app:inner_color="@color/app_color"
+            app:outer_color="@color/app_color_soft"
+            app:slider_height="55dp"
+            app:slider_icon_color="@android:color/white"
+            app:slider_locked="false"
+            app:text="@string/start"
+            app:text_color="@color/app_color"
+            app:text_size="16sp"
+            app:text_style="bold" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            android:id="@+id/sb_arrive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:foreground="@drawable/bg_swiper_border"
+            android:visibility="gone"
+            app:animation_duration="250"
+            app:area_margin="4dp"
+            app:inner_color="@color/app_color"
+            app:outer_color="@color/app_color_soft"
+            app:slider_height="55dp"
+            app:slider_icon_color="@android:color/white"
+            app:slider_locked="false"
+            app:text="@string/driver_arrived"
+            app:text_color="@color/app_color"
+            app:text_size="16sp"
+            app:text_style="bold" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            android:id="@+id/sb_go"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:foreground="@drawable/bg_swiper_border"
+            android:visibility="gone"
+            app:animation_duration="250"
+            app:area_margin="4dp"
+            app:inner_color="@color/app_color"
+            app:outer_color="@color/app_color_soft"
+            app:slider_height="55dp"
+            app:slider_icon_color="@android:color/white"
+            app:slider_locked="false"
+            app:text="@string/go_away"
+            app:text_color="@color/app_color"
+            app:text_size="16sp"
+            app:text_style="bold" />
+
+        <!-- Finish is a slide-to-confirm like the other state transitions — an accidental
+             tap can't end a paid trip. -->
+        <com.ncorti.slidetoact.SlideToActView
+            android:id="@+id/sb_finish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:foreground="@drawable/bg_swiper_border"
+            android:visibility="gone"
+            app:animation_duration="250"
+            app:area_margin="4dp"
+            app:inner_color="@color/app_color"
+            app:outer_color="@color/app_color_soft"
+            app:slider_height="55dp"
+            app:slider_icon_color="@android:color/white"
+            app:slider_locked="false"
+            app:text="@string/to_finish"
+            app:text_color="@color/app_color"
+            app:text_size="16sp"
+            app:text_style="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>

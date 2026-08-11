@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp"
+    app:cardBackgroundColor="@color/white_black"
+    app:cardCornerRadius="@dimen/radius_lg"
+    app:strokeColor="@color/gray_light_black_light"
+    app:strokeWidth="0.7dp">
+
+    <LinearLayout
+        android:id="@+id/llItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <!-- Header — 2 rows: Route(distance)/Time(ETA) on the left, total Price/Additional(surge ↑)
+             on the right, chevron at the far end (so nothing truncates on one cramped line). -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/space_14"
+            android:paddingVertical="@dimen/space_12">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginEnd="@dimen/space_8"
+                android:src="@drawable/icon_distance"
+                app:tint="@color/gray_full" />
+
+            <!-- Left column: Route (distance to client) over Time (ETA) -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDistanceClient"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif-medium"
+                    android:maxLines="1"
+                    android:text="@string/checking"
+                    android:textColor="@color/black_white"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tvDistanceTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/gray_full"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- Right column: total Price over Additional (surge ↑) -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_8"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvTotalPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="~25 000 so'm"
+                    android:textAppearance="@style/TextAppearance.App.Price" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvAddPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="0 so'm"
+                        android:textColor="@color/green"
+                        android:textSize="13sp" />
+
+                    <ImageView
+                        android:id="@+id/ivAddPrice"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="2dp"
+                        android:src="@drawable/baseline_arrow_upward_24"
+                        app:tint="@color/green" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="@dimen/space_6"
+                android:src="@drawable/baseline_arrow_forward_ios_24"
+                app:tint="@color/gray" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="@color/gray_middle_black_middle" />
+
+        <!-- Route: From (+ district) · connector + trip distance · To (+ district) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/space_14"
+            android:paddingTop="@dimen/space_12">
+
+            <!-- From -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="4dp"
+                        android:src="@drawable/shape_dot"
+                        app:tint="@color/green" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:fontFamily="sans-serif-medium"
+                            android:maxLines="2"
+                            android:text="Ohunboboyev massiv"
+                            android:textColor="@color/black_white"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/tvOrderActive"
+                            style="@style/Widget.App.StatusBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_8"
+                            android:backgroundTint="@color/green_soft"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@string/is_doing"
+                            android:textColor="@color/green"
+                            android:visibility="visible" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvAddressDistrict"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Uchtepa tumani"
+                        android:textColor="@color/gray_full"
+                        android:textSize="13sp"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Intermediate stops (everything between pickup and dropoff) -->
+            <LinearLayout
+                android:id="@+id/llMiddlePoints"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_8"
+                android:orientation="vertical"
+                android:visibility="gone" />
+
+            <!-- To -->
+            <LinearLayout
+                android:id="@+id/llAddressFinish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_8"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <FrameLayout
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/baseline_location_red"
+                        app:tint="@color/red" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvAddressFinish"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="sans-serif-medium"
+                        android:maxLines="2"
+                        android:text="@string/not_showed"
+                        android:textColor="@color/black_white"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tvAddressFinishDistrict"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Yunusobod tumani"
+                        android:textColor="@color/gray_full"
+                        android:textSize="13sp"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Trip distance row — removed from the order card per request (kept in the tree, hidden, so
+             the adapters that reference tvDistanceTrack/llVerticalLine still bind without changes). -->
+        <LinearLayout
+            android:id="@+id/llVerticalLine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.7dp"
+                android:layout_marginTop="@dimen/space_12"
+                android:background="@color/gray_middle_black_middle" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/space_14"
+                android:paddingTop="@dimen/space_12">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginEnd="@dimen/space_8"
+                    android:src="@drawable/icon_distance"
+                    app:tint="@color/gray_full" />
+
+                <TextView
+                    android:id="@+id/tvDistanceTrack"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif-medium"
+                    android:maxLines="1"
+                    android:textColor="@color/black_white"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Divider between the route points and the extras (comment + service chips) —
+             shown by the binder ONLY when that section has content, so empty cards don't
+             get a stray double line above the footer divider. -->
+        <View
+            android:id="@+id/vExtrasDivider"
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:layout_marginTop="@dimen/space_12"
+            android:background="@color/gray_middle_black_middle"
+            android:visibility="gone" />
+
+        <!-- Comment — its own labelled section. It used to be a bare line of text sitting
+             directly on top of the service chips, so the client's note and the add-ons read as
+             one undifferentiated blob. Same idiom as the overlay offer card. -->
+        <LinearLayout
+            android:id="@+id/llInfoSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_12"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/space_14"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/description"
+                android:textAppearance="@style/TextAppearance.App.Section" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_4"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="2dp"
+                    android:src="@drawable/ph_chat_text"
+                    app:tint="@color/app_color" />
+
+                <TextView
+                    android:id="@+id/tvInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_10"
+                    android:textAppearance="@style/TextAppearance.App.BodyMedium"
+                    android:textColor="@color/black_white"
+                    tools:text="hello" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Hairline between the two extras sections — shown by the binder only when the card
+             carries BOTH a comment and services, otherwise it would float on its own. -->
+        <View
+            android:id="@+id/vInfoServicesDivider"
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:layout_marginTop="@dimen/space_12"
+            android:background="@color/gray_middle_black_middle"
+            android:visibility="gone" />
+
+        <!-- Services — its own labelled section. -->
+        <LinearLayout
+            android:id="@+id/llServicesSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_12"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/space_14"
+                android:text="@string/services"
+                android:textAppearance="@style/TextAppearance.App.Section" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_8"
+                android:clickable="false"
+                android:paddingHorizontal="@dimen/space_14"
+                app:chipSpacingVertical="@dimen/space_6" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:layout_marginTop="@dimen/space_12"
+            android:background="@color/gray_middle_black_middle" />
+
+        <!-- Client (gone until the order has a contact) -->
+        <LinearLayout
+            android:id="@+id/llClient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/space_14"
+            android:paddingTop="@dimen/space_12"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="@dimen/space_6"
+                android:src="@drawable/ph_user_circle"
+                app:tint="@color/gray_full" />
+
+            <TextView
+                android:id="@+id/tvClientName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:text="Mijoz"
+                android:textColor="@color/black_white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <!-- Footer: payment method · tariff -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/space_14"
+            android:paddingTop="@dimen/space_10"
+            android:paddingBottom="@dimen/space_14">
+
+            <!-- Left column: payment method over tariff. -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Payment chip — cash = green on green_soft, card = blue on blue_soft. -->
+                <LinearLayout
+                    android:id="@+id/llPaymentChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_badge_pill"
+                    android:backgroundTint="@color/green_soft"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/space_10"
+                    android:paddingVertical="5dp">
+
+                    <ImageView
+                        android:id="@+id/ivPaymentType"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginEnd="@dimen/space_6"
+                        android:src="@drawable/icon_cash"
+                        app:tint="@color/green" />
+
+                    <TextView
+                        android:id="@+id/tvPaymentType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="sans-serif-medium"
+                        android:maxLines="1"
+                        android:text="@string/payment_type_cash"
+                        android:textColor="@color/green"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <!-- Tariff chip — accent pill, sits BELOW the payment chip. -->
+                <TextView
+                    android:id="@+id/tvTariff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_6"
+                    android:background="@drawable/bg_badge_pill"
+                    android:backgroundTint="@color/app_color_soft"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:paddingHorizontal="@dimen/space_10"
+                    android:paddingVertical="5dp"
+                    android:text="Komfort"
+                    android:textColor="@color/app_color"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <!-- Order creation time — right side of the footer, bottom-aligned so it sits level with
+                 the tariff pill (not vertically centred). No leading icon. Hidden if omitted. -->
+            <LinearLayout
+                android:id="@+id/llCreatedAt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="@dimen/space_8"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/tvCreatedAt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/gray_full"
+                    android:textSize="12sp"
+                    tools:text="Jul 24, 2026 22:25" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

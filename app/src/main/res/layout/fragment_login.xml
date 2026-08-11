@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.auth.ui.login.LoginFragment">
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/topBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:paddingStart="4dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <FrameLayout
+                android:id="@+id/flAsk"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="@drawable/ripple_circle">
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:src="@drawable/baseline_circle_24"
+                    app:tint="@color/app_color_soft" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:src="@drawable/baseline_question_mark_24"
+                    app:tint="@color/app_color" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.4"
+            android:background="@color/gray_middle_black_middle" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollContent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:fillViewport="true"
+            android:overScrollMode="never">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="24dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:contentDescription="@null"
+                    android:paddingHorizontal="64dp"
+                    android:src="@drawable/logo_in_app" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center"
+                    android:text="@string/login_welcome_title"
+                    android:textAppearance="@style/TextAppearance.App.Display" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:paddingHorizontal="24dp"
+                    android:text="@string/login_welcome_subtitle"
+                    android:textAppearance="@style/TextAppearance.App.Caption" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/phone_label"
+                    android:textColor="@color/black_white"
+                    android:textSize="14sp" />
+
+                <com.santalu.maskara.widget.MaskEditText
+                    android:id="@+id/etPhoneNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/background_solid_gray_middle_black_middle"
+                    android:hint="+___ (__) ___ __ __"
+                    android:inputType="phone"
+                    android:maxLines="13"
+                    android:padding="16dp"
+                    android:text="+998"
+                    android:textColor="@color/black_white"
+                    android:textColorHint="@color/gray_full"
+                    android:textSize="16sp"
+                    app:mask="+___ (__) ___ __ __"
+                    app:maskCharacter="_"
+                    app:maskStyle="completable" />
+
+                <!--Kazakh-->
+                <!--            <com.santalu.maskara.widget.MaskEditText-->
+                <!--                android:id="@+id/etPhoneNumber"-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:layout_marginTop="8dp"-->
+                <!--                android:background="@drawable/background_solid_gray_middle_black_middle"-->
+                <!--                android:textColor="@color/black_white"-->
+                <!--                android:textColorHint="@color/gray_full"-->
+                <!--                android:hint="+_ (___) ___ __ __"-->
+                <!--                android:text="+7"-->
+                <!--                android:inputType="phone"-->
+                <!--                android:maxLines="11"-->
+                <!--                android:padding="16dp"-->
+                <!--                android:textSize="16sp"-->
+                <!--                app:mask="+_ (___) ___ __ __"-->
+                <!--                app:maskCharacter="_"-->
+                <!--                app:maskStyle="completable" />-->
+
+                <!--Kyrgyz-->
+                <!--            <com.santalu.maskara.widget.MaskEditText-->
+                <!--                android:id="@+id/etPhoneNumber"-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:layout_marginTop="8dp"-->
+                <!--                android:background="@drawable/background_solid_gray_middle_black_middle"-->
+                <!--                android:textColor="@color/black_white"-->
+                <!--                android:textColorHint="@color/gray_full"-->
+                <!--                android:hint="+___ (___) ______"-->
+                <!--                android:text="+996"-->
+                <!--                android:inputType="phone"-->
+                <!--                android:maxLines="13"-->
+                <!--                android:padding="16dp"-->
+                <!--                android:textSize="16sp"-->
+                <!--                app:mask="+___ (___) ______"-->
+                <!--                app:maskCharacter="_"-->
+                <!--                app:maskStyle="completable" />-->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/password_label"
+                    android:textColor="@color/black_white"
+                    android:textSize="14sp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/background_solid_gray_middle_black_middle">
+
+                    <EditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/input_password"
+                        android:inputType="textPassword"
+                        android:paddingStart="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingEnd="56dp"
+                        android:paddingBottom="16dp"
+                        android:textColor="@color/black_white"
+                        android:textColorHint="@color/gray_full"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/ivPasswordToggle"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="4dp"
+                        android:clickable="true"
+                        android:contentDescription="@null"
+                        android:focusable="true"
+                        android:foreground="@drawable/ripple_circle"
+                        android:padding="12dp"
+                        android:src="@drawable/ic_visibility_off_24"
+                        app:tint="@color/gray_full" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvPasswordRecovery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="@dimen/space_12"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:fontFamily="sans-serif-medium"
+                    android:foreground="@drawable/ripple_rounded_8dp"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/space_8"
+                    android:paddingVertical="@dimen/space_6"
+                    android:text="@string/forgot_password"
+                    android:textColor="@color/app_color"
+                    android:textSize="13sp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_16">
+
+                    <TextView
+                        android:id="@+id/tvLogin"
+                        style="@style/Widget.App.Button.Primary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/login" />
+
+                    <ProgressBar
+                        android:id="@+id/pbLogin"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:indeterminateTint="@color/white"
+                        android:visibility="gone" />
+
+                </FrameLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/space_24"
+                    android:alpha="0.4"
+                    android:background="@color/gray_middle_black_middle" />
+
+                <TextView
+                    android:id="@+id/tvSignUp"
+                    style="@style/Widget.App.Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_16"
+                    android:text="@string/sign_up" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/app_color"
+        android:visibility="gone" />
+
+</FrameLayout>

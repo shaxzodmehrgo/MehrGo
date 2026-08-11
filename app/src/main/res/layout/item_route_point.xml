@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  One intermediate route stop (everything between pickup and dropoff): an app_color dot + the
+  address only (no venue/district subtitle). Populated by RoutePointsBinder for every new-order view.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="12dp">
+
+    <View
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/shape_dot"
+        android:backgroundTint="@color/app_color" />
+
+    <TextView
+        android:id="@+id/tvPointAddress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textAppearance="@style/TextAppearance.App.BodyMedium"
+        android:textColor="@color/black_white" />
+</LinearLayout>

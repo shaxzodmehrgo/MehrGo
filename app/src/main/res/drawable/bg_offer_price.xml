@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Offer price hero: neutral card surface (matches bg_section_card) with a 1.5dp
+  amber border so the fare reads as the key decision info — without the muddy
+  translucent-amber fill that looked dreadful in dark mode. Day/night aware.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/white_black" />
+    <corners android:radius="@dimen/radius_lg" />
+    <stroke
+        android:width="1.5dp"
+        android:color="@color/app_color" />
+</shape>

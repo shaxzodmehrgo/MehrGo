@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Expanded-map speed badge: translucent amber disc with a 1dp gray ring, matching the bordered
+     control chips on the main view. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/white_black" />
+    <stroke
+        android:width="1dp"
+        android:color="@color/gray_middle_black_middle" />
+</shape>

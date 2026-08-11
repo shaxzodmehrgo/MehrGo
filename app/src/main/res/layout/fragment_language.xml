@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".presentation.auth.ui.language.LanguageFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingHorizontal="28dp"
+            android:paddingTop="96dp"
+            android:paddingBottom="32dp">
+
+            <FrameLayout
+                android:layout_width="96dp"
+                android:layout_height="96dp">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_settings_icon_chip" />
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/baseline_language_24"
+                    app:tint="@color/app_color" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:text="@string/choose_your_language"
+                android:textAppearance="@style/TextAppearance.App.Display"
+                android:textColor="@color/black_white" />
+
+            <TextView
+                android:id="@+id/tvSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_6"
+                android:gravity="center"
+                android:text="@string/choose_your_language_sub"
+                android:textAppearance="@style/TextAppearance.App.Caption"
+                android:textColor="@color/gray_full" />
+
+            <LinearLayout
+                android:id="@+id/llUzbek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:background="@drawable/bg_lang_option"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="@drawable/ripple_rounded_16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="18dp"
+                android:paddingVertical="18dp">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:contentDescription="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/flag_uz" />
+
+                <TextView
+                    android:id="@+id/tvUzbek"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:text="O'zbekcha"
+                    android:textAppearance="@style/TextAppearance.App.Headline"
+                    android:textColor="@color/black_white" />
+
+                <ImageView
+                    android:id="@+id/ivCheckUzbek"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/baseline_radio_button_checked_24"
+                    app:tint="@color/app_color" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llKazakh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/bg_lang_unselected"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="@drawable/ripple_rounded_16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="18dp"
+                android:paddingVertical="18dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:contentDescription="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/flag_kk" />
+
+                <TextView
+                    android:id="@+id/tvKazakh"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:text="Қазақша"
+                    android:textAppearance="@style/TextAppearance.App.Headline"
+                    android:textColor="@color/black_white" />
+
+                <ImageView
+                    android:id="@+id/ivCheckKazakh"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/baseline_radio_button_unchecked_24"
+                    app:tint="@color/gray" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llKyrgyz"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/bg_lang_unselected"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="@drawable/ripple_rounded_16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="18dp"
+                android:paddingVertical="18dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:contentDescription="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/flag_ky" />
+
+                <TextView
+                    android:id="@+id/tvKyrgyz"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:text="Кыргызча"
+                    android:textAppearance="@style/TextAppearance.App.Headline"
+                    android:textColor="@color/black_white" />
+
+                <ImageView
+                    android:id="@+id/ivCheckKyrgyz"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/baseline_radio_button_unchecked_24"
+                    app:tint="@color/gray" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llRussian"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/bg_lang_unselected"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="@drawable/ripple_rounded_16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="18dp"
+                android:paddingVertical="18dp">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:contentDescription="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/flag_ru" />
+
+                <TextView
+                    android:id="@+id/tvRussian"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:text="Русский"
+                    android:textAppearance="@style/TextAppearance.App.Headline"
+                    android:textColor="@color/black_white" />
+
+                <ImageView
+                    android:id="@+id/ivCheckRussian"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/baseline_radio_button_unchecked_24"
+                    app:tint="@color/gray" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_24"
+        android:layout_marginTop="@dimen/space_12"
+        android:layout_marginBottom="@dimen/space_24">
+
+        <TextView
+            android:id="@+id/btnContinue"
+            style="@style/Widget.App.Button.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/continue_action" />
+
+        <ProgressBar
+            android:id="@+id/pbContinue"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/white_black"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+</LinearLayout>

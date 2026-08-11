@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Rounded pill behind the "DEV MODE" warning badge on the settings header. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/red_soft" />
+    <corners android:radius="6dp" />
+</shape>

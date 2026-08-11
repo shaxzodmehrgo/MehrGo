@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+
+    <action
+        android:id="@+id/action_global_to_verificationFragment"
+        app:destination="@id/verificationFragment"
+        app:launchSingleTop="true" />
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_navigation_home_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_home_to_languageFragment"
+            app:destination="@id/languageFragment"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_home_to_introduceFragment"
+            app:destination="@id/introduceFragment"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_home_to_completeDriverInfoFragment"
+            app:destination="@id/completeDriverInfoFragment"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_home_to_myPaymentFragment"
+            app:destination="@id/myPaymentFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_notActiveUserFragment"
+            app:destination="@id/notActiveUserFragment"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_home_to_mapFragment"
+            app:destination="@id/mapFragment"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_home_to_accessPermissionsFragment"
+            app:destination="@id/accessPermissionsFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_maktabGoLoginFragment"
+            app:destination="@id/maktabGoLoginFragment"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_home_to_maktabGoRoutesFragment"
+            app:destination="@id/maktabGoRoutesFragment"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_home_to_maktabGoMapFragment"
+            app:destination="@id/maktabGoMapFragment"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/maktabGoLoginFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.auth.ui.maktabgo_login.MaktabGoLoginFragment"
+        android:label="MaktabGo login"
+        tools:layout="@layout/fragment_maktabgo_login">
+        <action
+            android:id="@+id/action_maktabGoLoginFragment_to_maktabGoRoutesFragment"
+            app:destination="@id/maktabGoRoutesFragment"
+            app:popUpTo="@id/maktabGoLoginFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_maktabGoLoginFragment_to_maktabGoMapFragment"
+            app:destination="@id/maktabGoMapFragment"
+            app:popUpTo="@id/maktabGoLoginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/maktabGoRoutesFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.maktabgo_routes.MaktabGoRoutesFragment"
+        android:label="MaktabGo routes"
+        tools:layout="@layout/fragment_maktabgo_routes">
+        <action
+            android:id="@+id/action_maktabGoRoutesFragment_to_maktabGoMapFragment"
+            app:destination="@id/maktabGoMapFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/maktabGoMapFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.maktabgo_map.MaktabGoMapFragment"
+        android:label="MaktabGo route map"
+        tools:layout="@layout/fragment_maktabgo_map">
+        <action
+            android:id="@+id/action_maktabGoMapFragment_to_maktabGoRoutesFragment"
+            app:destination="@id/maktabGoRoutesFragment" />
+        <action
+            android:id="@+id/action_maktabGoMapFragment_to_mapSettingsFragment"
+            app:destination="@id/mapSettingsFragment" />
+        <action
+            android:id="@+id/action_maktabGoMapFragment_to_accessPermissionsFragment"
+            app:destination="@id/accessPermissionsFragment" />
+        <argument
+            android:name="routeId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.auth.ui.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_passwordRecoveryFragment"
+            app:destination="@id/passwordRecoveryFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_to_completeDriverInfoFragment"
+            app:destination="@id/completeDriverInfoFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_accessPermissionsFragment"
+            app:destination="@id/accessPermissionsFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.auth.ui.sign_up.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up">
+        <action
+            android:id="@+id/action_signUpFragment_to_signUpVerifyFragment"
+            app:destination="@id/signUpVerifyFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/passwordRecoveryFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.auth.ui.password_recovery.PasswordRecoveryFragment"
+        android:label="fragment_password_recovery"
+        tools:layout="@layout/fragment_password_recovery">
+        <action
+            android:id="@+id/action_passwordRecoveryFragment_to_passwordRecoveryVerifyFragment"
+            app:destination="@id/passwordRecoveryVerifyFragment" />
+        <action
+            android:id="@+id/action_passwordRecoveryFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/passwordRecoveryVerifyFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.auth.ui.password_recovery_verify.PasswordRecoveryVerifyFragment"
+        android:label="fragment_password_recovery_verify"
+        tools:layout="@layout/fragment_password_recovery_verify">
+        <action
+            android:id="@+id/action_passwordRecoveryVerifyFragment_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="phone_number"
+            app:argType="string" />
+        <argument
+            android:name="password"
+            app:argType="string" />
+        <argument
+            android:name="auth_key_verify"
+            app:argType="string" />
+        <argument
+            android:name="channel"
+            android:defaultValue="sms"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_passwordRecoveryVerifyFragment_to_completeDriverInfoFragment"
+            app:destination="@id/completeDriverInfoFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signUpVerifyFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.auth.ui.sign_up_verify.SignUpVerifyFragment"
+        android:label="fragment_sign_up_verify"
+        tools:layout="@layout/fragment_sign_up_verify">
+        <action
+            android:id="@+id/action_signUpVerifyFragment_to_completeDriverInfoFragment"
+            app:destination="@id/completeDriverInfoFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="auth_key"
+            app:argType="string" />
+        <argument
+            android:name="phone_number"
+            android:defaultValue=""
+            app:argType="string" />
+        <argument
+            android:name="channel"
+            android:defaultValue="sms"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/completeDriverInfoFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.auth.ui.complete_driver_info.CompleteDriverInfoFragment"
+        android:label="fragment_complete_driver_info"
+        tools:layout="@layout/fragment_complete_driver_info">
+        <action
+            android:id="@+id/action_completeDriverInfoFragment_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/completeDriverInfoFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_completeDriverInfoFragment_to_termsOfUseFragment"
+            app:destination="@id/termsOfUseFragment" />
+        <argument
+            android:name="auth_key"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.auth.ui.language.LanguageFragment"
+        android:label="fragment_language"
+        tools:layout="@layout/fragment_language">
+
+        <action
+            android:id="@+id/action_languageFragment_to_introduceFragment"
+            app:destination="@id/introduceFragment"
+            app:popUpTo="@id/languageFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/introduceFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.auth.ui.introduce.IntroduceFragment"
+        android:label="fragment_introduce"
+        tools:layout="@layout/fragment_introduce">
+        <action
+            android:id="@+id/action_introduceFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/introduceFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/termsOfUseFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.auth.ui.terms_of_use.TermsOfUseFragment"
+        android:label="fragment_terms_of_use"
+        tools:layout="@layout/fragment_terms_of_use"></fragment>
+
+
+    <fragment
+        android:id="@+id/myPaymentFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.my_payment.MyPaymentFragment"
+        android:label="fragment_my_payment"
+        tools:layout="@layout/fragment_my_payment">
+        <action
+            android:id="@+id/action_myPaymentFragment_to_addCardFragment"
+            app:destination="@id/addCardFragment" />
+        <action
+            android:id="@+id/action_myPaymentFragment_to_paylovHistoryFragment"
+            app:destination="@id/paylovHistoryFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/paylovHistoryFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.paylov_history.PaylovHistoryFragment"
+        android:label="fragment_paylov_history"
+        tools:layout="@layout/fragment_paylov_history">
+        <argument
+            android:name="tab"
+            android:defaultValue="requests"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addCardFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.add_card.AddCardFragment"
+        android:label="fragment_add_card"
+        tools:layout="@layout/fragment_add_card">
+        <action
+            android:id="@+id/action_addCardFragment_to_addCardConfirmFragment"
+            app:destination="@id/addCardConfirmFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addCardConfirmFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.add_card_confirm.AddCardConfirmFragment"
+        android:label="fragment_add_card_confirm"
+        tools:layout="@layout/fragment_add_card_confirm">
+        <argument
+            android:name="card_id"
+            app:argType="string" />
+        <argument
+            android:name="phone_number"
+            android:defaultValue=""
+            app:argType="string" />
+        <argument
+            android:name="card_number"
+            app:argType="string" />
+        <argument
+            android:name="expired_date"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/driverEarningsFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.driver_earnings.DriverEarningsFragment"
+        android:label="fragment_driver_earnings"
+        tools:layout="@layout/fragment_driver_earnings" />
+
+    <fragment
+        android:id="@+id/ordersHistoryFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.orders_history.OrdersHistoryFragment"
+        android:label="fragment_orders_history"
+        tools:layout="@layout/fragment_orders_history">
+        <action
+            android:id="@+id/action_ordersHistoryFragment_to_orderHistoryDetailFragment"
+            app:destination="@id/orderHistoryDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/orderHistoryDetailFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.orders_history.OrderHistoryDetailFragment"
+        android:label="fragment_order_history_detail"
+        tools:layout="@layout/fragment_order_history_detail" />
+
+    <fragment
+        android:id="@+id/myProfileFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.my_profile.MyProfileFragment"
+        android:label="fragment_my_profile"
+        tools:layout="@layout/fragment_my_profile">
+        <action
+            android:id="@+id/action_myProfileFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/instructionFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.instuction.InstructionFragment"
+        android:label="fragment_instruction"
+        tools:layout="@layout/fragment_instruction">
+        <argument
+            android:name="video_position"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/changeLanguageFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.change_language.ChangeLanguageFragment"
+        android:label="fragment_change_language"
+        tools:layout="@layout/fragment_change_language" />
+
+    <fragment
+        android:id="@+id/notificationDetailFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.notification_detail.NotificationDetailFragment"
+        android:label="fragment_notification_detail"
+        tools:layout="@layout/fragment_notification_detail">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="text"
+            app:argType="string" />
+        <argument
+            android:name="photo_url"
+            app:argType="string" />
+        <argument
+            android:name="date_time"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/videosFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.videos.VideosFragment"
+        android:label="fragment_videos"
+        tools:layout="@layout/fragment_videos">
+        <action
+            android:id="@+id/action_videosFragment_to_videoFragment"
+            app:destination="@id/videoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/videoFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.video.VideoFragment"
+        android:label="fragment_video"
+        tools:layout="@layout/fragment_video">
+        <argument
+            android:name="video_url"
+            app:argType="string" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/accessPermissionsFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.permissions.AccessPermissionsFragment"
+        android:label="fragment_access_permissions"
+        tools:layout="@layout/fragment_access_permissions" />
+
+    <!-- Transparent placeholder ONLY. The real MapFragment is mounted persistently in MainActivity's
+         flPersistentMap (Activity-hosted) so its Yandex GL surface never rebuilds on navigation. The id
+         + all actions below are unchanged, so every action / popUpTo=@id/mapFragment /
+         popBackStack(R.id.mapFragment) / getAction(action_mapFragment_*) keeps resolving. -->
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.maps.yandex_map.MapPlaceholderFragment"
+        android:label="fragment_map">
+        <action
+            android:id="@+id/action_mapFragment_to_ordersMapFragment"
+            app:destination="@id/ordersMapFragment" />
+        <action
+            android:id="@+id/action_mapFragment_self"
+            app:destination="@id/mapFragment"
+            app:popUpTo="@id/mapFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_mapFragment_to_mapSettingsFragment"
+            app:destination="@id/mapSettingsFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_notificationsMapFragment"
+            app:destination="@id/notificationsMapFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/mapFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_mapFragment_to_accessPermissionsFragment"
+            app:destination="@id/accessPermissionsFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_tripFinishFragment"
+            app:destination="@id/tripFinishFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/tripFinishFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.maps.yandex_map.trip_finish.TripFinishFragment"
+        android:label="fragment_trip_finish"
+        tools:layout="@layout/fragment_trip_finish">
+        <action
+            android:id="@+id/action_tripFinishFragment_to_mapFragment"
+            app:destination="@id/mapFragment"
+            app:popUpTo="@id/mapFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.maps.legacy.google_map.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" />
+
+    <fragment
+        android:id="@+id/notActiveUserFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.not_active_user.NotActiveUserFragment"
+        android:label="fragment_not_active_user"
+        tools:layout="@layout/fragment_not_active_user">
+        <action
+            android:id="@+id/action_notActiveUserFragment_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/notActiveUserFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_notActiveUserFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/notActiveUserFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ordersMapFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.maps.orders.OrdersMapFragment"
+        android:label="fragment_orders_map"
+        tools:layout="@layout/fragment_orders_map">
+        <action
+            android:id="@+id/action_ordersMapFragment_to_mapFragment"
+            app:destination="@id/mapFragment"
+            app:popUpTo="@id/mapFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapSettingsFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.maps.map_settings.MapSettingsFragment"
+        android:label="fragment_map_settings"
+        tools:layout="@layout/fragment_map_settings">
+        <action
+            android:id="@+id/action_mapSettingsFragment_to_changeLanguageFragment"
+            app:destination="@id/changeLanguageFragment" />
+        <action
+            android:id="@+id/action_mapSettingsFragment_to_myProfileFragment"
+            app:destination="@id/myProfileFragment" />
+        <action
+            android:id="@+id/action_mapSettingsFragment_to_ordersHistoryFragment"
+            app:destination="@id/ordersHistoryFragment" />
+        <action
+            android:id="@+id/action_mapSettingsFragment_to_myPaymentFragment"
+            app:destination="@id/myPaymentFragment" />
+        <action
+            android:id="@+id/action_mapSettingsFragment_to_driverEarningsFragment"
+            app:destination="@id/driverEarningsFragment" />
+        <action
+            android:id="@+id/action_mapSettingsFragment_to_videosFragment"
+            app:destination="@id/videosFragment" />
+        <action
+            android:id="@+id/action_mapSettingsFragment_to_chooseMapFragment"
+            app:destination="@id/chooseMapFragment" />
+        <action
+            android:id="@+id/action_mapSettingsFragment_to_ordersInLocaleFragment"
+            app:destination="@id/ordersInLocaleFragment" />
+        <action
+            android:id="@+id/action_mapSettingsFragment_to_subscriptionsFragment"
+            app:destination="@id/subscriptionsFragment" />
+        <action
+            android:id="@+id/action_mapSettingsFragment_to_changeThemeFragment"
+            app:destination="@id/changeThemeFragment" />
+        <action
+            android:id="@+id/action_mapSettingsFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/mapFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_mapSettingsFragment_to_maktabGoLoginFragment"
+            app:destination="@id/maktabGoLoginFragment"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/notificationsMapFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.maps.notifications.NotificationsMapFragment"
+        android:label="fragment_notifications_map"
+        tools:layout="@layout/fragment_notifications_map">
+        <action
+            android:id="@+id/action_notificationsMapFragment_to_notificationDetailFragment"
+            app:destination="@id/notificationDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chooseMapFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.choose_map.ChooseMapFragment"
+        android:label="fragment_choose_map"
+        tools:layout="@layout/fragment_choose_map" />
+    <fragment
+        android:id="@+id/ordersInLocaleFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.orders_in_locale.OrdersInLocaleFragment"
+        android:label="fragment_orders_in_locale"
+        tools:layout="@layout/fragment_orders_in_locale" />
+
+    <fragment
+        android:id="@+id/subscriptionsFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.subscriptions.SubscriptionsFragment"
+        android:label="fragment_subscriptions"
+        tools:layout="@layout/fragment_subscriptions" />
+    <fragment
+        android:id="@+id/changeThemeFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.change_theme.ChangeThemeFragment"
+        android:label="fragment_change_theme"
+        tools:layout="@layout/fragment_change_theme" />
+
+    <fragment
+        android:id="@+id/verificationFragment"
+        android:name="uz.teamwork.mehrgodriver.presentation.main.ui.verification.VerificationFragment"
+        android:label="fragment_verification"
+        tools:layout="@layout/fragment_verification" />
+
+</navigation>

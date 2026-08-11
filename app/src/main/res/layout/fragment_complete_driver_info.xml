@@ -1,0 +1,801 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_light_black_light"
+    tools:context=".presentation.auth.ui.complete_driver_info.CompleteDriverInfoFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:padding="@dimen/space_16">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/space_8">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civMyPhoto"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/avatar_placeholder" />
+
+                <!-- Camera badge with a page-color ring so it reads cleanly over any photo -->
+                <FrameLayout
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="bottom|end"
+                    android:background="@drawable/baseline_circle_24"
+                    android:backgroundTint="@color/gray_light_black_light">
+
+                    <FrameLayout
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/baseline_circle_24"
+                        android:backgroundTint="@color/app_color">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center"
+                            android:contentDescription="@null"
+                            android:src="@drawable/baseline_camera_alt_24"
+                            app:tint="@color/white" />
+
+                    </FrameLayout>
+
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_10"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="@string/take_photo_with_passport"
+                android:textAppearance="@style/TextAppearance.App.Caption"
+                android:textColor="@color/gray_full" />
+
+            <TextView
+                android:id="@+id/tvDriverInfo"
+                style="@style/Widget.App.SectionHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_16"
+                android:paddingStart="@dimen/space_4"
+                android:paddingEnd="@dimen/space_4"
+                android:text="@string/driver_info" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.App.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_12">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilSelectRegion"
+                        style="@style/ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/which_region_work"
+                        android:visibility="visible"
+                        app:boxCornerRadiusBottomEnd="@dimen/radius_md"
+                        app:boxCornerRadiusBottomStart="@dimen/radius_md"
+                        app:boxCornerRadiusTopEnd="@dimen/radius_md"
+                        app:boxCornerRadiusTopStart="@dimen/radius_md">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/atv_region"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:dropDownVerticalOffset="8dp"
+                            android:inputType="none"
+                            android:popupBackground="@drawable/bg_dropdown_popup"
+                            android:textColor="@color/black_white"
+                            android:textSize="16sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilGender"
+                        style="@style/ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_12"
+                        android:hint="@string/gender"
+                        android:visibility="visible"
+                        app:boxCornerRadiusBottomEnd="@dimen/radius_md"
+                        app:boxCornerRadiusBottomStart="@dimen/radius_md"
+                        app:boxCornerRadiusTopEnd="@dimen/radius_md"
+                        app:boxCornerRadiusTopStart="@dimen/radius_md">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/atvGender"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:dropDownVerticalOffset="8dp"
+                            android:inputType="none"
+                            android:popupBackground="@drawable/bg_dropdown_popup"
+                            android:textColor="@color/black_white"
+                            android:textSize="16sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/TextInputLayoutStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_12"
+                        android:layout_weight="1"
+                        android:hint="@string/birthday"
+                        android:visibility="visible"
+                        app:boxCornerRadiusBottomEnd="@dimen/radius_md"
+                        app:boxCornerRadiusBottomStart="@dimen/radius_md"
+                        app:boxCornerRadiusTopEnd="@dimen/radius_md"
+                        app:boxCornerRadiusTopStart="@dimen/radius_md">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tieBirthday"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:drawableStart="@drawable/baseline_calendar_month_24"
+                            android:drawablePadding="16dp"
+                            android:drawableTint="@color/gray_full"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:inputType="none"
+                            android:padding="16dp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/TextInputLayoutStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_12"
+                        android:layout_weight="1"
+                        android:hint="@string/residential_address"
+                        android:visibility="visible"
+                        app:boxCornerRadiusBottomEnd="@dimen/radius_md"
+                        app:boxCornerRadiusBottomStart="@dimen/radius_md"
+                        app:boxCornerRadiusTopEnd="@dimen/radius_md"
+                        app:boxCornerRadiusTopStart="@dimen/radius_md">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tieAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/baseline_maps_home_work_24"
+                            android:drawablePadding="16dp"
+                            android:drawableTint="@color/gray_full"
+                            android:inputType="textCapWords"
+                            android:padding="16dp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/tvPassportInfo"
+                style="@style/Widget.App.SectionHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_12"
+                android:paddingStart="@dimen/space_4"
+                android:paddingEnd="@dimen/space_4"
+                android:text="@string/passport_info" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.App.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_12">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/TextInputLayoutStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/passport_series_and_number"
+                        android:visibility="visible"
+                        app:boxCornerRadiusBottomEnd="@dimen/radius_md"
+                        app:boxCornerRadiusBottomStart="@dimen/radius_md"
+                        app:boxCornerRadiusTopEnd="@dimen/radius_md"
+                        app:boxCornerRadiusTopStart="@dimen/radius_md"
+                        app:placeholderText="AA1234567">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tiePassportNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/baseline_person_pin_24"
+                            android:drawablePadding="16dp"
+                            android:drawableTint="@color/gray_full"
+                            android:inputType="textVisiblePassword|textCapCharacters"
+                            android:maxLength="9"
+                            android:padding="16dp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/TextInputLayoutStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_12"
+                        android:layout_weight="1"
+                        android:hint="@string/given_by_who"
+                        android:visibility="visible"
+                        app:boxCornerRadiusBottomEnd="@dimen/radius_md"
+                        app:boxCornerRadiusBottomStart="@dimen/radius_md"
+                        app:boxCornerRadiusTopEnd="@dimen/radius_md"
+                        app:boxCornerRadiusTopStart="@dimen/radius_md">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tiePassportGiveBy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="16dp"
+                            android:inputType="textCapCharacters"
+                            android:padding="16dp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/TextInputLayoutStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_12"
+                        android:layout_weight="1"
+                        android:hint="@string/given_date"
+                        android:visibility="visible"
+                        app:boxCornerRadiusBottomEnd="@dimen/radius_md"
+                        app:boxCornerRadiusBottomStart="@dimen/radius_md"
+                        app:boxCornerRadiusTopEnd="@dimen/radius_md"
+                        app:boxCornerRadiusTopStart="@dimen/radius_md">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tie_passport_give_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:drawableStart="@drawable/baseline_calendar_month_24"
+                            android:drawablePadding="16dp"
+                            android:drawableTint="@color/gray_full"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:inputType="none"
+                            android:padding="16dp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/tvLicenseInfo"
+                style="@style/Widget.App.SectionHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_12"
+                android:paddingStart="@dimen/space_4"
+                android:paddingEnd="@dimen/space_4"
+                android:text="@string/driver_certificate" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.App.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_12">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/TextInputLayoutStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/certificate_series_and_number"
+                        android:visibility="visible"
+                        app:boxCornerRadiusBottomEnd="@dimen/radius_md"
+                        app:boxCornerRadiusBottomStart="@dimen/radius_md"
+                        app:boxCornerRadiusTopEnd="@dimen/radius_md"
+                        app:boxCornerRadiusTopStart="@dimen/radius_md">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tieLicenseNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/baseline_person_pin_24"
+                            android:drawablePadding="16dp"
+                            android:drawableTint="@color/gray_full"
+                            android:inputType="textVisiblePassword|textCapCharacters"
+                            android:padding="16dp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_12"
+                        android:hint="@string/category"
+                        android:visibility="visible"
+                        app:boxCornerRadiusBottomEnd="@dimen/radius_md"
+                        app:boxCornerRadiusBottomStart="@dimen/radius_md"
+                        app:boxCornerRadiusTopEnd="@dimen/radius_md"
+                        app:boxCornerRadiusTopStart="@dimen/radius_md">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/atvDriverLicense"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:dropDownVerticalOffset="8dp"
+                            android:inputType="none"
+                            android:popupBackground="@drawable/bg_dropdown_popup"
+                            android:textColor="@color/black_white"
+                            android:textSize="16sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                style="@style/Widget.App.SectionHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_12"
+                android:paddingStart="@dimen/space_4"
+                android:paddingEnd="@dimen/space_4"
+                android:text="@string/car" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.App.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_12">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilBrand"
+                        style="@style/ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/brand"
+                        android:visibility="visible"
+                        app:boxCornerRadiusBottomEnd="@dimen/radius_md"
+                        app:boxCornerRadiusBottomStart="@dimen/radius_md"
+                        app:boxCornerRadiusTopEnd="@dimen/radius_md"
+                        app:boxCornerRadiusTopStart="@dimen/radius_md">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/atvBrand"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:dropDownVerticalOffset="8dp"
+                            android:inputType="none"
+                            android:popupBackground="@drawable/bg_dropdown_popup"
+                            android:textColor="@color/black_white"
+                            android:textSize="16sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilModel"
+                        style="@style/ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_12"
+                        android:hint="@string/model"
+                        android:visibility="visible"
+                        app:boxCornerRadiusBottomEnd="@dimen/radius_md"
+                        app:boxCornerRadiusBottomStart="@dimen/radius_md"
+                        app:boxCornerRadiusTopEnd="@dimen/radius_md"
+                        app:boxCornerRadiusTopStart="@dimen/radius_md">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/atvModel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:dropDownVerticalOffset="8dp"
+                            android:inputType="none"
+                            android:popupBackground="@drawable/bg_dropdown_popup"
+                            android:textColor="@color/black_white"
+                            android:textSize="16sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilColor"
+                        style="@style/ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_12"
+                        android:hint="@string/color"
+                        android:visibility="visible"
+                        app:boxCornerRadiusBottomEnd="@dimen/radius_md"
+                        app:boxCornerRadiusBottomStart="@dimen/radius_md"
+                        app:boxCornerRadiusTopEnd="@dimen/radius_md"
+                        app:boxCornerRadiusTopStart="@dimen/radius_md">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/atvColor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:dropDownVerticalOffset="8dp"
+                            android:inputType="none"
+                            android:popupBackground="@drawable/bg_dropdown_popup"
+                            android:textColor="@color/black_white"
+                            android:textSize="16sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/TextInputLayoutStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_12"
+                        android:layout_weight="1"
+                        android:hint="@string/gov_number_car"
+                        android:visibility="visible"
+                        app:boxCornerRadiusBottomEnd="@dimen/radius_md"
+                        app:boxCornerRadiusBottomStart="@dimen/radius_md"
+                        app:boxCornerRadiusTopEnd="@dimen/radius_md"
+                        app:boxCornerRadiusTopStart="@dimen/radius_md"
+                        app:placeholderText="01777AAA">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tieCarNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="16dp"
+                            android:inputType="textCapCharacters"
+                            android:maxLength="8"
+                            android:padding="16dp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/TextInputLayoutStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_12"
+                        android:layout_weight="1"
+                        android:hint="@string/made_year"
+                        android:visibility="visible"
+                        app:boxCornerRadiusBottomEnd="@dimen/radius_md"
+                        app:boxCornerRadiusBottomStart="@dimen/radius_md"
+                        app:boxCornerRadiusTopEnd="@dimen/radius_md"
+                        app:boxCornerRadiusTopStart="@dimen/radius_md">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tieCarMade"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:drawableStart="@drawable/baseline_calendar_month_24"
+                            android:drawablePadding="16dp"
+                            android:drawableTint="@color/gray_full"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:inputType="none"
+                            android:padding="16dp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/tvImages"
+                style="@style/Widget.App.SectionHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_12"
+                android:paddingStart="@dimen/space_4"
+                android:paddingEnd="@dimen/space_4"
+                android:text="@string/photos" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.App.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_12">
+
+                    <!-- Helper moved INSIDE the card (boss request): as a sibling above it, it
+                         floated orphaned between the section header and the tiles it describes.
+                         Sitting on the card it reads as that card's instruction. -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/space_10"
+                        android:paddingHorizontal="@dimen/space_4"
+                        android:text="@string/upload_images_of_licence"
+                        android:textColor="@color/gray_full"
+                        android:textSize="12sp" />
+
+                    <!-- Task 11: two big side-by-side tiles. Empty = icon + label + "choose photo"
+                         hint; picked = full-bleed thumbnail with a scrim label + removable X badge,
+                         so an upload unmistakably reads as done. -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/clPhotoLicence"
+                            android:layout_width="0dp"
+                            android:layout_height="120dp"
+                            android:layout_marginEnd="@dimen/space_12"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            app:cardBackgroundColor="@color/gray_light_black_light"
+                            app:cardCornerRadius="@dimen/radius_lg"
+                            app:cardElevation="0dp">
+
+                            <LinearLayout
+                                android:id="@+id/llEmptyLicence"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/ivChooseLicence"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:contentDescription="@null"
+                                    android:src="@drawable/icon_choose_image"
+                                    app:tint="@color/gray_full" />
+
+                                <TextView
+                                    android:id="@+id/tvPhotoLicence"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/space_8"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="@string/licence"
+                                    android:textColor="@color/black_white"
+                                    android:textSize="13sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="@string/choose_photo"
+                                    android:textColor="@color/gray_full"
+                                    android:textSize="11sp" />
+
+                            </LinearLayout>
+
+                            <FrameLayout
+                                android:id="@+id/cvPreviewLicence"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:visibility="gone"
+                                tools:visibility="visible">
+
+                                <ImageView
+                                    android:id="@+id/ivPreviewLicence"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:contentDescription="@null"
+                                    android:scaleType="centerCrop"
+                                    tools:src="@drawable/icon_choose_image" />
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="44dp"
+                                    android:layout_gravity="bottom"
+                                    android:background="@drawable/bg_photo_scrim" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="bottom|start"
+                                    android:layout_margin="@dimen/space_10"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="@string/licence"
+                                    android:textColor="@color/white"
+                                    android:textSize="12sp" />
+
+                            </FrameLayout>
+
+                            <ImageView
+                                android:id="@+id/ivCloseLicence"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:layout_gravity="top|end"
+                                android:layout_margin="@dimen/space_8"
+                                android:background="@drawable/bg_close_badge"
+                                android:contentDescription="@null"
+                                android:elevation="2dp"
+                                android:padding="6dp"
+                                android:src="@drawable/icon_close"
+                                android:visibility="gone"
+                                app:tint="@color/red"
+                                tools:visibility="visible" />
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/clPhotoCar"
+                            android:layout_width="0dp"
+                            android:layout_height="120dp"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            app:cardBackgroundColor="@color/gray_light_black_light"
+                            app:cardCornerRadius="@dimen/radius_lg"
+                            app:cardElevation="0dp">
+
+                            <LinearLayout
+                                android:id="@+id/llEmptyCar"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/ivChooseCar"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:contentDescription="@null"
+                                    android:src="@drawable/icon_choose_image"
+                                    app:tint="@color/gray_full" />
+
+                                <TextView
+                                    android:id="@+id/tvPhotoCar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/space_8"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="@string/car"
+                                    android:textColor="@color/black_white"
+                                    android:textSize="13sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="@string/choose_photo"
+                                    android:textColor="@color/gray_full"
+                                    android:textSize="11sp" />
+
+                            </LinearLayout>
+
+                            <FrameLayout
+                                android:id="@+id/cvPreviewCar"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:visibility="gone"
+                                tools:visibility="visible">
+
+                                <ImageView
+                                    android:id="@+id/ivPreviewCar"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:contentDescription="@null"
+                                    android:scaleType="centerCrop"
+                                    tools:src="@drawable/icon_choose_image" />
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="44dp"
+                                    android:layout_gravity="bottom"
+                                    android:background="@drawable/bg_photo_scrim" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="bottom|start"
+                                    android:layout_margin="@dimen/space_10"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="@string/car"
+                                    android:textColor="@color/white"
+                                    android:textSize="12sp" />
+
+                            </FrameLayout>
+
+                            <ImageView
+                                android:id="@+id/ivCloseCar"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:layout_gravity="top|end"
+                                android:layout_margin="@dimen/space_8"
+                                android:background="@drawable/bg_close_badge"
+                                android:contentDescription="@null"
+                                android:elevation="2dp"
+                                android:padding="6dp"
+                                android:src="@drawable/icon_close"
+                                android:visibility="gone"
+                                app:tint="@color/red"
+                                tools:visibility="visible" />
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_20"
+                android:layout_marginBottom="@dimen/space_16">
+
+                <TextView
+                    android:id="@+id/tvSubmit"
+                    style="@style/Widget.App.Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/submit" />
+
+                <ProgressBar
+                    android:id="@+id/pbSubmit"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@color/white_black"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/app_color"
+        android:visibility="gone" />
+
+</FrameLayout>

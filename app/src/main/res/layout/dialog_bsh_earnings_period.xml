@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_solid_white_black_t16"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/space_12">
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/space_8"
+        android:background="@drawable/bg_badge_pill"
+        android:backgroundTint="@color/gray_middle_black_middle" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:paddingHorizontal="@dimen/space_20"
+        android:paddingTop="@dimen/space_16"
+        android:paddingBottom="@dimen/space_8"
+        android:text="@string/driver_earnings_report_period"
+        android:textColor="@color/gray_full"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/tvPeriodDay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_16"
+        android:layout_marginBottom="@dimen/space_8"
+        android:background="@drawable/bg_nav_option"
+        android:clickable="true"
+        android:drawableStart="@drawable/baseline_calendar_month_24"
+        android:drawablePadding="@dimen/space_12"
+        android:drawableTint="@color/app_color"
+        android:focusable="true"
+        android:fontFamily="sans-serif-medium"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/space_16"
+        android:paddingVertical="@dimen/space_16"
+        android:text="@string/driver_earnings_period_day"
+        android:textColor="@color/black_white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvPeriodWeek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_16"
+        android:layout_marginBottom="@dimen/space_8"
+        android:background="@drawable/bg_nav_option"
+        android:clickable="true"
+        android:drawableStart="@drawable/baseline_calendar_month_24"
+        android:drawablePadding="@dimen/space_12"
+        android:drawableTint="@color/app_color"
+        android:focusable="true"
+        android:fontFamily="sans-serif-medium"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/space_16"
+        android:paddingVertical="@dimen/space_16"
+        android:text="@string/driver_earnings_period_week"
+        android:textColor="@color/black_white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvPeriodMonth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_16"
+        android:layout_marginBottom="@dimen/space_8"
+        android:background="@drawable/bg_nav_option"
+        android:clickable="true"
+        android:drawableStart="@drawable/baseline_calendar_month_24"
+        android:drawablePadding="@dimen/space_12"
+        android:drawableTint="@color/app_color"
+        android:focusable="true"
+        android:fontFamily="sans-serif-medium"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/space_16"
+        android:paddingVertical="@dimen/space_16"
+        android:text="@string/driver_earnings_period_month"
+        android:textColor="@color/black_white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvPeriodCustom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_16"
+        android:layout_marginBottom="@dimen/space_8"
+        android:background="@drawable/bg_nav_option"
+        android:clickable="true"
+        android:drawableStart="@drawable/baseline_calendar_month_24"
+        android:drawablePadding="@dimen/space_12"
+        android:drawableTint="@color/app_color"
+        android:focusable="true"
+        android:fontFamily="sans-serif-medium"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/space_16"
+        android:paddingVertical="@dimen/space_16"
+        android:text="@string/driver_earnings_period_custom"
+        android:textColor="@color/black_white"
+        android:textSize="16sp" />
+
+</LinearLayout>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?><!-- One saved Paylov card row: soft icon chip + masked number/bank + delete. Also reused
+     inside the withdraw sheet as a selectable row (delete hidden, root gets selection bg). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llCardRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_input_field"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="@drawable/ripple_rounded_8dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/space_12"
+    android:paddingVertical="@dimen/space_10">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        app:cardBackgroundColor="@color/app_color_soft"
+        app:cardCornerRadius="@dimen/radius_sm"
+        app:cardElevation="0dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:contentDescription="@null"
+            android:src="@drawable/ph_credit_card"
+            app:tint="@color/app_color" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_12"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvCardNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/black_white"
+            android:textSize="15sp"
+            tools:text="8600 13** **** 4751" />
+
+        <TextView
+            android:id="@+id/tvBankName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/gray_full"
+            android:textSize="12sp"
+            tools:text="Xalq banki" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivDeleteCard"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@drawable/ripple_circle"
+        android:clickable="true"
+        android:contentDescription="@null"
+        android:focusable="true"
+        android:padding="7dp"
+        android:src="@drawable/ph_x"
+        app:tint="@color/red" />
+
+    <ImageView
+        android:id="@+id/ivSelected"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:contentDescription="@null"
+        android:src="@drawable/ph_check_circle"
+        android:visibility="gone"
+        app:tint="@color/app_color" />
+
+</LinearLayout>

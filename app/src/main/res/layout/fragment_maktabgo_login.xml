@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.auth.ui.maktabgo_login.MaktabGoLoginFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="32dp"
+            android:paddingBottom="24dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:contentDescription="@null"
+                android:paddingHorizontal="64dp"
+                android:src="@drawable/logo_in_app" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:text="@string/maktabgo_login_title"
+                android:textAppearance="@style/TextAppearance.App.Display" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="@string/maktabgo_login_subtitle"
+                android:textAppearance="@style/TextAppearance.App.Caption" />
+
+            <!-- Телефон -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/phone_label"
+                android:textColor="@color/black_white"
+                android:textSize="14sp" />
+
+            <com.santalu.maskara.widget.MaskEditText
+                android:id="@+id/etPhoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/background_solid_gray_middle_black_middle"
+                android:hint="+___ (__) ___ __ __"
+                android:inputType="phone"
+                android:maxLines="13"
+                android:padding="16dp"
+                android:text="+998"
+                android:textColor="@color/black_white"
+                android:textColorHint="@color/gray_full"
+                android:textSize="16sp"
+                app:mask="+___ (__) ___ __ __"
+                app:maskCharacter="_"
+                app:maskStyle="completable" />
+
+            <!-- Получить код -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:id="@+id/tvGetCode"
+                    style="@style/Widget.App.Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/get_code" />
+
+                <ProgressBar
+                    android:id="@+id/pbGetCode"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@color/white"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <!-- Секция кода (появляется после «Получить код») -->
+            <LinearLayout
+                android:id="@+id/llCodeSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvOtpHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center"
+                    android:textColor="@color/app_color"
+                    android:textSize="13sp"
+                    tools:text="Код (демо): 1234" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/code_label"
+                    android:textColor="@color/black_white"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/background_solid_gray_middle_black_middle"
+                    android:hint="@string/input_code"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:padding="16dp"
+                    android:textColor="@color/black_white"
+                    android:textColorHint="@color/gray_full"
+                    android:textSize="16sp" />
+
+                <CheckBox
+                    android:id="@+id/cbNewDriver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/new_driver"
+                    android:textColor="@color/black_white" />
+
+                <!-- Поля нового водителя -->
+                <LinearLayout
+                    android:id="@+id/llNewDriver"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <EditText
+                        android:id="@+id/etName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/background_solid_gray_middle_black_middle"
+                        android:hint="@string/name_hint"
+                        android:inputType="textPersonName"
+                        android:padding="16dp"
+                        android:textColor="@color/black_white"
+                        android:textColorHint="@color/gray_full"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/vehicle_class_label"
+                        android:textColor="@color/black_white"
+                        android:textSize="14sp" />
+
+                    <Spinner
+                        android:id="@+id/spVehicleClass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/background_solid_gray_middle_black_middle"
+                        android:padding="8dp" />
+
+                    <EditText
+                        android:id="@+id/etPlate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/background_solid_gray_middle_black_middle"
+                        android:hint="@string/car_number"
+                        android:inputType="textCapCharacters"
+                        android:padding="16dp"
+                        android:textColor="@color/black_white"
+                        android:textColorHint="@color/gray_full"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/etCarModel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/background_solid_gray_middle_black_middle"
+                        android:hint="@string/car_model"
+                        android:inputType="text"
+                        android:padding="16dp"
+                        android:textColor="@color/black_white"
+                        android:textColorHint="@color/gray_full"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/etCarColor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/background_solid_gray_middle_black_middle"
+                        android:hint="@string/car_color"
+                        android:inputType="text"
+                        android:padding="16dp"
+                        android:textColor="@color/black_white"
+                        android:textColorHint="@color/gray_full"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <!-- Войти -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:id="@+id/tvLogin"
+                        style="@style/Widget.App.Button.Primary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/login" />
+
+                    <ProgressBar
+                        android:id="@+id/pbLogin"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:indeterminateTint="@color/white"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvResend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="@string/resend_code_again"
+                    android:textColor="@color/app_color"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</FrameLayout>

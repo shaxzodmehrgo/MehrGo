@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false">
+
+    <LinearLayout
+        android:id="@+id/llContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingHorizontal="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.18">
+
+        <FrameLayout
+            android:id="@+id/flMedallion"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:clipChildren="false">
+
+            <!-- Outer faint halo -->
+            <View
+                android:layout_width="240dp"
+                android:layout_height="240dp"
+                android:layout_gravity="center"
+                android:alpha="0.45"
+                android:background="@drawable/shape_dot"
+                android:backgroundTint="@color/app_color_soft" />
+
+            <!-- Inner halo -->
+            <View
+                android:layout_width="176dp"
+                android:layout_height="176dp"
+                android:layout_gravity="center"
+                android:background="@drawable/shape_dot"
+                android:backgroundTint="@color/app_color_soft" />
+
+            <ProgressBar
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/app_color" />
+
+            <ImageView
+                android:id="@+id/ivImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@null"
+                android:padding="52dp"
+                android:scaleType="fitCenter" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:letterSpacing="-0.02"
+            android:lineSpacingExtra="2dp"
+            android:text="Header"
+            android:textAppearance="@style/TextAppearance.App.Display"
+            android:textColor="@color/black_white" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
+            android:text="Title"
+            android:textAppearance="@style/TextAppearance.App.BodyMedium"
+            android:textColor="@color/gray_full" />
+
+        <TextView
+            android:id="@+id/tvDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:lineSpacingExtra="2dp"
+            android:text="Description"
+            android:textAppearance="@style/TextAppearance.App.Caption"
+            android:textColor="@color/gray_full" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

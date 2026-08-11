@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Saved offline calculations row ("Saqlangan buyurtmalar"). iOS card matching
+  adapter_order_history: leading trip glyph, order id title, stacked time meta (track
+  time / waited time) with label + emphasized value, trailing distance + copy glyph
+  (tap copies the GPS track). IDs used by CalculationAdapter: tvOrderId, tvTrackTime,
+  tvWaitedTime, tvDistance.
+-->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/space_8"
+    android:layout_marginVertical="@dimen/space_6"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@color/gray_light_black_light"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/space_16">
+
+        <!-- Leading trip glyph (the "N: <row id>" label was meaningless noise — the ID
+             title already identifies the entry). -->
+        <FrameLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/background_settings_icon_chip">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ph_road"
+                app:tint="@color/app_color" />
+
+        </FrameLayout>
+
+        <!-- Center: order id + time meta -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_12"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvOrderId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:textColor="@color/black_white"
+                android:textSize="15sp"
+                tools:text="ID: 68791" />
+
+            <!-- Track time -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_8"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/ph_car"
+                    app:tint="@color/gray_full" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="@string/time_track_short"
+                    android:textColor="@color/gray_full"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvTrackTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/black_white"
+                    android:textSize="13sp"
+                    tools:text="00:01:30" />
+
+            </LinearLayout>
+
+            <!-- Waited time -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_4"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/ph_timer"
+                    app:tint="@color/gray_full" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="@string/waited_time_short"
+                    android:textColor="@color/gray_full"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvWaitedTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/black_white"
+                    android:textSize="13sp"
+                    tools:text="00:00:10" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Trailing: distance + chevron -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_8"
+            android:gravity="center_vertical|end"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.App.Price"
+                android:textColor="@color/app_color"
+                tools:text="8 metr" />
+
+            <!-- Copy glyph, not a chevron: tapping the card copies the trip's GPS track,
+                 it doesn't open a detail screen. -->
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="@dimen/space_8"
+                android:src="@drawable/ph_copy"
+                app:tint="@color/gray_full" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

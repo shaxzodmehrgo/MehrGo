@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Soft red wash over the top of the map while the driver is offline/inactive
+     (mirrors the iOS offline gradient). Fades top-down to transparent. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:centerColor="#33EF4444"
+        android:endColor="#00EF4444"
+        android:startColor="#80EF4444"
+        android:type="linear" />
+</shape>

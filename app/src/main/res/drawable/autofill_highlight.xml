@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Highlight drawn over autofilled fields. Rounded to match the field background
+     (background_solid_gray_middle_black_middle uses radius_md) so the autofill tint
+     follows the field's shape instead of being a hard rectangle. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/app_color_soft" />
+    <corners android:radius="@dimen/radius_md" />
+</shape>

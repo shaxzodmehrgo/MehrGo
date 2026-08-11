@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Touch ripple masked to a pill, for chip-shaped tap targets (used as android:foreground so it
+     rides on top of the chip's own selector background). -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorControlHighlight">
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFFFF" />
+            <corners android:radius="@dimen/radius_pill" />
+        </shape>
+    </item>
+</ripple>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><!-- iOS TripView close button: soft light-red disc behind the red ✕. Translucent so it
+     reads as light-pink on a white toolbar and a soft red tint in dark mode. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="#22EF4444" />
+</shape>

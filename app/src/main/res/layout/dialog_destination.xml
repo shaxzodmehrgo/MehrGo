@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/white_black"
+    app:cardCornerRadius="@dimen/radius_lg"
+    app:cardElevation="0dp">
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/space_16"
+        android:paddingTop="@dimen/space_20"
+        android:paddingBottom="@dimen/space_16">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginEnd="@dimen/space_8"
+                android:src="@drawable/baseline_location_on_24"
+                app:tint="@color/app_color" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/choose_address"
+                android:textAppearance="@style/TextAppearance.App.Title"
+                android:textColor="@color/black_white" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_4"
+            android:layout_marginBottom="@dimen/space_8"
+            android:gravity="center"
+            android:text="@string/choose_address_hint"
+            android:textColor="@color/gray_full"
+            android:textSize="13sp" />
+
+        <!-- Stops A, B, C … -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvDestinations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:splitMotionEvents="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/adapter_destination" />
+
+        <!-- Full route — same row style as a stop; accent border when it is the active mode. -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcvFullRoute"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/space_6"
+            app:cardBackgroundColor="@color/white_black"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/gray_light_black_light"
+            app:strokeWidth="1.2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/space_12"
+                android:paddingVertical="@dimen/space_10">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/shape_dot"
+                    android:backgroundTint="@color/app_color_soft"
+                    android:padding="6dp"
+                    android:src="@drawable/icon_distance"
+                    app:tint="@color/app_color" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_12"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/full_route"
+                    android:textColor="@color/black_white"
+                    android:textSize="15sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/mcvFullRouteInApp"
+                    style="@style/Widget.App.Card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_8"
+                    app:cardBackgroundColor="@color/app_color_soft"
+                    app:cardCornerRadius="@dimen/radius_sm">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/space_8"
+                        android:scaleX="-1"
+                        android:src="@drawable/ph_navigation_arrow"
+                        app:tint="@color/app_color" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/mcvFullRouteMap"
+                    style="@style/Widget.App.Card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_8"
+                    app:cardBackgroundColor="@color/app_color_soft"
+                    app:cardCornerRadius="@dimen/radius_sm">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/space_8"
+                        android:src="@drawable/icon_map"
+                        app:tint="@color/app_color" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

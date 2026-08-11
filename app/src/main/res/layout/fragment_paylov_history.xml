@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Paylov history: two tabs — withdrawal requests (statuses) and the full balance ledger
+     (income/expense with running remainder). Paged 20 per request, load-more on scroll. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_light_black_light"
+    android:orientation="vertical"
+    tools:context=".presentation.main.ui.paylov_history.PaylovHistoryFragment">
+
+    <LinearLayout
+        android:id="@+id/clToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/bg_toolbar"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/space_8">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcvBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/space_8"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardCornerRadius="@dimen/radius_sm"
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/space_8"
+                android:contentDescription="@null"
+                android:src="@drawable/baseline_keyboard_backspace_24"
+                app:tint="@color/black_white" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:paddingEnd="@dimen/space_16"
+            android:text="@string/withdrawal_history"
+            android:textAppearance="@style/TextAppearance.App.Title"
+            android:textColor="@color/black_white" />
+
+    </LinearLayout>
+
+    <!-- Tab chips -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/space_16"
+        android:paddingTop="@dimen/space_12">
+
+        <TextView
+            android:id="@+id/chipRequests"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_8"
+            android:layout_weight="1"
+            android:background="@drawable/bg_nav_option_selected"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:paddingVertical="@dimen/space_12"
+            android:text="@string/withdrawal_history"
+            android:textColor="@color/app_color"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/chipBalance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_nav_option"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:paddingVertical="@dimen/space_12"
+            android:text="@string/balance_history"
+            android:textColor="@color/black_white"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <!-- Period totals (balance tab only) -->
+    <LinearLayout
+        android:id="@+id/llTotals"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/space_16"
+        android:paddingTop="@dimen/space_10"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <!-- Tap = filter to only that type; tap again = show all (server `type` param).
+             Background (pill + selected border) is set in code — no backgroundTint here,
+             it would also tint the selection stroke. -->
+        <LinearLayout
+            android:id="@+id/llIncomeTotal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_8"
+            android:layout_weight="1"
+            android:background="@drawable/bg_badge_pill"
+            android:clickable="true"
+            android:contentDescription="@string/income_total"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingVertical="@dimen/space_10">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ph_arrow_down_right"
+                app:tint="@color/green" />
+
+            <TextView
+                android:id="@+id/tvIncomeTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_6"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/green"
+                android:textSize="14sp"
+                tools:text="308 126" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llExpenseTotal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_badge_pill"
+            android:clickable="true"
+            android:contentDescription="@string/expense_total"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingVertical="@dimen/space_10">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ph_arrow_up_right"
+                app:tint="@color/red" />
+
+            <TextView
+                android:id="@+id/tvExpenseTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_6"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                tools:text="131 595" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Breathing room + divider separating the fixed header block from the scrolling list -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/space_12"
+        android:alpha="0.4"
+        android:background="@color/gray_middle_black_middle" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHistory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:padding="@dimen/space_16" />
+
+        <TextView
+            android:id="@+id/tvEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/history_empty"
+            android:textColor="@color/gray_full"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/app_color"
+            android:visibility="gone" />
+
+        <!-- Load-more spinner (next pages) -->
+        <ProgressBar
+            android:id="@+id/pbMore"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="@dimen/space_16"
+            android:indeterminateTint="@color/app_color"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+</LinearLayout>
